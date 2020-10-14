@@ -24,6 +24,11 @@ import {
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 import { RentsComponent } from './rents/rents.component';
 import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MAT_DATE_LOCALE, MatNativeDateModule} from '@angular/material/core';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
 
 @NgModule({
     imports: [
@@ -37,14 +42,21 @@ import {MatFormFieldModule} from '@angular/material/form-field';
         AgmCoreModule.forRoot({
             apiKey: 'YOUR_GOOGLE_MAPS_API_KEY'
         }),
-        MatFormFieldModule
+        MatFormFieldModule,
+        MatInputModule,
+        MatDatepickerModule,
+        MatNativeDateModule,
+        MatCheckboxModule,
+        MatAutocompleteModule
     ],
   declarations: [
     AppComponent,
     AdminLayoutComponent,
     RentsComponent,
   ],
-  providers: [],
+  providers: [
+      {provide: MAT_DATE_LOCALE, useValue: 'hu-HU'},
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
