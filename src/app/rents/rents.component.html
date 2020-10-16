@@ -49,6 +49,9 @@
                                     Várható visszaérkezés
                                 </th>
                                 <th>
+                                    Tényleges visszaérkezés
+                                </th>
+                                <th>
                                     Eszközök száma
                                 </th>
                                 <th>
@@ -59,33 +62,37 @@
                                 </th>
                                 </thead>
                                 <tbody>
-                                <tr>
+                                <tr *ngFor="let rent of rents">
                                     <td>
-                                        Béla
+                                        {{rent.issuer}}
                                     </td>
                                     <td>
-                                        József
+                                        {{rent.renter}}
                                     </td>
                                     <td>
-                                        Fontos közvetítés
+                                        {{rent.destination}}
                                     </td>
                                     <td>
-                                        2020.09.15.
+                                        {{rent.outDate}}
                                     </td>
                                     <td>
-                                        2020.09.25.
+                                        {{rent.expBackDate}}
                                     </td>
                                     <td>
-                                        12
+                                        <div *ngIf="rent.actBackDate == ''">Nem jött még vissza</div>
+                                        {{rent.actBackDate}}
                                     </td>
                                     <td>
-                                        245 kg
+                                        {{rent.rentItems.length}}
+                                    </td>
+                                    <td>
+                                        {{getSumWeight(rent) / 1000}} kg
                                     </td>
                                     <td>
                                         <button mat-raised-button type="button"
                                                 class="btn btn-info pull-center btn-just-icon"
                                                 data-toggle="modal" data-target=".edit-rental-dialog"><i
-                                                class="material-icons">create</i>
+                                                class="material-icons" (click)="onSelect(rent)">create</i>
                                         </button>
                                     </td>
                                 </tr>
@@ -154,16 +161,15 @@
                             </mat-form-field>
                         </div>
                     </div>
-                    <div class="container-fluid">
-                        <div class="row">
-                            <h4 class="col-lg-5 col-sm-12">Eszközök:</h4>
-                            <div class="col-lg-3 col-sm-12"></div>
-                            <div class="input-group col-lg-3 col-sm-12">
-                                <input type="text" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="basic-addon2">
-                                <div class="input-group-append">
-                                    <button class="btn btn-outline-secondary" type="button">Button</button>
-                                </div>
-                            </div>
+                    <h4>Eszközök:</h4>
+                    <div class="input-group mb-3 col-md-6  col-sm-12 row">
+                        <mat-form-field class="example-full-width">
+                            <input matInput placeholder="Hozzáadandó vonalkódja">
+                        </mat-form-field>
+                        <div class="input-group-append">
+                            <button class="btn btn-warning btn-just-icon" type="button" (click)="addItemToRent()">
+                                <i class="material-icons">add</i>
+                            </button>
                         </div>
                     </div>
 
@@ -203,8 +209,8 @@
                                 <td>
                                     <button mat-raised-button type="button"
                                             class="btn btn-info pull-center btn-just-icon"
-                                            data-toggle="modal" data-target=".edit-rental-dialog"><i
-                                            class="material-icons">delete</i>
+                                            data-toggle="modal" data-target=".edit-rental-dialog">
+                                        <i class="material-icons">delete</i>
                                     </button>
                                 </td>
                             </tr>
