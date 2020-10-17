@@ -3,6 +3,7 @@ import {Title} from '@angular/platform-browser';
 import * as $ from 'jquery';
 import 'bootstrap-notify'
 import {Rent} from '../model/Rent';
+import {RentService} from '../services/rent.service';
 
 @Component({
     selector: 'app-rents',
@@ -15,25 +16,16 @@ export class RentsComponent implements OnInit {
 
     currRent: Rent;
 
-    constructor(private title: Title) {
+    constructor(private title: Title, private rentService: RentService) {
         this.title.setTitle('Raktr - Bérlések');
     }
 
     ngOnInit(): void {
+        this.rentService.getRents().subscribe(rents => this.rents = rents);
     }
 
     addItemToRent() {
         this.showNotification('Hozzáadva sikeresen!', 'success');
-    }
-
-    getSumWeight(rent: Rent): number {
-        let sum = 0;
-
-        rent.rentItems.forEach(rentItem => {
-            sum += rentItem.scannable.getWeight();
-        });
-
-        return sum;
     }
 
     showNotification(message_: string, type: string) {

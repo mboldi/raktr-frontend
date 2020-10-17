@@ -79,32 +79,32 @@ export class DevicesComponent implements OnInit {
         console.log(this.filteredCategoryOptions);
     }
 
-    private _filterCategories(options: Category[], value: string): Category[] {
+    private _filterCategories(categories: Category[], value: string): Category[] {
         const filterValue = value.toLowerCase();
 
-        return options.filter(option => option.name.toLowerCase().includes(filterValue));
+        return categories.filter(category => category.name.toLowerCase().includes(filterValue));
     }
 
-    private _filterLocations(options: Category[], value: string): Location[] {
+    private _filterLocations(locations: Location[], value: string): Location[] {
         const filterValue = value.toLowerCase();
 
-        return options.filter(option => option.name.toLowerCase().includes(filterValue));
+        return locations.filter(location => location.name.toLowerCase().includes(filterValue));
     }
 
-    private _filterDevices(options: Device[], value: string): Device[] {
+    private _filterDevices(devices_: Device[], value: string): Device[] {
         const filterValue = value.toLowerCase();
 
-        return options.filter(option => option.name.toLowerCase().includes(filterValue) ||
-            option.maker.toLowerCase().includes(filterValue) ||
-            option.type.toLowerCase().includes(filterValue) ||
-            option.barcode.toLowerCase().includes(filterValue));
+        return devices_.filter(device => device.name.toLowerCase().includes(filterValue) ||
+            device.maker.toLowerCase().includes(filterValue) ||
+            device.type.toLowerCase().includes(filterValue) ||
+            device.barcode.toLowerCase().includes(filterValue));
     }
 
-    private _filterCompositeItems(options: CompositeItem[], value: string): CompositeItem[] {
+    private _filterCompositeItems(compositeItems_: CompositeItem[], value: string): CompositeItem[] {
         const filterValue = value.toLowerCase();
 
-        return options.filter(option => option.name.toLowerCase().includes(filterValue) ||
-            option.barcode.toLowerCase().includes(filterValue));
+        return compositeItems_.filter(compositeItem => compositeItem.name.toLowerCase().includes(filterValue) ||
+            compositeItem.barcode.toLowerCase().includes(filterValue));
     }
 
     createCopy(device: Device) {
