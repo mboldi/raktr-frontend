@@ -1,32 +1,29 @@
 <div class="main-content">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-lg-4 col-md-6 col-sm-6">
+            <div class="col-lg-3 col-md-4 col-sm-6">
                 <div class="card card-stats">
                     <div class="card-header card-header-warning card-header-icon">
                         <div class="card-icon">
                             <i class="material-icons">sd_storage</i>
                         </div>
                         <p class="card-category">Összes eszköz a rendszerben</p>
-                        <h3 class="card-title">120
+                        <h3 class="card-title">{{devices.length}}
                             <small>db</small>
                         </h3>
                     </div>
                     <div class="card-footer">
-                        <!--<div class="stats">
-                            Rend a lelke mindennek!
-                        </div>-->
                     </div>
                 </div>
             </div>
-            <div class="col-lg-4 col-md-6 col-sm-6">
+            <div class="col-lg-3 col-md-4 col-sm-6">
                 <div class="card card-stats">
                     <div class="card-header card-header-success card-header-icon">
                         <div class="card-icon">
                             <i class="material-icons">content_paste</i>
                         </div>
                         <p class="card-category">Aktív bérlések</p>
-                        <h3 class="card-title">2
+                        <h3 class="card-title">{{getNumOfActiveRents()}}
                             <small>db</small>
                         </h3>
                     </div>
@@ -74,56 +71,27 @@
                                 </th>
                                 </thead>
                                 <tbody>
-                                <tr>
+                                <tr *ngFor="let rent of activeRents()">
                                     <td>
-                                        Béla
+                                        {{rent.issuer}}
                                     </td>
                                     <td>
-                                        József
+                                        {{rent.renter}}
                                     </td>
                                     <td>
-                                        Fontos közvetítés
+                                        {{rent.destination}}
                                     </td>
                                     <td>
-                                        2020.09.15.
+                                        {{rent.outDate}}
                                     </td>
                                     <td>
-                                        2020.09.23.
+                                        {{rent.expBackDate}}
                                     </td>
                                     <td>
-                                        12
+                                        {{rent.rentItems.length}}
                                     </td>
                                     <td>
-                                        102kg
-                                    </td>
-                                    <td>
-                                        <button mat-raised-button type="submit"
-                                                class="btn btn-info pull-center btn-just-icon"><i
-                                                class="material-icons">create</i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        Béla
-                                    </td>
-                                    <td>
-                                        József
-                                    </td>
-                                    <td>
-                                        Fontos közvetítés
-                                    </td>
-                                    <td>
-                                        2020.09.15.
-                                    </td>
-                                    <td>
-                                        2020.09.23.
-                                    </td>
-                                    <td>
-                                        12
-                                    </td>
-                                    <td>
-                                        102kg
+                                        {{rent.getSumWeight() / 1000}} kg
                                     </td>
                                     <td>
                                         <button mat-raised-button type="submit"
@@ -137,7 +105,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="card">
+                <!--<div class="card">
                     <div class="card-header card-header-primary">
                         <div class="card-title ">
                             <h4>Bérlések összekészítés alatt</h4>
@@ -235,7 +203,7 @@
                             </table>
                         </div>
                     </div>
-                </div>
+                </div>-->
             </div>
         </div>
     </div>
