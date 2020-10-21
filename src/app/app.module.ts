@@ -18,7 +18,11 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {EditDeviceModalComponent} from './edit-device-modal/edit-device-modal.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
-import { EditRentComponent } from './edit-rent/edit-rent.component';
+import {EditRentComponent} from './edit-rent/edit-rent.component';
+import {MatButtonModule} from '@angular/material/button';
+import {MatIconModule} from '@angular/material/icon';
+import {MatToolbarModule} from '@angular/material/toolbar';
+import {LoginComponent} from './login/login.component';
 
 @NgModule({
     imports: [
@@ -35,7 +39,10 @@ import { EditRentComponent } from './edit-rent/edit-rent.component';
         MatNativeDateModule,
         MatCheckboxModule,
         MatAutocompleteModule,
-        NgbModule
+        NgbModule,
+        MatButtonModule,
+        MatIconModule,
+        MatToolbarModule
     ],
     declarations: [
         AppComponent,
@@ -43,6 +50,7 @@ import { EditRentComponent } from './edit-rent/edit-rent.component';
         RentsComponent,
         EditDeviceModalComponent,
         EditRentComponent,
+        LoginComponent,
     ],
     providers: [
         {provide: MAT_DATE_LOCALE, useValue: 'hu-HU'},
