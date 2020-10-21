@@ -1,7 +1,26 @@
 <div class="main-content">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-lg-3 col-md-4 col-sm-6">
+            <div class="col-xl-4 col-lg-12">
+                <div class="card card-stats">
+                    <div class="card-header card-header-primary card-header-icon">
+                        <div class="card-icon">
+                            <i class="material-icons">sd_storage</i>
+                        </div>
+                        <p class="card-category">Eszköz keresése vonalkód alapján</p>
+                    </div>
+                    <div class="card-body">
+                        <mat-form-field class="deviceSearchField">
+                            <mat-label>Eszköz vonalkódja</mat-label>
+                            <input matInput type="text" [(ngModel)]="deviceSearch">
+                            <button mat-button *ngIf="deviceSearch" matSuffix mat-icon-button aria-label="Search" (click)="searchDevice()">
+                                <i class="material-icons">search</i>
+                            </button>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-4 col-lg-6">
                 <div class="card card-stats">
                     <div class="card-header card-header-warning card-header-icon">
                         <div class="card-icon">
@@ -16,7 +35,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-3 col-md-4 col-sm-6">
+            <div class="col-xl-4 col-lg-6">
                 <div class="card card-stats">
                     <div class="card-header card-header-success card-header-icon">
                         <div class="card-icon">

@@ -15,6 +15,7 @@ export class OverviewComponent implements OnInit {
 
     rents: Rent[] = [];
     devices: Device[] = [];
+    deviceSearch: string;
 
     constructor(private title: Title, private rentService: RentService, private deviceService: DeviceService) {
         this.title.setTitle('Raktr - Áttekintés');
@@ -33,4 +34,7 @@ export class OverviewComponent implements OnInit {
         return this.rents.filter(rent => rent.actBackDate !== '');
     }
 
+    searchDevice() {
+        return;
+    }
 }

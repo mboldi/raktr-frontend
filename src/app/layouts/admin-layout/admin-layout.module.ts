@@ -12,6 +12,7 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatSelectModule} from '@angular/material/select';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import {MatIconModule} from '@angular/material/icon';
 
 @NgModule({
     imports: [
@@ -26,6 +27,7 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
         MatSelectModule,
         MatTooltipModule,
         MatAutocompleteModule,
+        MatIconModule,
     ],
   declarations: [
     UserProfileComponent,

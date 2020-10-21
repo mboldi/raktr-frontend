@@ -8,6 +8,7 @@ import {MOCK_LOCATIONS} from '../mockData/mockLocations';
 import {map, startWith} from 'rxjs/operators';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {Device} from '../model/Device';
+import * as $ from 'jquery';
 
 @Component({
     selector: 'app-edit-device-modal',
@@ -56,5 +57,24 @@ export class EditDeviceModalComponent implements OnInit {
 
     save() {
         this.activeModal.dismiss('save')
+    }
+
+    addItemToRent() {
+        this.showNotification('Hozzáadva sikeresen!', 'success');
+    }
+
+    showNotification(message_: string, type: string) {
+        $['notify']({
+            icon: 'add_alert',
+            message: message_
+        }, {
+            type: type,
+            timer: 1000,
+            placement: {
+                from: 'top',
+                align: 'right'
+            },
+            z_index: 2000
+        })
     }
 }

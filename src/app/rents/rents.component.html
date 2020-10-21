@@ -5,29 +5,22 @@
                 <div class="card">
                     <div class="card-header card-header-primary">
                         <div class="card-title ">
-                            <h4 style="display: inline-block; padding-top: 12px">Bérlések</h4>
-                            <form class="navbar-form pull-right">
-                                <span class="bmd-form-group">
-                                    <div class="input-group no-border">
-                                        <input type="text" value="" class="form-control text-white"
-                                               placeholder="Keresés...">
-                                        <button mat-raised-button type="submit" class="btn btn-warning btn-just-icon">
-                                            <i class="material-icons">search</i>
-                                            <div class="ripple-container"></div>
-                                        </button>
-                                        <button mat-raised-button type="submit" class="btn btn-warning btn-just-icon">
-                                            <i class="material-icons">filter_alt</i>
-                                            <div class="ripple-container"></div>
-                                        </button>
-                                        <button mat-raised-button type="submit" class="btn btn-warning btn-just-icon">
-                                            <i class="material-icons">add</i>
-                                            <div class="ripple-container"></div>
-                                        </button>
-                                    </div>
-                                </span>
-                            </form>
+                            <h4 style="display: inline-block" class="mt-3">Bérlések</h4>
+                            <div class="form-inline pull-right">
+                                <mat-form-field class="rent-search-field">
+                                    <mat-label>Keresés...</mat-label>
+                                    <input matInput class="searchInput" type="text" [formControl]="rentSearchControl" autocomplete="off">
+                                    <button mat-button matSuffix mat-icon-button
+                                            *ngIf="rentSearchControl.value !== ''" aria-label="deviceSearch">
+                                        <mat-icon (click)="rentSearchControl.setValue('')">clear</mat-icon>
+                                    </button>
+                                </mat-form-field>
+                                <button class="ml-3 addButton" color="warn" mat-mini-fab mat-icon-button aria-label="Add">
+                                    <mat-icon style="color: white">add</mat-icon>
+                                </button>
+                            </div>
+
                         </div>
-                        <!--<p class="card-category"> Here is a subtitle for this table</p>-->
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -62,7 +55,7 @@
                                 </th>
                                 </thead>
                                 <tbody>
-                                <tr *ngFor="let rent of rents">
+                                <tr *ngFor="let rent of filteredRents | async">
                                     <td>
                                         {{rent.issuer}}
                                     </td>
@@ -91,8 +84,8 @@
                                     <td>
                                         <button mat-raised-button type="button"
                                                 class="btn btn-info pull-center btn-just-icon"
-                                                data-toggle="modal" data-target=".edit-rental-dialog"><i
-                                                class="material-icons" (click)="onSelect(rent)">create</i>
+                                                data-toggle="modal" (click)="onSelect(rent)">
+                                                    <i class="material-icons">create</i>
                                         </button>
                                     </td>
                                 </tr>

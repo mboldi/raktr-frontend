@@ -1,9 +1,12 @@
 import {Component, OnInit} from '@angular/core';
 import {Title} from '@angular/platform-browser';
-import * as $ from 'jquery';
 import 'bootstrap-notify'
 import {Rent} from '../model/Rent';
 import {RentService} from '../services/rent.service';
+import {FormControl} from '@angular/forms';
+import {map, startWith} from 'rxjs/operators';
+import {Device} from '../model/Device';
+import {Observable} from 'rxjs';
 
 @Component({
     selector: 'app-rents',
@@ -13,34 +16,33 @@ import {RentService} from '../services/rent.service';
 })
 export class RentsComponent implements OnInit {
     rents: Rent[] = [];
+    filteredRents: Observable<Rent[]>;
 
     currRent: Rent;
+    rentSearchControl = new FormControl();
 
     constructor(private title: Title, private rentService: RentService) {
         this.title.setTitle('Raktr - Bérlések');
     }
 
     ngOnInit(): void {
+        this.rentSearchControl.setValue('');
+
         this.rentService.getRents().subscribe(rents => this.rents = rents);
+
+        this.filteredRents = this.rentSearchControl.valueChanges
+            .pipe(
+                startWith(''),
+                map(value => this._filterDevices(this.rents, value))
+            );
     }
 
-    addItemToRent() {
-        this.showNotification('Hozzáadva sikeresen!', 'success');
-    }
+    private _filterDevices(rents_: Rent[], value: string): Rent[] {
+        const filterValue = value.toLowerCase();
 
-    showNotification(message_: string, type: string) {
-        $['notify']({
-            icon: 'add_alert',
-            message: message_
-        }, {
-            type: type,
-            timer: 1000,
-            placement: {
-                from: 'top',
-                align: 'right'
-            },
-            z_index: 2000
-        })
+        return rents_.filter(rent => rent.destination.toLowerCase().includes(filterValue) ||
+            rent.issuer.toLowerCase().includes(filterValue) ||
+            rent.renter.toLowerCase().includes(filterValue));
     }
 
     onSelect(rent: Rent) {

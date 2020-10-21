@@ -3,10 +3,12 @@ import {UserProfileComponent} from '../../user-profile/user-profile.component';
 import {DevicesComponent} from '../../devices/devices.component';
 import {OverviewComponent} from '../../overview/overview.component';
 import {RentsComponent} from '../../rents/rents.component';
+import {EditRentComponent} from '../../edit-rent/edit-rent.component';
 
 export const AdminLayoutRoutes: Routes = [
     {path: 'overview', component: OverviewComponent},
     {path: 'devices', component: DevicesComponent},
     {path: 'rents', component: RentsComponent},
     {path: 'user-profile', component: UserProfileComponent},
+    {path: 'rent/:id', component: EditRentComponent},
 ];
