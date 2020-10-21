@@ -3,192 +3,182 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
-                    <div class="card-header card-header-primary">
+                    <div class="card-header card-header-tabs card-header-primary">
                         <div class="card-title ">
-                            <h4 style="display: inline-block; padding-top: 12px">Eszközök</h4>
-                            <form class="navbar-form pull-right">
-                                <span class="bmd-form-group">
-                                    <div class="input-group no-border">
-                                        <input type="text" value="" class="form-control text-white"
-                                               placeholder="Keresés..." [formControl]="deviceSearchControl">
-                                        <button mat-raised-button type="submit" class="btn btn-warning btn-just-icon">
-                                            <i class="material-icons">search</i>
-                                            <div class="ripple-container"></div>
-                                        </button>
-                                        <button mat-raised-button type="submit" class="btn btn-warning btn-just-icon">
-                                            <i class="material-icons">filter_alt</i>
-                                            <div class="ripple-container"></div>
-                                        </button>
-                                        <button mat-raised-button type="submit" class="btn btn-warning btn-just-icon">
-                                            <i class="material-icons">add</i>
-                                            <div class="ripple-container"></div>
-                                        </button>
-                                    </div>
-                                </span>
-                            </form>
-                        </div>
-                        <!--<p class="card-category"> Here is a subtitle for this table</p>-->
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table">
-                                <thead class="text-orange">
-                                <th>
-                                    Név
-                                </th>
-                                <th>
-                                    Vonalkód
-                                </th>
-                                <th>
-                                    Gyártó
-                                </th>
-                                <th>
-                                    Típus
-                                </th>
-                                <th>
-                                    Mennyiség
-                                </th>
-                                <th>
-                                    Kategória
-                                </th>
-                                <th>
-                                    Tárolási hely
-                                </th>
-                                <th>
-                                    Tömeg
-                                </th>
-                                <th>
-                                    Másolás
-                                </th>
-                                <th>
-                                    Szerkesztés
-                                </th>
-                                </thead>
-                                <tbody>
-                                <tr *ngFor="let device of filteredDevices | async">
-                                    <td>
-                                        {{device.name}}
-                                    </td>
-                                    <td>
-                                        {{device.barcode}}
-                                    </td>
-                                    <td>
-                                        {{device.maker}}
-                                    </td>
-                                    <td>
-                                        {{device.type}}
-                                    </td>
-                                    <td>
-                                        {{device.quantity}}
-                                    </td>
-                                    <td>
-                                        {{device.category.name}}
-                                    </td>
-                                    <td>
-                                        {{device.location.name}}
-                                    </td>
-                                    <td>
-                                        {{device.weight / 1000}} kg
-                                    </td>
-                                    <td>
-                                        <button mat-raised-button type="button"
-                                                class="btn btn-info pull-center btn-just-icon"><i
-                                                class="material-icons" (click)="createCopy(device)">content_copy</i>
-                                        </button>
-                                    </td>
-                                    <td>
-                                        <button mat-raised-button type="button"
-                                                class="btn btn-info pull-center btn-just-icon">
-                                            <i class="material-icons" (click)="edit(device)">create</i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="card-header card-header-primary">
-                        <div class="card-title ">
-                            <h4 style="display: inline-block; padding-top: 12px">Összetett eszközök</h4>
-                            <form class="navbar-form pull-right">
-                                <span class="bmd-form-group">
-                                    <div class="input-group no-border">
-                                        <input type="text" value="" class="form-control text-white"
-                                               placeholder="Keresés..." [formControl]="compositeItemSearchControl">
-                                        <button mat-raised-button type="submit" class="btn btn-warning btn-just-icon">
-                                            <i class="material-icons">search</i>
-                                            <div class="ripple-container"></div>
-                                        </button>
-                                        <button mat-raised-button type="submit" class="btn btn-warning btn-just-icon">
-                                            <i class="material-icons">filter_alt</i>
-                                            <div class="ripple-container"></div>
-                                        </button>
-                                        <button mat-raised-button type="submit" class="btn btn-warning btn-just-icon">
-                                            <i class="material-icons">add</i>
-                                            <div class="ripple-container"></div>
-                                        </button>
-                                    </div>
-                                </span>
-                            </form>
+                            <div class="nav-tabs-navigation list-title mt-1">
+                                <div class="nav-tabs-wrapper">
+                                    <ul class="nav nav-tabs" data-tabs="tabs">
+                                        <li class="nav-item active">
+                                            <a href="#devices" class="nav-link active" style="vertical-align: center" data-toggle="tab">
+                                                <h4 class="mb-0">Eszközök</h4>
+                                                <div class="ripple-container"></div>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="#composites" class="nav-link" data-toggle="tab">
+                                                <h4 class="mb-0">Összetett eszközök</h4>
+                                                <div class="ripple-container"></div>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="pull-right form-inline">
+                                <mat-form-field class="deviceSearchField">
+                                    <mat-label>Keresés...</mat-label>
+                                    <input matInput class="searchInput" type="text" [formControl]="deviceSearchControl" autocomplete="off">
+                                    <button mat-button matSuffix mat-icon-button
+                                            *ngIf="deviceSearchControl.value !== ''" aria-label="deviceSearch">
+                                        <mat-icon (click)="deviceSearchControl.setValue('')">clear</mat-icon>
+                                    </button>
+                                </mat-form-field>
+                                <button class="ml-1" mat-button mat-icon-button aria-label="Filter">
+                                    <mat-icon>filter_alt</mat-icon>
+                                </button>
+                                <button class="ml-1 addButton" mat-mini-fab mat-icon-button aria-label="Add">
+                                    <mat-icon>add</mat-icon>
+                                </button>
+                            </div>
                         </div>
                     </div>
                     <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table">
-                                <thead class="text-orange">
-                                <th>
-                                    Név
-                                </th>
-                                <th>
-                                    Vonalkód
-                                </th>
-                                <th>
-                                    Tartalmazott eszközök száma
-                                </th>
-                                <th>
-                                    Tömeg
-                                </th>
-                                <th>
-                                    Tárolási hely
-                                </th>
-                                <th>
-                                    Szerkesztés
-                                </th>
-                                </thead>
-                                <tbody>
-                                <tr *ngFor="let compositeItem of filteredCompositeItems | async">
-                                    <td>
-                                        {{compositeItem.name}}
-                                    </td>
-                                    <td>
-                                        {{compositeItem.barcode}}
-                                    </td>
-                                    <td>
-                                        {{compositeItem.devices.length}}
-                                    </td>
-                                    <td>
-                                        {{compositeItem.getWeight() / 1000}} kg
-                                    </td>
-                                    <td>
-                                        {{compositeItem.location.name}}
-                                    </td>
-                                    <td>
-                                        <button mat-raised-button type="button"
-                                                class="btn btn-info pull-center btn-just-icon"><i
-                                                class="material-icons">create</i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="devices">
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead class="text-orange">
+                                        <th>
+                                            Név
+                                        </th>
+                                        <th>
+                                            Vonalkód
+                                        </th>
+                                        <th>
+                                            Gyártó
+                                        </th>
+                                        <th>
+                                            Típus
+                                        </th>
+                                        <th>
+                                            Mennyiség
+                                        </th>
+                                        <th>
+                                            Kategória
+                                        </th>
+                                        <th>
+                                            Tárolási hely
+                                        </th>
+                                        <th>
+                                            Tömeg
+                                        </th>
+                                        <th>
+                                            Másolás
+                                        </th>
+                                        <th>
+                                            Szerkesztés
+                                        </th>
+                                        </thead>
+                                        <tbody>
+                                        <tr *ngFor="let device of filteredDevices | async">
+                                            <td>
+                                                {{device.name}}
+                                            </td>
+                                            <td>
+                                                {{device.barcode}}
+                                            </td>
+                                            <td>
+                                                {{device.maker}}
+                                            </td>
+                                            <td>
+                                                {{device.type}}
+                                            </td>
+                                            <td>
+                                                {{device.quantity}}
+                                            </td>
+                                            <td>
+                                                {{device.category.name}}
+                                            </td>
+                                            <td>
+                                                {{device.location.name}}
+                                            </td>
+                                            <td>
+                                                {{device.weight / 1000}} kg
+                                            </td>
+                                            <td>
+                                                <button mat-raised-button type="button"
+                                                        class="btn btn-info pull-center btn-just-icon"><i
+                                                        class="material-icons"
+                                                        (click)="createCopy(device)">content_copy</i>
+                                                </button>
+                                            </td>
+                                            <td>
+                                                <button mat-raised-button type="button"
+                                                        class="btn btn-info pull-center btn-just-icon">
+                                                    <i class="material-icons" (click)="edit(device)">create</i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="composites">
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead class="text-orange">
+                                        <th>
+                                            Név
+                                        </th>
+                                        <th>
+                                            Vonalkód
+                                        </th>
+                                        <th>
+                                            Tartalmazott eszközök száma
+                                        </th>
+                                        <th>
+                                            Tömeg
+                                        </th>
+                                        <th>
+                                            Tárolási hely
+                                        </th>
+                                        <th>
+                                            Szerkesztés
+                                        </th>
+                                        </thead>
+                                        <tbody>
+                                        <tr *ngFor="let compositeItem of filteredCompositeItems | async">
+                                            <td>
+                                                {{compositeItem.name}}
+                                            </td>
+                                            <td>
+                                                {{compositeItem.barcode}}
+                                            </td>
+                                            <td>
+                                                {{compositeItem.devices.length}}
+                                            </td>
+                                            <td>
+                                                {{compositeItem.getWeight() / 1000}} kg
+                                            </td>
+                                            <td>
+                                                {{compositeItem.location.name}}
+                                            </td>
+                                            <td>
+                                                <button mat-raised-button type="button"
+                                                        class="btn btn-info pull-center btn-just-icon"><i
+                                                        class="material-icons">create</i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
+
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
 </div>

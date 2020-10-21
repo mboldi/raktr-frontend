@@ -43,6 +43,8 @@ export class DevicesComponent implements OnInit {
         this.getDevices();
         this.getCompositeItems();
 
+        this.deviceSearchControl.setValue('');
+
         this.filteredDevices = this.deviceSearchControl.valueChanges
             .pipe(
                 startWith(''),
@@ -81,5 +83,9 @@ export class DevicesComponent implements OnInit {
         const editModal = this.modalService.open(EditDeviceModalComponent, {size: 'lg', windowClass: 'modal-holder'});
         editModal.componentInstance.title = 'Eszköz szerkesztése';
         editModal.componentInstance.device = device;
+    }
+
+    clearDeviceSearch() {
+        this.deviceSearchControl.setValue('');
     }
 }
