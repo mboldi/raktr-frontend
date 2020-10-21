@@ -3,14 +3,12 @@ import {Title} from '@angular/platform-browser';
 import {FormControl} from '@angular/forms';
 import {Observable} from 'rxjs';
 import {map, startWith} from 'rxjs/operators';
-import {MOCK_CATEGORIES} from '../mockData/mockCategories';
-import {MOCK_LOCATIONS} from '../mockData/mockLocations';
-import {Category} from '../model/Category';
-import {Location} from '../model/Location';
 import {Device} from '../model/Device';
 import {DeviceService} from '../services/device.service';
 import {CompositeItem} from '../model/CompositeItem';
 import {CompositeService} from '../services/composite.service';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {EditDeviceModalComponent} from '../edit-device-modal/edit-device-modal.component';
 
 @Component({
     selector: 'app-table-list',
@@ -19,13 +17,6 @@ import {CompositeService} from '../services/composite.service';
     providers: [Title]
 })
 export class DevicesComponent implements OnInit {
-
-    categoryControl = new FormControl();
-    categoryOptions: Category[] = MOCK_CATEGORIES;
-    filteredCategoryOptions: Observable<Category[]>;
-    locationControl = new FormControl();
-    locationOptions: Location[] = MOCK_LOCATIONS;
-    filteredLocationOptions: Observable<Location[]>;
 
     deviceSearchControl = new FormControl();
     compositeItemSearchControl = new FormControl();
@@ -36,7 +27,7 @@ export class DevicesComponent implements OnInit {
     compositeItems: CompositeItem[];
     filteredCompositeItems: Observable<CompositeItem[]>;
 
-    constructor(private title: Title, private deviceService: DeviceService, private compositeService: CompositeService) {
+    constructor(private title: Title, private deviceService: DeviceService, private compositeService: CompositeService, private modalService: NgbModal) {
         this.title.setTitle('Raktr - Eszközök');
     }
 
@@ -52,18 +43,6 @@ export class DevicesComponent implements OnInit {
         this.getDevices();
         this.getCompositeItems();
 
-        this.filteredCategoryOptions = this.categoryControl.valueChanges
-            .pipe(
-                startWith(''),
-                map(value => this._filterCategories(this.categoryOptions, value))
-            );
-
-        this.filteredLocationOptions = this.locationControl.valueChanges
-            .pipe(
-                startWith(''),
-                map(value => this._filterLocations(this.locationOptions, value))
-            );
-
         this.filteredDevices = this.deviceSearchControl.valueChanges
             .pipe(
                 startWith(''),
@@ -76,19 +55,6 @@ export class DevicesComponent implements OnInit {
                 map(value => this._filterCompositeItems(this.compositeItems, value))
             );
 
-        console.log(this.filteredCategoryOptions);
-    }
-
-    private _filterCategories(categories: Category[], value: string): Category[] {
-        const filterValue = value.toLowerCase();
-
-        return categories.filter(category => category.name.toLowerCase().includes(filterValue));
-    }
-
-    private _filterLocations(locations: Location[], value: string): Location[] {
-        const filterValue = value.toLowerCase();
-
-        return locations.filter(location => location.name.toLowerCase().includes(filterValue));
     }
 
     private _filterDevices(devices_: Device[], value: string): Device[] {
@@ -112,6 +78,8 @@ export class DevicesComponent implements OnInit {
     }
 
     edit(device: Device) {
-        return;
+        const editModal = this.modalService.open(EditDeviceModalComponent, {size: 'lg', windowClass: 'modal-holder'});
+        editModal.componentInstance.title = 'Eszköz szerkesztése';
+        editModal.componentInstance.device = device;
     }
 }

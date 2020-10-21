@@ -8,7 +8,6 @@ import {AppRoutingModule} from './app.routing';
 import {ComponentsModule} from './components/components.module';
 
 import {AppComponent} from './app.component';
-import {AgmCoreModule} from '@agm/core';
 import {AdminLayoutComponent} from './layouts/admin-layout/admin-layout.component';
 import {RentsComponent} from './rents/rents.component';
 import {MatFormFieldModule} from '@angular/material/form-field';
@@ -17,6 +16,9 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MAT_DATE_LOCALE, MatNativeDateModule} from '@angular/material/core';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import {EditDeviceModalComponent} from './edit-device-modal/edit-device-modal.component';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import { EditRentComponent } from './edit-rent/edit-rent.component';
 
 @NgModule({
     imports: [
@@ -27,20 +29,20 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
         ComponentsModule,
         RouterModule,
         AppRoutingModule,
-        AgmCoreModule.forRoot({
-            apiKey: 'YOUR_GOOGLE_MAPS_API_KEY'
-        }),
         MatFormFieldModule,
         MatInputModule,
         MatDatepickerModule,
         MatNativeDateModule,
         MatCheckboxModule,
-        MatAutocompleteModule
+        MatAutocompleteModule,
+        NgbModule
     ],
     declarations: [
         AppComponent,
         AdminLayoutComponent,
         RentsComponent,
+        EditDeviceModalComponent,
+        EditRentComponent,
     ],
     providers: [
         {provide: MAT_DATE_LOCALE, useValue: 'hu-HU'},

@@ -98,8 +98,7 @@
                                     </td>
                                     <td>
                                         <button mat-raised-button type="button"
-                                                class="btn btn-info pull-center btn-just-icon"
-                                                data-toggle="modal" data-target=".edit-device-dialog">
+                                                class="btn btn-info pull-center btn-just-icon">
                                             <i class="material-icons" (click)="edit(device)">create</i>
                                         </button>
                                     </td>
@@ -189,104 +188,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade edit-device-dialog" tabindex="-1" role="dialog" aria-labelledby="editDeviceDialog"
-     aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="container-fluid">
-                <h3>Eszköz szerkesztése</h3>
-                <form>
-                    <div class="row">
-                        <div class="col-md-7  col-sm-12">
-                            <mat-form-field class="example-full-width">
-                                <div class="input-group">
-                                    <input matInput placeholder="Eszköz neve" type="text" required>
-                                    <div class="invalid-feedback">
-                                        Kérlek add meg az eszköz nevét!
-                                    </div>
-                                </div>
-                            </mat-form-field>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-5  col-sm-12">
-                            <mat-form-field class="example-full-width">
-                                <input matInput placeholder="Gyártó">
-                            </mat-form-field>
-                        </div>
-                        <div class="col-md-7  col-sm-12">
-                            <mat-form-field class="example-full-width">
-                                <input matInput placeholder="Típus">
-                            </mat-form-field>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6  col-sm-12">
-                            <mat-form-field class="example-full-width">
-                                <input type="text"
-                                       matInput
-                                       [formControl]="categoryControl"
-                                       [matAutocomplete]="autoCategory"
-                                       placeholder="Kategória" required>
-                                <mat-autocomplete #autoCategory="matAutocomplete">
-                                    <mat-option *ngFor="let option of filteredCategoryOptions | async" [value]="option.name">
-                                        {{option.name}}
-                                    </mat-option>
-                                </mat-autocomplete>
-                            </mat-form-field>
-                        </div>
-                        <div class="col-md-6  col-sm-12">
-                            <mat-form-field class="example-full-width">
-                                <input type="text"
-                                       matInput
-                                       [formControl]="locationControl"
-                                       [matAutocomplete]="autoLocation"
-                                       placeholder="Tárolási hely" required>
-                                <mat-autocomplete #autoLocation="matAutocomplete">
-                                    <mat-option *ngFor="let option of filteredLocationOptions | async" [value]="option.name">
-                                        {{option.name}}
-                                    </mat-option>
-                                </mat-autocomplete>
-                            </mat-form-field>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-5  col-sm-12">
-                            <mat-form-field class="example-full-width">
-                                <input matInput placeholder="Vonalkód tartalma" type="text" required>
-                            </mat-form-field>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6  col-sm-12">
-                            <mat-form-field class="example-full-width">
-                                <input matInput placeholder="Tömeg (gramm)" type="number" min="1">
-                            </mat-form-field>
-                        </div>
-                        <div class="col-md-6  col-sm-12">
-                            <mat-form-field class="example-full-width">
-                                <input matInput placeholder="Érték (Ft)" type="number" min="1">
-                            </mat-form-field>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-5  col-sm-12">
-                            <mat-form-field class="example-full-width">
-                                <input matInput placeholder="Birtokolt mennyiség azonos vonalkód alatt"
-                                       type="number" min="1" [defaultValue]="1" required>
-                            </mat-form-field>
-                        </div>
-                    </div>
-                    <button mat-raised-button type="submit" class="btn btn-info pull-right" data-dismiss="modal">
-                        Mentés
-                    </button>
-                    <div class="clearfix"></div>
-                </form>
             </div>
         </div>
     </div>
