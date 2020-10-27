@@ -5,7 +5,6 @@ import {Rent} from '../model/Rent';
 import {RentService} from '../services/rent.service';
 import {FormControl} from '@angular/forms';
 import {map, startWith} from 'rxjs/operators';
-import {Device} from '../model/Device';
 import {Observable} from 'rxjs';
 
 @Component({
@@ -28,7 +27,13 @@ export class RentsComponent implements OnInit {
     ngOnInit(): void {
         this.rentSearchControl.setValue('');
 
-        this.rentService.getRents().subscribe(rents => this.rents = rents);
+        this.rentService.getRents().subscribe(rents => this.rents =
+            rents.sort(((a, b) => {
+                const aDate = new Date(a.actBackDate === '' ? a.actBackDate : a.expBackDate);
+                const bDate = new Date(b.actBackDate === '' ? b.actBackDate : b.expBackDate);
+
+                return aDate.getTime() - bDate.getTime();
+            })));
 
         this.filteredRents = this.rentSearchControl.valueChanges
             .pipe(

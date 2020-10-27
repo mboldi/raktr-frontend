@@ -1,0 +1,11 @@
+.main-content {
+    margin-top: 0px !important;
+}
+
+.backbutton {
+    z-index: 3000 !important;
+}
+
+.full-width {
+    width: 100%;
+}

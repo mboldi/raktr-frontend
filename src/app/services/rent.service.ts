@@ -7,6 +7,7 @@ import {DeviceStatus} from '../model/DeviceStatus';
 import {MOCK_CATEGORIES} from '../mockData/mockCategories';
 import {RentItem} from '../model/RentItem';
 import {BackStatus} from '../model/BackStatus';
+import {map} from 'rxjs/operators';
 
 @Injectable({
     providedIn: 'root'
@@ -83,7 +84,7 @@ export class RentService {
             ]
         ),
         new Rent(
-            0,
+            1,
             'Fontos közvetítés',
             'István',
             'Sándor',
@@ -106,5 +107,11 @@ export class RentService {
 
     getRents(): Observable<Rent[]> {
         return of(this.mockRents);
+    }
+
+    getRent(id: number |string) {
+        return this.getRents().pipe(
+            map((rents: Rent[]) => rents.find(rent => rent.id === +id))
+        );
     }
 }

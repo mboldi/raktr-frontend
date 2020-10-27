@@ -35,7 +35,7 @@
                                matInput
                                [formControl]="categoryControl"
                                [matAutocomplete]="autoCategory"
-                               placeholder="Kategória" required value="{{device.category ? device.category.name : ''}}">
+                               placeholder="Kategória" required [defaultValue]="device.category ? device.category.name : ''">
                         <mat-autocomplete #autoCategory="matAutocomplete">
                             <mat-option *ngFor="let option of filteredCategoryOptions | async"
                                         [value]="option.name">
@@ -51,7 +51,7 @@
                                matInput
                                [formControl]="locationControl"
                                [matAutocomplete]="autoLocation"
-                               required value="{{device.location ? device.location.name : ''}}">
+                               required [defaultValue]="device.location ? device.location.name : ''">
                         <mat-autocomplete #autoLocation="matAutocomplete">
                             <mat-option *ngFor="let option of filteredLocationOptions | async"
                                         [value]="option.name">

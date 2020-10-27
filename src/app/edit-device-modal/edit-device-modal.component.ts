@@ -62,23 +62,4 @@ export class EditDeviceModalComponent implements OnInit {
     save() {
         this.activeModal.dismiss('save')
     }
-
-    addItemToRent() {
-        this.showNotification('Hozzáadva sikeresen!', 'success');
-    }
-
-    showNotification(message_: string, type: string) {
-        $['notify']({
-            icon: 'add_alert',
-            message: message_
-        }, {
-            type: type,
-            timer: 1000,
-            placement: {
-                from: 'top',
-                align: 'right'
-            },
-            z_index: 2000
-        })
-    }
 }
