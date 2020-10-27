@@ -109,9 +109,23 @@ export class RentService {
         return of(this.mockRents);
     }
 
-    getRent(id: number |string) {
+    getRent(id: number | string) {
         return this.getRents().pipe(
             map((rents: Rent[]) => rents.find(rent => rent.id === +id))
         );
+    }
+
+    removeFromRent(rentId: number, rentItem: RentItem) {
+        // TODO delete
+        return;
+    }
+
+    addItemToRent(rentId: number, newRentItem: RentItem): Observable<Rent> {
+        console.log("alma");
+        this.mockRents.find(rent => rent.id === rentId).rentItems.push(newRentItem);
+
+        console.log(this.mockRents.find(rent => rent.id === rentId));
+
+        return of(this.mockRents.find(rent => rent.id === rentId));
     }
 }

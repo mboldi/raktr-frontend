@@ -8,7 +8,6 @@ import {MOCK_LOCATIONS} from '../mockData/mockLocations';
 import {map, startWith} from 'rxjs/operators';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {Device} from '../model/Device';
-import * as $ from 'jquery';
 
 @Component({
     selector: 'app-edit-device-modal',

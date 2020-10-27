@@ -27,7 +27,10 @@ export class DevicesComponent implements OnInit {
     compositeItems: CompositeItem[];
     filteredCompositeItems: Observable<CompositeItem[]>;
 
-    constructor(private title: Title, private deviceService: DeviceService, private compositeService: CompositeService, private modalService: NgbModal) {
+    constructor(private title: Title,
+                private deviceService: DeviceService,
+                private compositeService: CompositeService,
+                private modalService: NgbModal) {
         this.title.setTitle('Raktr - Eszközök');
     }
 

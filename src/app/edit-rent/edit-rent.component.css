@@ -3,7 +3,11 @@
 }
 
 .backbutton {
-    z-index: 3000 !important;
+    z-index: 1100 !important;
+}
+
+.modal-holder {
+    z-index: 2000 !important;
 }
 
 .full-width {

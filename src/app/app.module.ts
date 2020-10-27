@@ -22,8 +22,8 @@ import {EditRentComponent} from './edit-rent/edit-rent.component';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
 import {MatToolbarModule} from '@angular/material/toolbar';
-import {MatSuffix} from '@angular/material/form-field';
 import {LoginComponent} from './login/login.component';
+import { DeviceToRentModalComponent } from './device-to-rent-modal/device-to-rent-modal.component';
 
 @NgModule({
     imports: [
@@ -52,6 +52,7 @@ import {LoginComponent} from './login/login.component';
         EditDeviceModalComponent,
         EditRentComponent,
         LoginComponent,
+        DeviceToRentModalComponent,
     ],
     providers: [
         {provide: MAT_DATE_LOCALE, useValue: 'hu-HU'},

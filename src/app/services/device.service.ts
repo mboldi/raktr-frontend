@@ -4,6 +4,7 @@ import {MOCK_LOCATIONS} from '../mockData/mockLocations';
 import {DeviceStatus} from '../model/DeviceStatus';
 import {MOCK_CATEGORIES} from '../mockData/mockCategories';
 import {Observable, of} from 'rxjs';
+import {Scannable} from '../model/Scannable';
 
 @Injectable({
     providedIn: 'root'
@@ -51,6 +52,20 @@ export class DeviceService {
             DeviceStatus.GOOD,
             MOCK_CATEGORIES[2],
             1,
+        ),
+        new Device(
+            3,
+            '15m hosszabbító',
+            'B-CABLE-1x16HT-15m',
+            'BSS',
+            '15m csirke',
+            'adsaddd',
+            4500,
+            1500,
+            MOCK_LOCATIONS[0],
+            DeviceStatus.GOOD,
+            MOCK_CATEGORIES[2],
+            10,
         )
     ];
 
@@ -63,5 +78,9 @@ export class DeviceService {
 
     getDeviceNum(): Observable<number> {
         return of(this.mockDevices.length);
+    }
+
+    getDeviceByBarcode(barcode: string): Observable<Scannable> {
+        return of(this.mockDevices.filter(device => device.barcode === barcode)[0]);
     }
 }

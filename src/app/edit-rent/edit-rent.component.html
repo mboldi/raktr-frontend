@@ -41,7 +41,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-xl-2 col-lg-3 col-md-4  col-sm-12">
+                                <div class="col-xl-3 col-lg-4 col-md-5  col-sm-12">
                                     <mat-form-field class="full-width">
                                         <mat-label>Kivitel ideje</mat-label>
                                         <input matInput [matDatepicker]="picker_out"
@@ -50,7 +50,7 @@
                                         <mat-datepicker #picker_out></mat-datepicker>
                                     </mat-form-field>
                                 </div>
-                                <div class="col-xl-2 col-lg-3 col-md-4  col-sm-12">
+                                <div class="col-xl-3 col-lg-4 col-md-5  col-sm-12">
                                     <mat-form-field class="full-width">
                                         <mat-label>Várható visszaérkezés</mat-label>
                                         <input matInput [matDatepicker]="picker_exp"
@@ -59,7 +59,7 @@
                                         <mat-datepicker #picker_exp></mat-datepicker>
                                     </mat-form-field>
                                 </div>
-                                <div class="col-xl-2 col-lg-3 col-md-4  col-sm-12">
+                                <div class="col-xl-3 col-lg-4 col-md-5  col-sm-12">
                                     <mat-form-field class="full-width">
                                         <mat-label>Tényleges visszaérkezés</mat-label>
                                         <input matInput [matDatepicker]="picker_back"
@@ -84,7 +84,7 @@
                                 <div class="col-xl-4 col-lg-5 col-md-6 col-sm-12">
                                     <mat-form-field class="full-width">
                                         <input matInput placeholder="Hozzáadandó vonalkódja"
-                                               [formControl]=""
+                                               [formControl]="addDeviceFormControl"
                                                (keyup.enter)="addItemToRent()">
                                         <button mat-button mat-icon-button matSuffix type="button"
                                                 (click)="addItemToRent()">
@@ -95,7 +95,8 @@
                                 <div class="col-xl-4 col-lg-2 col-md-1 col-sm-0"></div>
                                 <mat-form-field class="deviceSearchField col-xl-4 col-lg-5 col-md-6 col-sm-12">
                                     <mat-label>Keresés...</mat-label>
-                                    <input matInput class="searchInput" type="text" [formControl]="searchControl" autocomplete="off">
+                                    <input matInput class="searchInput" type="text" [formControl]="searchControl"
+                                           autocomplete="off">
                                     <button mat-button matSuffix mat-icon-button
                                             *ngIf="searchControl.value !== ''" aria-label="search">
                                         <mat-icon (click)="searchControl.setValue('')">clear</mat-icon>
@@ -152,6 +153,12 @@
                         </form>
                     </div>
                 </div>
+            </div>
+            <div class="col-md-12" *ngIf="(rent$ | async) == null">
+                <h1 style="text-align: center">Hoppá!</h1>
+                <h3 style="text-align: center">Nincs ilyen ID-vel rendelkező eszköz, vagy csak vak vagyok és nem
+                    találom :(
+                </h3>
             </div>
         </div>
     </div>
