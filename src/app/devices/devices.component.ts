@@ -17,9 +17,9 @@ import {EditDeviceModalComponent} from '../edit-device-modal/edit-device-modal.c
     providers: [Title]
 })
 export class DevicesComponent implements OnInit {
+    currentTab = 'devices';
 
-    deviceSearchControl = new FormControl();
-    compositeItemSearchControl = new FormControl();
+    searchControl = new FormControl();
 
     devices: Device[];
     filteredDevices: Observable<Device[]>
@@ -43,20 +43,19 @@ export class DevicesComponent implements OnInit {
         this.getDevices();
         this.getCompositeItems();
 
-        this.deviceSearchControl.setValue('');
+        this.searchControl.setValue('');
 
-        this.filteredDevices = this.deviceSearchControl.valueChanges
+        this.filteredDevices = this.searchControl.valueChanges
             .pipe(
                 startWith(''),
                 map(value => this._filterDevices(this.devices, value))
             );
 
-        this.filteredCompositeItems = this.compositeItemSearchControl.valueChanges
+        this.filteredCompositeItems = this.searchControl.valueChanges
             .pipe(
                 startWith(''),
                 map(value => this._filterCompositeItems(this.compositeItems, value))
             );
-
     }
 
     private _filterDevices(devices_: Device[], value: string): Device[] {
@@ -85,7 +84,18 @@ export class DevicesComponent implements OnInit {
         editModal.componentInstance.device = device;
     }
 
-    clearDeviceSearch() {
-        this.deviceSearchControl.setValue('');
+    create() {
+        switch (this.currentTab) {
+            case 'devices':
+                console.log('clicked');
+                const editModal = this.modalService.open(EditDeviceModalComponent, {size: 'lg', windowClass: 'modal-holder'});
+                editModal.componentInstance.title = 'Új eszköz';
+                break;
+        }
+    }
+
+    setTab(tabName: string) {
+        this.currentTab = tabName;
+        this.searchControl.setValue('');
     }
 }

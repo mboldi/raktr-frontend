@@ -2,7 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {Category} from '../model/Category';
 import {MOCK_CATEGORIES} from '../mockData/mockCategories';
-import {Observable, of} from 'rxjs';
+import {Observable} from 'rxjs';
 import {Location} from '../model/Location';
 import {MOCK_LOCATIONS} from '../mockData/mockLocations';
 import {map, startWith} from 'rxjs/operators';
@@ -30,6 +30,10 @@ export class EditDeviceModalComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        if (this.device === undefined) {
+            this.device = new Device();
+        }
+
         this.filteredCategoryOptions = this.categoryControl.valueChanges
             .pipe(
                 startWith(''),

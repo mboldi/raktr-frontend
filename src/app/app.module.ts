@@ -22,6 +22,7 @@ import {EditRentComponent} from './edit-rent/edit-rent.component';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
 import {MatToolbarModule} from '@angular/material/toolbar';
+import {MatSuffix} from '@angular/material/form-field';
 import {LoginComponent} from './login/login.component';
 
 @NgModule({

@@ -9,13 +9,13 @@
                                 <div class="nav-tabs-wrapper">
                                     <ul class="nav nav-tabs" data-tabs="tabs">
                                         <li class="nav-item active">
-                                            <a href="#devices" class="nav-link active" style="vertical-align: center" data-toggle="tab">
+                                            <a href="#devices" class="nav-link active" data-toggle="tab" (click)="setTab('devices')">
                                                 <h4 class="mb-0">Eszközök</h4>
                                                 <div class="ripple-container"></div>
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a href="#composites" class="nav-link" data-toggle="tab">
+                                            <a href="#composites" class="nav-link" data-toggle="tab" (click)="setTab('composites')">
                                                 <h4 class="mb-0">Összetett eszközök</h4>
                                                 <div class="ripple-container"></div>
                                             </a>
@@ -26,16 +26,16 @@
                             <div class="pull-right form-inline">
                                 <mat-form-field class="deviceSearchField">
                                     <mat-label>Keresés...</mat-label>
-                                    <input matInput class="searchInput" type="text" [formControl]="deviceSearchControl" autocomplete="off">
+                                    <input matInput class="searchInput" type="text" [formControl]="searchControl" autocomplete="off">
                                     <button mat-button matSuffix mat-icon-button
-                                            *ngIf="deviceSearchControl.value !== ''" aria-label="deviceSearch">
-                                        <mat-icon (click)="deviceSearchControl.setValue('')">clear</mat-icon>
+                                            *ngIf="searchControl.value !== ''" aria-label="search">
+                                        <mat-icon (click)="searchControl.setValue('')">clear</mat-icon>
                                     </button>
                                 </mat-form-field>
                                 <button class="ml-1" mat-button mat-icon-button aria-label="Filter">
                                     <mat-icon>filter_alt</mat-icon>
                                 </button>
-                                <button class="ml-1 addButton" mat-mini-fab mat-icon-button aria-label="Add">
+                                <button class="ml-1 addButton" color="warn" mat-mini-fab aria-label="Add" (click)="create()">
                                     <mat-icon>add</mat-icon>
                                 </button>
                             </div>

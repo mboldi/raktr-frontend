@@ -14,8 +14,8 @@ export class Device extends Scannable {
     category: Category;
     quantity: number;
 
-    constructor(id: number, name: string, barcode: string, maker: string, type: string, serial: string, value: number, weight: number,
-                location: Location, status: DeviceStatus, category: Category, quantity: number) {
+    constructor(id: number = 0, name: string = '', barcode: string = '', maker: string = '', type: string = '', serial: string = '', value: number = 0, weight: number = 0,
+                location: Location = null, status: DeviceStatus = DeviceStatus.GOOD, category: Category = null, quantity: number = 1) {
         super('device', id, name, barcode);
         this.maker = maker;
         this.type = type;
