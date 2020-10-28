@@ -18,7 +18,7 @@ export class RentService {
         new Device(
             0,
             '320 kamera',
-            'B-CAMERA-320-1',
+            'B-CAM-320-1',
             'Sony',
             'PMW-320',
             '123456',
@@ -32,7 +32,7 @@ export class RentService {
         new Device(
             1,
             'EX3 kamera',
-            'B-CAMERA-EX3-1',
+            'B-CAM-EX3-1',
             'Sony',
             'PMW-EX3',
             '123456dsa',
@@ -121,7 +121,6 @@ export class RentService {
     }
 
     addItemToRent(rentId: number, newRentItem: RentItem): Observable<Rent> {
-        console.log("alma");
         this.mockRents.find(rent => rent.id === rentId).rentItems.push(newRentItem);
 
         console.log(this.mockRents.find(rent => rent.id === rentId));

@@ -14,7 +14,7 @@ export class DeviceService {
         new Device(
             0,
             '320 kamera',
-            'B-CAMERA-320-1',
+            'B-CAM-320-1',
             'Sony',
             'PMW-320',
             '123456',
@@ -28,7 +28,7 @@ export class DeviceService {
         new Device(
             1,
             'EX3 kamera',
-            'B-CAMERA-EX3-1',
+            'B-CAM-EX3-1',
             'Sony',
             'PMW-EX3',
             '123456dsa',
@@ -81,6 +81,7 @@ export class DeviceService {
     }
 
     getDeviceByBarcode(barcode: string): Observable<Scannable> {
+        console.log('"' + barcode + '"');
         return of(this.mockDevices.filter(device => device.barcode === barcode)[0]);
     }
 }

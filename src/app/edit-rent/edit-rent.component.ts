@@ -110,6 +110,12 @@ export class EditRentComponent implements OnInit {
 
         this.rent$ = this.rentService.addItemToRent(this.rent.id, newRentItem);
 
+        this.rent$.subscribe(rent => {
+            this.rentItems = rent.rentItems;
+            this.rent = rent;
+            this.filteredRentItems = of(this.rentItems);
+        })
+
         console.log(this.rent.rentItems);
     }
 
