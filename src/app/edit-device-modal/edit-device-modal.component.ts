@@ -1,13 +1,14 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {Category} from '../model/Category';
-import {MOCK_CATEGORIES} from '../mockData/mockCategories';
 import {Observable} from 'rxjs';
 import {Location} from '../model/Location';
 import {MOCK_LOCATIONS} from '../mockData/mockLocations';
 import {map, startWith} from 'rxjs/operators';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {Device} from '../model/Device';
+import {LocationService} from '../services/location.service';
+import {CategoryService} from '../services/category.service';
 
 @Component({
     selector: 'app-edit-device-modal',
@@ -19,31 +20,60 @@ export class EditDeviceModalComponent implements OnInit {
     @Input() device: Device;
 
     categoryControl = new FormControl();
-    categoryOptions: Category[] = MOCK_CATEGORIES;
+    categoryOptions: Category[];
     filteredCategoryOptions: Observable<Category[]>;
     locationControl = new FormControl();
-    locationOptions: Location[] = MOCK_LOCATIONS;
+    locationOptions: Location[];
     filteredLocationOptions: Observable<Location[]>;
 
-    constructor(public activeModal: NgbActiveModal) {
-    }
+    constructor(public activeModal: NgbActiveModal,
+                private locationService: LocationService,
+                private categoryService: CategoryService) {
+        console.log(this.device);
 
-    ngOnInit(): void {
         if (this.device === undefined) {
             this.device = new Device();
         }
 
-        this.filteredCategoryOptions = this.categoryControl.valueChanges
-            .pipe(
-                startWith(''),
-                map(value => this._filterCategories(this.categoryOptions, value))
-            );
+        console.log(this.device);
 
-        this.filteredLocationOptions = this.locationControl.valueChanges
-            .pipe(
-                startWith(''),
-                map(value => this._filterLocations(this.locationOptions, value))
-            );
+
+    }
+
+    ngOnInit(): void {
+
+        this.categoryService.getCategories().subscribe(categories => {
+            this.categoryOptions = categories;
+
+            console.log(this.categoryOptions);
+
+            this.filteredCategoryOptions = this.categoryControl.valueChanges
+                .pipe(
+                    startWith(''),
+                    map(value => value ? this._filterCategories(this.categoryOptions, value) : this.categoryOptions.slice())
+                );
+        })
+
+        this.locationService.getLocations().subscribe(locations => {
+            this.locationOptions = locations;
+
+            this.filteredLocationOptions = this.locationControl.valueChanges
+                .pipe(
+                    startWith(''),
+                    map(value => value ? this._filterLocations(this.locationOptions, value) : this.locationOptions.slice())
+                );
+        });
+
+
+
+        if (this.device.category !== null) {
+            this.categoryControl.setValue(this.device.category.name);
+        }
+
+        if (this.device.location !== null) {
+            this.locationControl.setValue(this.device.location.name);
+        }
+
     }
 
     private _filterCategories(categories: Category[], value: string): Category[] {

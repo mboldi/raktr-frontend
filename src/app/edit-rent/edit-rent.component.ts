@@ -113,7 +113,11 @@ export class EditRentComponent implements OnInit {
         this.rent$.subscribe(rent => {
             this.rentItems = rent.rentItems;
             this.rent = rent;
-            this.filteredRentItems = of(this.rentItems);
+            this.filteredRentItems = this.searchControl.valueChanges
+                .pipe(
+                    startWith(''),
+                    map(value => this._filterRentItems(this.rentItems, value))
+                );
         })
 
         console.log(this.rent.rentItems);

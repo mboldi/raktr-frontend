@@ -85,8 +85,10 @@
                                     <mat-form-field class="full-width">
                                         <input matInput placeholder="Hozzáadandó vonalkódja"
                                                [formControl]="addDeviceFormControl"
-                                               (keyup.enter)="addItemToRent()">
+                                               (keyup.enter)="addItemToRent()"
+                                                autocomplete="off">
                                         <button mat-button mat-icon-button matSuffix type="button"
+                                                *ngIf="addDeviceFormControl.value"
                                                 (click)="addItemToRent()">
                                             <mat-icon>add</mat-icon>
                                         </button>
@@ -98,7 +100,7 @@
                                     <input matInput class="searchInput" type="text" [formControl]="searchControl"
                                            autocomplete="off">
                                     <button mat-button matSuffix mat-icon-button
-                                            *ngIf="searchControl.value !== ''" aria-label="search">
+                                            *ngIf="searchControl.value" aria-label="search">
                                         <mat-icon (click)="searchControl.setValue('')">clear</mat-icon>
                                     </button>
                                 </mat-form-field>

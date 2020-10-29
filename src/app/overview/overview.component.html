@@ -12,8 +12,12 @@
                     <div class="card-body">
                         <mat-form-field class="deviceSearchField">
                             <mat-label>Eszköz vonalkódja</mat-label>
-                            <input matInput type="text" [(ngModel)]="deviceSearch">
-                            <button mat-button *ngIf="deviceSearch" matSuffix mat-icon-button aria-label="Search" (click)="searchDevice()">
+                            <input matInput autofocus type="text"
+                                   autocomplete="off"
+                                   [formControl]="deviceSearchFormControl"
+                                   (keyup.enter)="searchDevice()">
+                            <button mat-button *ngIf="deviceSearchFormControl.value" matSuffix mat-icon-button aria-label="Search"
+                                    (click)="searchDevice()">
                                 <i class="material-icons">search</i>
                             </button>
                         </mat-form-field>

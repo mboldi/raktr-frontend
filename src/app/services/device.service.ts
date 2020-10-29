@@ -1,15 +1,50 @@
 import {Injectable} from '@angular/core';
 import {Device} from '../model/Device';
-import {MOCK_LOCATIONS} from '../mockData/mockLocations';
 import {DeviceStatus} from '../model/DeviceStatus';
 import {MOCK_CATEGORIES} from '../mockData/mockCategories';
 import {Observable, of} from 'rxjs';
 import {Scannable} from '../model/Scannable';
+import {Location} from '../model/Location';
+import {Category} from '../model/Category';
 
 @Injectable({
     providedIn: 'root'
 })
 export class DeviceService {
+    mockLocations = [
+        new Location(
+            0,
+            'Stúdiótér'
+        ),
+        new Location(
+            1,
+            '110'
+        ),
+        new Location(
+            2,
+            'Páncél'
+        )
+    ];
+
+    mockCategories = [
+        new Category(
+            0,
+            'Videó'
+        ),
+        new Category(
+            1,
+            'Audió'
+        ),
+        new Category(
+            2,
+            'Világítás'
+        ),
+        new Category(
+            3,
+            'Kábel'
+        )
+    ];
+
     mockDevices = [
         new Device(
             0,
@@ -20,9 +55,9 @@ export class DeviceService {
             '123456',
             4500000,
             8000,
-            MOCK_LOCATIONS[1],
+            this.mockLocations[2],
             DeviceStatus.GOOD,
-            MOCK_CATEGORIES[0],
+            this.mockCategories[0],
             1,
         ),
         new Device(
@@ -34,9 +69,9 @@ export class DeviceService {
             '123456dsa',
             2500000,
             4000,
-            MOCK_LOCATIONS[1],
+            this.mockLocations[2],
             DeviceStatus.GOOD,
-            MOCK_CATEGORIES[0],
+            this.mockCategories[0],
             1,
         ),
         new Device(
@@ -48,9 +83,9 @@ export class DeviceService {
             'adsad',
             45000,
             9500,
-            MOCK_LOCATIONS[0],
+            this.mockLocations[0],
             DeviceStatus.GOOD,
-            MOCK_CATEGORIES[2],
+            this.mockCategories[2],
             1,
         ),
         new Device(
@@ -62,9 +97,9 @@ export class DeviceService {
             'adsaddd',
             4500,
             1500,
-            MOCK_LOCATIONS[0],
+            this.mockLocations[0],
             DeviceStatus.GOOD,
-            MOCK_CATEGORIES[2],
+            this.mockCategories[3],
             10,
         )
     ];
@@ -82,6 +117,9 @@ export class DeviceService {
 
     getDeviceByBarcode(barcode: string): Observable<Scannable> {
         console.log('"' + barcode + '"');
-        return of(this.mockDevices.filter(device => device.barcode === barcode)[0]);
+
+        const deviceByCode = this.mockDevices.filter(device => device.barcode === barcode)[0];
+        console.log(deviceByCode);
+        return of(deviceByCode);
     }
 }
