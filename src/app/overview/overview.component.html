@@ -16,7 +16,8 @@
                                    autocomplete="off"
                                    [formControl]="deviceSearchFormControl"
                                    (keyup.enter)="searchDevice()">
-                            <button mat-button *ngIf="deviceSearchFormControl.value" matSuffix mat-icon-button aria-label="Search"
+                            <button mat-button *ngIf="deviceSearchFormControl.value" matSuffix mat-icon-button
+                                    aria-label="Search"
                                     (click)="searchDevice()">
                                 <i class="material-icons">search</i>
                             </button>
@@ -117,9 +118,10 @@
                                         {{rent.getSumWeight() / 1000}} kg
                                     </td>
                                     <td>
-                                        <button mat-raised-button type="submit"
-                                                class="btn btn-info pull-center btn-just-icon"><i
-                                                class="material-icons">create</i>
+                                        <button mat-button mat-raised-button type="button"
+                                                class="btn btn-info pull-center btn-just-icon"
+                                                [routerLink]="['/rent', rent.id]">
+                                            <mat-icon>create</mat-icon>
                                         </button>
                                     </td>
                                 </tr>
@@ -128,105 +130,6 @@
                         </div>
                     </div>
                 </div>
-                <!--<div class="card">
-                    <div class="card-header card-header-primary">
-                        <div class="card-title ">
-                            <h4>Bérlések összekészítés alatt</h4>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table">
-                                <thead class="text-orange">
-                                <th>
-                                    Kiadó
-                                </th>
-                                <th>
-                                    Felelősségvállaló
-                                </th>
-                                <th>
-                                    Kivitel célja
-                                </th>
-                                <th>
-                                    Kivitel ideje
-                                </th>
-                                <th>
-                                    Várható visszaérkezés
-                                </th>
-                                <th>
-                                    Eszközök száma
-                                </th>
-                                <th>
-                                    Össztömeg
-                                </th>
-                                <th>
-                                    Módosítás
-                                </th>
-                                </thead>
-                                <tbody>
-                                <tr>
-                                    <td>
-                                        Béla
-                                    </td>
-                                    <td>
-                                        József
-                                    </td>
-                                    <td>
-                                        Fontos közvetítés
-                                    </td>
-                                    <td>
-                                        2020.09.15.
-                                    </td>
-                                    <td>
-                                        2020.09.23.
-                                    </td>
-                                    <td>
-                                        12
-                                    </td>
-                                    <td>
-                                        102kg
-                                    </td>
-                                    <td>
-                                        <button mat-raised-button type="submit"
-                                                class="btn btn-info pull-center btn-just-icon"><i
-                                                class="material-icons">create</i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        Béla
-                                    </td>
-                                    <td>
-                                        József
-                                    </td>
-                                    <td>
-                                        Fontos közvetítés
-                                    </td>
-                                    <td>
-                                        2020.09.15.
-                                    </td>
-                                    <td>
-                                        2020.09.23.
-                                    </td>
-                                    <td>
-                                        12
-                                    </td>
-                                    <td>
-                                        102kg
-                                    </td>
-                                    <td>
-                                        <button mat-raised-button type="submit"
-                                                class="btn btn-info pull-center btn-just-icon"><i
-                                                class="material-icons">create</i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>-->
             </div>
         </div>
     </div>

@@ -18,7 +18,6 @@ export class OverviewComponent implements OnInit {
 
     rents: Rent[] = [];
     devices: Device[] = [];
-    deviceSearch: string;
     deviceSearchFormControl = new FormControl();
 
     constructor(private title: Title,
@@ -38,7 +37,7 @@ export class OverviewComponent implements OnInit {
     }
 
     activeRents(): Rent[] {
-        return this.rents.filter(rent => rent.actBackDate !== '');
+        return this.rents.filter(rent => rent.actBackDate === '');
     }
 
     searchDevice() {
