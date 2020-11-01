@@ -13,3 +13,7 @@
 .full-width {
     width: 100%;
 }
+
+.device-row:hover {
+    background: #f2f2f2 !important;
+}

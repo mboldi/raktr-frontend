@@ -51,9 +51,6 @@
                                             Név
                                         </th>
                                         <th>
-                                            Vonalkód
-                                        </th>
-                                        <th>
                                             Gyártó
                                         </th>
                                         <th>
@@ -72,6 +69,9 @@
                                             Tömeg
                                         </th>
                                         <th>
+                                            Vonalkód
+                                        </th>
+                                        <th>
                                             Másolás
                                         </th>
                                         <th>
@@ -79,12 +79,9 @@
                                         </th>
                                         </thead>
                                         <tbody>
-                                        <tr *ngFor="let device of filteredDevices | async">
+                                        <tr class="device-row" *ngFor="let device of filteredDevices | async">
                                             <td>
                                                 {{device.name}}
-                                            </td>
-                                            <td>
-                                                {{device.barcode}}
                                             </td>
                                             <td>
                                                 {{device.maker}}
@@ -105,15 +102,18 @@
                                                 {{device.weight / 1000}} kg
                                             </td>
                                             <td>
+                                                {{device.barcode}}
+                                            </td>
+                                            <td class="pb-0 pt-0">
                                                 <button mat-raised-button type="button"
                                                         class="btn btn-info pull-center btn-just-icon"><i
-                                                        class="material-icons"
+                                                        class="material-icons pb-0 pt-0"
                                                         (click)="createCopy(device)">content_copy</i>
                                                 </button>
                                             </td>
-                                            <td>
+                                            <td class="pb-0 pt-0">
                                                 <button mat-raised-button type="button"
-                                                        class="btn btn-info pull-center btn-just-icon">
+                                                        class="btn btn-info pull-center btn-just-icon pb-0 pt-0">
                                                     <i class="material-icons" (click)="edit(device)">create</i>
                                                 </button>
                                             </td>
@@ -130,9 +130,6 @@
                                             Név
                                         </th>
                                         <th>
-                                            Vonalkód
-                                        </th>
-                                        <th>
                                             Tartalmazott eszközök száma
                                         </th>
                                         <th>
@@ -142,16 +139,16 @@
                                             Tárolási hely
                                         </th>
                                         <th>
+                                            Vonalkód
+                                        </th>
+                                        <th>
                                             Szerkesztés
                                         </th>
                                         </thead>
                                         <tbody>
-                                        <tr *ngFor="let compositeItem of filteredCompositeItems | async">
+                                        <tr class="device-row" *ngFor="let compositeItem of filteredCompositeItems | async">
                                             <td>
                                                 {{compositeItem.name}}
-                                            </td>
-                                            <td>
-                                                {{compositeItem.barcode}}
                                             </td>
                                             <td>
                                                 {{compositeItem.devices.length}}
@@ -163,6 +160,9 @@
                                                 {{compositeItem.location.name}}
                                             </td>
                                             <td>
+                                                {{compositeItem.barcode}}
+                                            </td>
+                                            <td class="pb-0 pt-0">
                                                 <button mat-raised-button type="button"
                                                         class="btn btn-info pull-center btn-just-icon"><i
                                                         class="material-icons">create</i>
@@ -174,11 +174,9 @@
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 </div>

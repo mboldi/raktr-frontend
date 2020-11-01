@@ -95,7 +95,7 @@
                                 </th>
                                 </thead>
                                 <tbody>
-                                <tr *ngFor="let rent of activeRents()">
+                                <tr class="rent-row" *ngFor="let rent of activeRents()">
                                     <td>
                                         {{rent.issuer}}
                                     </td>
@@ -117,7 +117,7 @@
                                     <td>
                                         {{rent.getSumWeight() / 1000}} kg
                                     </td>
-                                    <td>
+                                    <td class="pb-0 pt-0">
                                         <button mat-button mat-raised-button type="button"
                                                 class="btn btn-info pull-center btn-just-icon"
                                                 [routerLink]="['/rent', rent.id]">
