@@ -121,10 +121,6 @@ export class RentService {
     }
 
     addItemToRent(rentId: number, newRentItem: RentItem): Observable<Rent> {
-        this.mockRents.find(rent => rent.id === rentId).rentItems.push(newRentItem);
-
-        console.log(this.mockRents.find(rent => rent.id === rentId));
-
         return of(this.mockRents.find(rent => rent.id === rentId));
     }
 }

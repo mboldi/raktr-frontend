@@ -10,8 +10,8 @@ export class Rent {
     actBackDate: string;
     rentItems: RentItem[];
 
-    constructor(id: number, destination: string, renter: string, issuer: string,
-                outDate: string, expBackDate: string, actBackDate: string, rentItems: RentItem[]) {
+    constructor(id: number = undefined, destination: string = '', renter: string = '', issuer: string = '',
+                outDate: string = '', expBackDate: string = '', actBackDate: string = '', rentItems: RentItem[] = []) {
         this.id = id;
         this.destination = destination;
         this.renter = renter;

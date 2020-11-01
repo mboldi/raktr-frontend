@@ -10,7 +10,7 @@
         </div>
         <div class="row pt-2">
             <div class="col-xl-10 col-lg-12">
-                <div class="card" *ngIf="rent$ | async as rent">
+                <div class="card" *ngIf="rent">
                     <div class="card-header {{rent.actBackDate == '' ? 'card-header-warning' : 'card-header-success'}}">
                         <h3 class="mt-1 mb-1">Bérlés szerkesztése</h3>
                     </div>
@@ -80,7 +80,7 @@
                             </div>
 
                             <h4>Eszközök:</h4>
-                            <div class="row">
+                            <div class="row" *ngIf="rent.actBackDate === ''">
                                 <div class="col-xl-4 col-lg-5 col-md-6 col-sm-12">
                                     <mat-form-field class="full-width">
                                         <input matInput placeholder="Hozzáadandó vonalkódja"
@@ -121,7 +121,7 @@
                                     <th>
                                         Visszaérkezett
                                     </th>
-                                    <th>
+                                    <th *ngIf="rent.actBackDate === ''">
                                         Törlés
                                     </th>
                                     </thead>
@@ -140,7 +140,7 @@
                                         <td>
                                             <mat-checkbox color="primary"></mat-checkbox>
                                         </td>
-                                        <td class="pb-0 pt-0">
+                                        <td class="pb-0 pt-0 " *ngIf="rent.actBackDate === ''">
                                             <button mat-raised-button type="button"
                                                     class="btn btn-info pull-center btn-just-icon"
                                                     data-toggle="modal" data-target=".edit-rental-dialog"
@@ -156,7 +156,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-12" *ngIf="(rent$ | async) == null">
+            <div class="col-md-12" *ngIf="!rent">
                 <h1 style="text-align: center">Hoppá!</h1>
                 <h3 style="text-align: center">Nincs ilyen ID-vel rendelkező eszköz, vagy csak vak vagyok és nem
                     találom :(

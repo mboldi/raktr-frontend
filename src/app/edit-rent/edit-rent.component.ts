@@ -3,15 +3,15 @@ import {Rent} from '../model/Rent';
 import {RentService} from '../services/rent.service';
 import {Title} from '@angular/platform-browser';
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute, ParamMap} from '@angular/router';
-import {Observable, of} from 'rxjs';
-import {map, startWith, switchMap} from 'rxjs/operators';
+import {ActivatedRoute} from '@angular/router';
+import {Observable} from 'rxjs';
+import {map, startWith} from 'rxjs/operators';
 import {RentItem} from '../model/RentItem';
 import {FormControl} from '@angular/forms';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {DeviceService} from '../services/device.service';
-import {DeviceToRentModalComponent} from '../device-to-rent-modal/device-to-rent-modal.component';
 import {Device} from '../model/Device';
+import {DeviceToRentModalComponent} from '../device-to-rent-modal/device-to-rent-modal.component';
 import {Scannable} from '../model/Scannable';
 import {BackStatus} from '../model/BackStatus';
 
@@ -23,7 +23,6 @@ import {BackStatus} from '../model/BackStatus';
 export class EditRentComponent implements OnInit {
     rent$: Observable<Rent>;
     rent: Rent;
-    rentItems: RentItem[];
     filteredRentItems: Observable<RentItem[]>;
 
     searchControl = new FormControl();
@@ -38,21 +37,20 @@ export class EditRentComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.rent$ = this.route.paramMap.pipe(
-            switchMap((params: ParamMap) =>
-                this.rentService.getRent(params.get('id')))
-        );
+        const id = this.route.snapshot.paramMap.get('id');
 
-        this.rent$.subscribe(rent => {
-            this.rentItems = rent.rentItems;
-            this.rent = rent;
-            this.filteredRentItems = of(this.rentItems);
-        })
+        if (id === 'new') {
+            this.rent = new Rent();
+        } else {
+            this.rentService.getRent(id).subscribe(rent =>
+                this.rent = rent
+            )
+        }
 
         this.filteredRentItems = this.searchControl.valueChanges
             .pipe(
                 startWith(''),
-                map(value => this._filterRentItems(this.rentItems, value))
+                map(value => this._filterRentItems(this.rent.rentItems, value))
             );
     }
 
@@ -65,8 +63,6 @@ export class EditRentComponent implements OnInit {
 
     addItemToRent() {
         if (this.addDeviceFormControl.value !== null && this.addDeviceFormControl.value !== '') {
-
-
             this.deviceService.getDeviceByBarcode(this.addDeviceFormControl.value).subscribe(scannable => {
                 if (scannable === undefined) {
                     this.showNotification('Nem találok ilyet!', 'warning');
@@ -82,17 +78,13 @@ export class EditRentComponent implements OnInit {
                         editModal.result.catch(result => {
                             if (result !== null && result as number !== 0) {
                                 this.addScannableToRent(device, result);
-                                this.showNotification(result + ' darab ' + device.name + ' hozzáadva sikeresen!', 'success');
                             }
-
                         })
                     } else {
                         this.addScannableToRent(scannable, 1);
-                        this.showNotification(scannable.name + ' hozzáadva sikeresen!', 'success');
                     }
                 } else if (scannable.type_ === 'composite') {
                     this.addScannableToRent(scannable, 1);
-                    this.showNotification(scannable.name + ' hozzáadva sikeresen!', 'success');
                 } else {
                     this.showNotification('Nem találok ilyet!', 'error');
                 }
@@ -106,26 +98,49 @@ export class EditRentComponent implements OnInit {
     }
 
     addScannableToRent(scannable: Scannable, amount: number) {
-        const newRentItem = new RentItem(0, scannable, BackStatus.OUT, amount);
 
-        this.rent$ = this.rentService.addItemToRent(this.rent.id, newRentItem);
+        let newRentItem = null;
 
-        this.rent$.subscribe(rent => {
-            this.rentItems = rent.rentItems;
-            this.rent = rent;
-            this.filteredRentItems = this.searchControl.valueChanges
-                .pipe(
-                    startWith(''),
-                    map(value => this._filterRentItems(this.rentItems, value))
-                );
-        })
+        this.rent.rentItems.forEach(rentItem => {
+            if (rentItem.scannable.barcode === scannable.barcode) {
+                if (rentItem.outQuantity !== amount) {
+                    rentItem.outQuantity = amount;
+                    this.showNotification(scannable.name + ' mennyisége frissítve: ' + amount + 'db', 'success');
+                } else {
+                    this.showNotification('Ez az eszköz (' + scannable.name + ') már hozzá van adva ilyen mennyiségben', 'warning');
+                }
+                newRentItem = rentItem;
+            }
+        });
 
-        console.log(this.rent.rentItems);
+        if (newRentItem === null) {
+            newRentItem = new RentItem(undefined,
+                scannable,
+                BackStatus.OUT,
+                amount);
+
+            this.rent.rentItems.push(newRentItem);
+            if (amount > 1) {
+                this.showNotification(amount + ' darab ' + scannable.name + ' hozzáadva sikeresen!', 'success');
+            } else {
+                this.showNotification(scannable.name + ' hozzáadva sikeresen!', 'success');
+            }
+        }
+
+        this.rentService.addItemToRent(this.rent.id, newRentItem);
+        this.searchControl.setValue('');
     }
 
     removeFromRent(rentItem: RentItem) {
         this.rentService.removeFromRent(this.rent.id, rentItem);
-        this.showNotification('Törölve!', 'success');
+
+        const indexOfItemInRent = this.rent.rentItems.indexOf(rentItem);
+
+        if (indexOfItemInRent > -1) {
+            this.rent.rentItems.splice(indexOfItemInRent, 1);
+            this.showNotification('Törölve!', 'success');
+            this.searchControl.setValue('');
+        }
     }
 
     showNotification(message_: string, type: string) {

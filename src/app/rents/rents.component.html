@@ -15,7 +15,9 @@
                                         <mat-icon (click)="rentSearchControl.setValue('')">clear</mat-icon>
                                     </button>
                                 </mat-form-field>
-                                <button class="ml-3 addButton" color="warn" mat-mini-fab mat-icon-button aria-label="Add">
+                                <button class="ml-3 addButton" color="warn" mat-mini-fab mat-icon-button
+                                        aria-label="Add"
+                                [routerLink]="['/rent', 'new']">
                                     <mat-icon style="color: white">add</mat-icon>
                                 </button>
                             </div>
