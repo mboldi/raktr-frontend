@@ -8,7 +8,7 @@ export class CompositeItem extends Scannable {
     location: Location;
 
 
-    constructor(id: number, name: string, barcode: string, devices: Device[], location: Location) {
+    constructor(id: number = 0, name: string = '', barcode: string = '', devices: Device[] = [], location: Location = null) {
         super('compositeItem', id, name, barcode);
         this.devices = devices;
         this.location = location;

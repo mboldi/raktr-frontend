@@ -29,15 +29,9 @@ export class EditDeviceModalComponent implements OnInit {
     constructor(public activeModal: NgbActiveModal,
                 private locationService: LocationService,
                 private categoryService: CategoryService) {
-        console.log(this.device);
-
         if (this.device === undefined) {
             this.device = new Device();
         }
-
-        console.log(this.device);
-
-
     }
 
     ngOnInit(): void {
@@ -63,8 +57,6 @@ export class EditDeviceModalComponent implements OnInit {
                     map(value => value ? this._filterLocations(this.locationOptions, value) : this.locationOptions.slice())
                 );
         });
-
-
 
         if (this.device.category !== null) {
             this.categoryControl.setValue(this.device.category.name);

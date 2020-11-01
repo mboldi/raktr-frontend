@@ -9,6 +9,7 @@ import {CompositeItem} from '../model/CompositeItem';
 import {CompositeService} from '../services/composite.service';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {EditDeviceModalComponent} from '../edit-device-modal/edit-device-modal.component';
+import {EditCompositeModalComponent} from '../edit-composite-modal/edit-composite-modal.component';
 
 @Component({
     selector: 'app-table-list',
@@ -77,22 +78,35 @@ export class DevicesComponent implements OnInit {
             compositeItem.barcode.toLowerCase().includes(filterValue));
     }
 
-    createCopy(device: Device) {
+    copyDevice(device: Device) {
         return;
     }
 
-    edit(device: Device) {
+    editDevice(device: Device) {
         const editModal = this.modalService.open(EditDeviceModalComponent, {size: 'lg', windowClass: 'modal-holder'});
         editModal.componentInstance.title = 'Eszköz szerkesztése';
         editModal.componentInstance.device = device;
     }
 
+    copyCompositeItem(compositeItem: CompositeItem) {
+        return;
+    }
+
+    editCompositeItem(compositeItem: CompositeItem) {
+        const editModal = this.modalService.open(EditCompositeModalComponent, {size: 'lg', windowClass: 'modal-holder'});
+        editModal.componentInstance.title = 'Összetett eszköz szerkesztése';
+        editModal.componentInstance.compositeItem = compositeItem;
+    }
+
     create() {
         switch (this.currentTab) {
             case 'devices':
-                console.log('clicked');
-                const editModal = this.modalService.open(EditDeviceModalComponent, {size: 'lg', windowClass: 'modal-holder'});
-                editModal.componentInstance.title = 'Új eszköz';
+                const editDeviceModal = this.modalService.open(EditDeviceModalComponent, {size: 'lg', windowClass: 'modal-holder'});
+                editDeviceModal.componentInstance.title = 'Új eszköz';
+                break;
+            case 'composites':
+                const editCompositeModal = this.modalService.open(EditCompositeModalComponent, {size: 'lg', windowClass: 'modal-holder'});
+                editCompositeModal.componentInstance.title = 'Új összetett eszköz';
                 break;
         }
     }
