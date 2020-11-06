@@ -75,6 +75,8 @@ export class EditCompositeModalComponent implements OnInit {
         this.deviceService.getDeviceByBarcode(this.addDeviceFormControl.value).subscribe(deviceByBarcode => {
             if (deviceByBarcode === undefined) {
                 this.showNotification('Nem találtam ilyen eszközt', 'warning');
+            } else if (this.inComposite(deviceByBarcode as Device)) {
+                this.showNotification('Ezt az eszközt (' + deviceByBarcode.name + ') már tartalmazza az összetett eszköz!', 'warning');
             } else if (!(deviceByBarcode instanceof Device)) {
                 this.showNotification('Csak rendes eszközt lehet hozzáadni!', 'warning');
             } else {
@@ -83,6 +85,11 @@ export class EditCompositeModalComponent implements OnInit {
                 this.addDeviceFormControl.setValue('');
             }
         });
+    }
+
+    inComposite(device: Device): boolean {
+        const indexOf = this.compositeItem.devices.indexOf(device);
+        return indexOf !== -1;
     }
 
     showNotification(message_: string, type: string) {
