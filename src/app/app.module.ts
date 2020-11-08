@@ -25,7 +25,8 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import {LoginComponent} from './login/login.component';
 import { DeviceToRentModalComponent } from './device-to-rent-modal/device-to-rent-modal.component';
 import { EditCompositeModalComponent } from './edit-composite-modal/edit-composite-modal.component';
-import {HttpClientModule} from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
+import {AuthInterceptor} from './helpers/auth.interceptor';
 
 @NgModule({
     imports: [
@@ -60,6 +61,7 @@ import {HttpClientModule} from '@angular/common/http';
     ],
     providers: [
         {provide: MAT_DATE_LOCALE, useValue: 'hu-HU'},
+        {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}
     ],
     bootstrap: [AppComponent]
 })

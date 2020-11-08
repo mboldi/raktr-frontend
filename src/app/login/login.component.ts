@@ -22,15 +22,21 @@ export class LoginComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        if (this.authService.isLoggedIn()) {
+            console.log('alma');
+            this.router.navigateByUrl('/overview');
+        }
     }
 
     login() {
         const val = this.form.value;
 
         if (val.username && val.password) {
-            this.authService.login(val.username, val.password);/*.subscribe(() => {
-                this.router.navigateByUrl('/overview');
-            })*/
+            this.authService.login(val.username, val.password).subscribe(resp => {
+                if (resp.ok) {
+                    this.router.navigateByUrl('/overview');
+                }
+            })
         }
     }
 }

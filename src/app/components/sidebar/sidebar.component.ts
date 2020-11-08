@@ -1,4 +1,6 @@
 import {Component, OnInit} from '@angular/core';
+import {AuthService} from '../../services/auth.service';
+import {Router} from '@angular/router';
 
 declare const $: any;
 
@@ -25,7 +27,8 @@ export const ROUTES: RouteInfo[] = [
 export class SidebarComponent implements OnInit {
     menuItems: any[];
 
-    constructor() {
+    constructor(private authService: AuthService,
+                private router: Router) {
     }
 
     ngOnInit() {
@@ -35,4 +38,9 @@ export class SidebarComponent implements OnInit {
     isMobileMenu() {
         return $(window).width() <= 991;
     };
+
+    logout() {
+        this.authService.logout();
+        this.router.navigateByUrl('/login');
+    }
 }
