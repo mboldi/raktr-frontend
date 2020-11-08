@@ -23,7 +23,6 @@ export class LoginComponent implements OnInit {
 
     ngOnInit(): void {
         if (this.authService.isLoggedIn()) {
-            console.log('alma');
             this.router.navigateByUrl('/overview');
         }
     }
