@@ -35,7 +35,6 @@ export class EditDeviceModalComponent implements OnInit {
     }
 
     ngOnInit(): void {
-
         this.categoryService.getCategories().subscribe(categories => {
             this.categoryOptions = categories;
 

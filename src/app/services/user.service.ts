@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {User} from '../model/User';
 import {environment} from '../../environments/environment';
@@ -18,7 +18,11 @@ export class UserService {
     }
 
     public updateUser(user: User): Observable<User> {
-        return this.http.put<User>(`${environment.apiUrl}/api/user/`, user)
+        const body = `{\"User\": ${JSON.stringify(user)}}`;
+        const headers = new HttpHeaders().set('Content-Type', 'application/json');
+
+        console.log(body);
+        return this.http.put<User>(`${environment.apiUrl}/api/user/`, body, {headers: headers});
     }
 
     public getCurrentUser(): Observable<User> {
