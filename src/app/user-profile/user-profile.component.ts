@@ -74,8 +74,6 @@ export class UserProfileComponent implements OnInit {
         this.user.nickName = this.personal_settings.value.nickName.toString();
         this.user.personalId = this.personal_settings.value.personalId.toString();
 
-        console.log('username: ' + this.user.nickName + ' id: ' + this.user.personalId);
-
         this.userService.updateUser(this.user).subscribe(user => {
             console.log(user);
         });

@@ -10,6 +10,7 @@ import {CompositeService} from '../services/composite.service';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {EditDeviceModalComponent} from '../edit-device-modal/edit-device-modal.component';
 import {EditCompositeModalComponent} from '../edit-composite-modal/edit-composite-modal.component';
+import * as $ from 'jquery';
 
 @Component({
     selector: 'app-table-list',
@@ -36,7 +37,11 @@ export class DevicesComponent implements OnInit {
     }
 
     getDevices() {
-        this.deviceService.getDevices().subscribe(devices => this.devices = devices);
+        this.deviceService.getDevices().subscribe(devices => {
+            this.devices = devices
+            this.devices.push()
+            console.log(devices);
+        });
     }
 
     getCompositeItems() {
@@ -44,16 +49,19 @@ export class DevicesComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.getDevices();
         this.getCompositeItems();
 
         this.searchControl.setValue('');
 
-        this.filteredDevices = this.searchControl.valueChanges
-            .pipe(
-                startWith(''),
-                map(value => this._filterDevices(this.devices, value))
-            );
+        this.deviceService.getDevices().subscribe(devices => {
+            this.devices = devices;
+
+            this.filteredDevices = this.searchControl.valueChanges
+                .pipe(
+                    startWith(''),
+                    map(value => this._filterDevices(this.devices, value))
+                );
+        });
 
         this.filteredCompositeItems = this.searchControl.valueChanges
             .pipe(
@@ -103,6 +111,15 @@ export class DevicesComponent implements OnInit {
             case 'devices':
                 const editDeviceModal = this.modalService.open(EditDeviceModalComponent, {size: 'lg', windowClass: 'modal-holder'});
                 editDeviceModal.componentInstance.title = 'Új eszköz';
+
+                editDeviceModal.result.catch(result => {
+                    console.log(result);
+                    if (result !== 0) {
+                        this.devices.push(result as Device);
+                        this.searchControl.setValue('');
+                        this.showNotification(result.name + ' hozzáadva sikeresen!', 'success');
+                    }
+                });
                 break;
             case 'composites':
                 const editCompositeModal = this.modalService.open(EditCompositeModalComponent, {size: 'lg', windowClass: 'modal-holder'});
@@ -114,5 +131,20 @@ export class DevicesComponent implements OnInit {
     setTab(tabName: string) {
         this.currentTab = tabName;
         this.searchControl.setValue('');
+    }
+
+    showNotification(message_: string, type: string) {
+        $['notify']({
+            icon: 'add_alert',
+            message: message_
+        }, {
+            type: type,
+            timer: 1000,
+            placement: {
+                from: 'top',
+                align: 'right'
+            },
+            z_index: 2000
+        })
     }
 }

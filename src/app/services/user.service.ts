@@ -21,7 +21,6 @@ export class UserService {
         const body = `{\"User\": ${JSON.stringify(user)}}`;
         const headers = new HttpHeaders().set('Content-Type', 'application/json');
 
-        console.log(body);
         return this.http.put<User>(`${environment.apiUrl}/api/user/`, body, {headers: headers});
     }
 

@@ -1,11 +1,12 @@
 import {Injectable} from '@angular/core';
 import {Device} from '../model/Device';
 import {DeviceStatus} from '../model/DeviceStatus';
-import {MOCK_CATEGORIES} from '../mockData/mockCategories';
 import {Observable, of} from 'rxjs';
 import {Scannable} from '../model/Scannable';
 import {Location} from '../model/Location';
 import {Category} from '../model/Category';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {environment} from '../../environments/environment';
 
 @Injectable({
     providedIn: 'root'
@@ -104,15 +105,21 @@ export class DeviceService {
         )
     ];
 
-    constructor() {
+    constructor(private http: HttpClient) {
     }
 
     getDevices(): Observable<Device[]> {
-        return of(this.mockDevices);
+        return this.http.get<Device[]>(`${environment.apiUrl}/api/device`);
     }
 
-    getDeviceNum(): Observable<number> {
-        return of(this.mockDevices.length);
+    addDevice(device: Device): Observable<Device> {
+        const deviceJson = JSON.parse(JSON.stringify(device));
+        deviceJson['@type'] = 'device';
+        const body = `{\"Device\": ${JSON.stringify(deviceJson)}}`;
+        const headers = new HttpHeaders().set('Content-Type', 'application/json');
+
+        console.log(body);
+        return this.http.post<Device>(`${environment.apiUrl}/api/device/`, body, {headers: headers});
     }
 
     getDeviceByBarcode(barcode: string): Observable<Scannable> {
