@@ -14,6 +14,12 @@ export class Device extends Scannable {
     category: Category;
     quantity: number;
 
+    static toJsonString(device: Device): string {
+        const deviceJson = JSON.parse(JSON.stringify(device));
+        deviceJson['@type'] = 'device';
+        return `{\"Device\": ${JSON.stringify(deviceJson)}}`;
+    }
+
     constructor(id: number = -1, name: string = '', barcode: string = '', maker: string = '', type: string = '', serial: string = '', value: number = 0, weight: number = 0,
                 location: Location = null, status: DeviceStatus = DeviceStatus.GOOD, category: Category = null, quantity: number = 1) {
         super('device', id, name, barcode);

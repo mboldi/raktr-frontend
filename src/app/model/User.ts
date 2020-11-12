@@ -10,6 +10,17 @@ export class User {
     roles: UserRole[];
     token?: string;
 
+    static isStudioMember(user: User): boolean {
+        for (let i = 0; i < user.roles.length; i++) {
+            const role = user.roles[i];
+            if (role.roleName === 'ROLE_Stúdiós') {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     constructor(id: number, username: string, nickName: string, familyName: string, givenName: string, personalId: string, roles: UserRole[], token?: string) {
         this.id = id;
         this.username = username;

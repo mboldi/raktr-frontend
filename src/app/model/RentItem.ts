@@ -14,4 +14,8 @@ export class RentItem {
         this.backStatus = backStatus;
         this.outQuantity = outQuantity;
     }
+
+    toJsonString(): string {
+        return `{\"RentItem\": ${JSON.stringify(this)}}`;
+    }
 }

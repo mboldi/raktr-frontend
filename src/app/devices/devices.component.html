@@ -49,27 +49,27 @@
                         <div class="tab-content">
                             <div class="tab-pane active" id="devices">
                                 <div class="table-responsive">
-                                    <table class="table">
+                                    <table class="table" matSort (matSortChange)="sortData($event)">
                                         <thead class="text-orange">
-                                        <th>
+                                        <th mat-sort-header="name">
                                             Név
                                         </th>
-                                        <th>
+                                        <th mat-sort-header="maker">
                                             Gyártó
                                         </th>
-                                        <th>
+                                        <th mat-sort-header="type">
                                             Típus
                                         </th>
-                                        <th>
+                                        <th mat-sort-header="quantity">
                                             Mennyiség
                                         </th>
-                                        <th>
+                                        <th mat-sort-header="category">
                                             Kategória
                                         </th>
-                                        <th>
+                                        <th mat-sort-header="location">
                                             Tárolási hely
                                         </th>
-                                        <th>
+                                        <th mat-sort-header="weight">
                                             Tömeg
                                         </th>
                                         <th>
@@ -83,7 +83,7 @@
                                         </th>
                                         </thead>
                                         <tbody>
-                                        <tr class="device-row" *ngFor="let device of filteredDevices | async">
+                                        <tr class="device-row" *ngFor="let device of sortedDevices">
                                             <td>
                                                 {{device.name}}
                                             </td>

@@ -11,6 +11,7 @@ import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {EditDeviceModalComponent} from '../edit-device-modal/edit-device-modal.component';
 import {EditCompositeModalComponent} from '../edit-composite-modal/edit-composite-modal.component';
 import * as $ from 'jquery';
+import {Sort} from '@angular/material/sort';
 
 @Component({
     selector: 'app-table-list',
@@ -24,7 +25,7 @@ export class DevicesComponent implements OnInit {
     searchControl = new FormControl();
 
     devices: Device[];
-    filteredDevices: Observable<Device[]>
+    sortedDevices: Device[];
 
     compositeItems: CompositeItem[];
     filteredCompositeItems: Observable<CompositeItem[]>;
@@ -34,14 +35,6 @@ export class DevicesComponent implements OnInit {
                 private compositeService: CompositeService,
                 private modalService: NgbModal) {
         this.title.setTitle('Raktr - Eszközök');
-    }
-
-    getDevices() {
-        this.deviceService.getDevices().subscribe(devices => {
-            this.devices = devices
-            this.devices.push()
-            console.log(devices);
-        });
     }
 
     getCompositeItems() {
@@ -55,12 +48,14 @@ export class DevicesComponent implements OnInit {
 
         this.deviceService.getDevices().subscribe(devices => {
             this.devices = devices;
+            this.sortedDevices = devices;
 
-            this.filteredDevices = this.searchControl.valueChanges
-                .pipe(
-                    startWith(''),
-                    map(value => this._filterDevices(this.devices, value))
-                );
+            this.searchControl.valueChanges.subscribe(value => {
+                this.devices = devices.filter(device => device.name.toLowerCase().includes(value.toLowerCase()) ||
+                    device.maker.toLowerCase().includes(value.toLowerCase()) ||
+                    device.type.toLowerCase().includes(value.toLowerCase()) ||
+                    device.barcode.toLowerCase().includes(value.toLowerCase()));
+            });
         });
 
         this.filteredCompositeItems = this.searchControl.valueChanges
@@ -70,13 +65,37 @@ export class DevicesComponent implements OnInit {
             );
     }
 
-    private _filterDevices(devices_: Device[], value: string): Device[] {
-        const filterValue = value.toLowerCase();
+    sortData(sort: Sort) {
+        if (this.devices.length === 0) {
+            return;
+        }
+        const data = this.devices.slice();
+        if (!sort.active || sort.direction === '') {
+            this.sortedDevices = data;
+            return;
+        }
 
-        return devices_.filter(device => device.name.toLowerCase().includes(filterValue) ||
-            device.maker.toLowerCase().includes(filterValue) ||
-            device.type.toLowerCase().includes(filterValue) ||
-            device.barcode.toLowerCase().includes(filterValue));
+        this.sortedDevices = data.sort((a, b) => {
+            const isAsc = sort.direction === 'asc';
+            switch (sort.active) {
+                case 'name':
+                    return compare(a.name.toLowerCase(), b.name.toLowerCase(), isAsc);
+                case 'maker':
+                    return compare(a.maker.toLowerCase(), b.maker.toLowerCase(), isAsc);
+                case 'type':
+                    return compare(a.type.toLowerCase(), b.type.toLowerCase(), isAsc);
+                case 'quantity':
+                    return compare(a.quantity, b.quantity, isAsc);
+                case 'category':
+                    return compare(a.category.name.toLowerCase(), b.category.name.toLowerCase(), isAsc);
+                case 'location':
+                    return compare(a.location.name.toLowerCase(), b.location.name.toLowerCase(), isAsc);
+                case 'weight':
+                    return compare(a.weight, b.weight, isAsc);
+                default:
+                    return 0;
+            }
+        });
     }
 
     private _filterCompositeItems(compositeItems_: CompositeItem[], value: string): CompositeItem[] {
@@ -94,6 +113,16 @@ export class DevicesComponent implements OnInit {
         const editModal = this.modalService.open(EditDeviceModalComponent, {size: 'lg', windowClass: 'modal-holder'});
         editModal.componentInstance.title = 'Eszköz szerkesztése';
         editModal.componentInstance.device = device;
+
+        editModal.result.catch(reason => {
+            if (reason === 'delete') {
+                this.deviceService.getDevices().subscribe(devices => {
+                    console.log(devices);
+                    this.devices = devices;
+                    this.sortedDevices = devices;
+                });
+            }
+        })
     }
 
     copyCompositeItem(compositeItem: CompositeItem) {
@@ -113,11 +142,15 @@ export class DevicesComponent implements OnInit {
                 editDeviceModal.componentInstance.title = 'Új eszköz';
 
                 editDeviceModal.result.catch(result => {
-                    console.log(result);
+                    console.log('create');
                     if (result !== 0) {
-                        this.devices.push(result as Device);
-                        this.searchControl.setValue('');
-                        this.showNotification(result.name + ' hozzáadva sikeresen!', 'success');
+                        const index = this.devices.indexOf(result);
+                        if (index === -1) {
+                            this.devices.push(result as Device);
+                            this.showNotification(result.name + ' hozzáadva sikeresen!', 'success');
+                        } else {
+                            this.devices[index] = (result as Device);
+                        }
                     }
                 });
                 break;
@@ -147,4 +180,8 @@ export class DevicesComponent implements OnInit {
             z_index: 2000
         })
     }
+}
+
+function compare(a: number | string, b: number | string, isAsc: boolean) {
+    return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
 }

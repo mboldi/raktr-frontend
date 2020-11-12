@@ -27,6 +27,8 @@ import { DeviceToRentModalComponent } from './device-to-rent-modal/device-to-ren
 import { EditCompositeModalComponent } from './edit-composite-modal/edit-composite-modal.component';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {AuthInterceptor} from './helpers/auth.interceptor';
+import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
+import {MatDialogModule} from '@angular/material/dialog';
 
 @NgModule({
     imports: [
@@ -47,7 +49,8 @@ import {AuthInterceptor} from './helpers/auth.interceptor';
         MatButtonModule,
         MatIconModule,
         MatToolbarModule,
-        HttpClientModule
+        HttpClientModule,
+        MatDialogModule
     ],
     declarations: [
         AppComponent,
@@ -58,6 +61,7 @@ import {AuthInterceptor} from './helpers/auth.interceptor';
         LoginComponent,
         DeviceToRentModalComponent,
         EditCompositeModalComponent,
+        ConfirmDialogComponent,
     ],
     providers: [
         {provide: MAT_DATE_LOCALE, useValue: 'hu-HU'},

@@ -113,13 +113,24 @@ export class DeviceService {
     }
 
     addDevice(device: Device): Observable<Device> {
-        const deviceJson = JSON.parse(JSON.stringify(device));
-        deviceJson['@type'] = 'device';
-        const body = `{\"Device\": ${JSON.stringify(deviceJson)}}`;
+        const headers = new HttpHeaders().set('Content-Type', 'application/json');
+        device.id = null;
+
+        return this.http.post<Device>(`${environment.apiUrl}/api/device/`, Device.toJsonString(device), {headers: headers});
+    }
+
+    updateDevice(device: Device): Observable<Device> {
         const headers = new HttpHeaders().set('Content-Type', 'application/json');
 
-        console.log(body);
-        return this.http.post<Device>(`${environment.apiUrl}/api/device/`, body, {headers: headers});
+        console.log(device);
+        return this.http.put<Device>(`${environment.apiUrl}/api/device/`, Device.toJsonString(device), {headers: headers});
+    }
+
+    deleteDevice(device: Device): Observable<Device> {
+        const headers = new HttpHeaders().set('Content-Type', 'application/json');
+
+        console.log(device);
+        return this.http.delete<Device>(`${environment.apiUrl}/api/device/${device.id}`, {headers: headers});
     }
 
     getDeviceByBarcode(barcode: string): Observable<Scannable> {
