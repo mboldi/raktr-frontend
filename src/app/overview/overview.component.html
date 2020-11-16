@@ -15,10 +15,10 @@
                             <input matInput autofocus type="text"
                                    autocomplete="off"
                                    [formControl]="deviceSearchFormControl"
-                                   (keyup.enter)="searchDevice()">
+                                   (keyup.enter)="searchScannable()">
                             <button mat-button *ngIf="deviceSearchFormControl.value" matSuffix mat-icon-button
                                     aria-label="Search"
-                                    (click)="searchDevice()">
+                                    (click)="searchScannable()">
                                 <i class="material-icons">search</i>
                             </button>
                         </mat-form-field>

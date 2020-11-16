@@ -51,7 +51,7 @@ export class DevicesComponent implements OnInit {
             this.sortedDevices = devices;
 
             this.searchControl.valueChanges.subscribe(value => {
-                this.devices = devices.filter(device => device.name.toLowerCase().includes(value.toLowerCase()) ||
+                this.sortedDevices = devices.filter(device => device.name.toLowerCase().includes(value.toLowerCase()) ||
                     device.maker.toLowerCase().includes(value.toLowerCase()) ||
                     device.type.toLowerCase().includes(value.toLowerCase()) ||
                     device.barcode.toLowerCase().includes(value.toLowerCase()));
