@@ -7,6 +7,13 @@ export class CompositeItem extends Scannable {
     devices: Device[];
     location: Location;
 
+    static fromJSON(compositeItem: CompositeItem): CompositeItem {
+        return new CompositeItem(compositeItem.id,
+            compositeItem.name,
+            compositeItem.barcode,
+            compositeItem.devices,
+            compositeItem.location)
+    }
 
     constructor(id: number = 0, name: string = '', barcode: string = '', devices: Device[] = [], location: Location = null) {
         super('compositeItem', id, name, barcode);

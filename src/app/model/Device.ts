@@ -20,6 +20,23 @@ export class Device extends Scannable {
         return `{\"Device\": ${JSON.stringify(deviceJson)}}`;
     }
 
+    static fromJson(deviceJson: Device): Device {
+        return new Device(
+            deviceJson.id,
+            deviceJson.name,
+            deviceJson.barcode,
+            deviceJson.maker,
+            deviceJson.type,
+            deviceJson.serial,
+            deviceJson.value,
+            deviceJson.weight,
+            deviceJson.location,
+            deviceJson.status,
+            deviceJson.category,
+            deviceJson.quantity
+        )
+    }
+
     constructor(id: number = -1, name: string = '', barcode: string = '', maker: string = '', type: string = '', serial: string = '', value: number = 0, weight: number = 0,
                 location: Location = null, status: DeviceStatus = DeviceStatus.GOOD, category: Category = null, quantity: number = 1) {
         super('device', id, name, barcode);

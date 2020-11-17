@@ -4,7 +4,6 @@ export abstract class Scannable {
     name: string;
     barcode: string;
 
-
     constructor(type_: string, id: number, name: string, barcode: string) {
         this.type_ = type_;
         this.id = id;

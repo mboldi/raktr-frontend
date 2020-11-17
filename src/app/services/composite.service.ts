@@ -4,7 +4,9 @@ import {MOCK_LOCATIONS} from '../mockData/mockLocations';
 import {DeviceStatus} from '../model/DeviceStatus';
 import {MOCK_CATEGORIES} from '../mockData/mockCategories';
 import {CompositeItem} from '../model/CompositeItem';
-import {Observable, of} from 'rxjs';
+import {Observable} from 'rxjs';
+import {HttpClient} from '@angular/common/http';
+import {environment} from '../../environments/environment';
 
 @Injectable({
     providedIn: 'root'
@@ -63,14 +65,14 @@ export class CompositeService {
         )
     ];
 
-    constructor() {
+    constructor(private http: HttpClient) {
     }
 
     getCompositeItems(): Observable<CompositeItem[]> {
-        return of(this.mockCompositeItems);
+        return this.http.get<CompositeItem[]>(`${environment.apiUrl}/api/composite`);
     }
 
-    getCopositeItemsNum(): Observable<number> {
-        return of(this.mockCompositeItems.length);
+    getCompositeItemById(id: number): Observable<CompositeItem> {
+        return this.http.get<CompositeItem>(`${environment.apiUrl}/api/composite/${id}`);
     }
 }

@@ -21,7 +21,6 @@ export class ScannableService {
         return this.http.get(`${environment.apiUrl}/api/scannable/${barcode}`, {observe: 'response'})
             .pipe(
                 map(res => {
-                    console.log(res.status);
                     if (res.status === 404) {
                         return undefined;
                     } else {

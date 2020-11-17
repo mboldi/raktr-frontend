@@ -1,8 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {Title} from '@angular/platform-browser';
 import {FormControl} from '@angular/forms';
-import {Observable} from 'rxjs';
-import {map, startWith} from 'rxjs/operators';
 import {Device} from '../model/Device';
 import {DeviceService} from '../services/device.service';
 import {CompositeItem} from '../model/CompositeItem';
@@ -28,7 +26,7 @@ export class DevicesComponent implements OnInit {
     sortedDevices: Device[];
 
     compositeItems: CompositeItem[];
-    filteredCompositeItems: Observable<CompositeItem[]>;
+    sortedComposites: CompositeItem[];
 
     constructor(private title: Title,
                 private deviceService: DeviceService,
@@ -37,35 +35,39 @@ export class DevicesComponent implements OnInit {
         this.title.setTitle('Raktr - Eszközök');
     }
 
-    getCompositeItems() {
-        this.compositeService.getCompositeItems().subscribe(items => this.compositeItems = items);
-    }
-
     ngOnInit() {
-        this.getCompositeItems();
-
         this.searchControl.setValue('');
 
+        this.devices = [];
+
         this.deviceService.getDevices().subscribe(devices => {
-            this.devices = devices;
-            this.sortedDevices = devices;
+            devices.forEach(device => this.devices.push(Device.fromJson(device)));
+            this.sortedDevices = this.devices;
 
             this.searchControl.valueChanges.subscribe(value => {
-                this.sortedDevices = devices.filter(device => device.name.toLowerCase().includes(value.toLowerCase()) ||
+                this.sortedDevices = this.devices.filter(device =>
+                    device.name.toLowerCase().includes(value.toLowerCase()) ||
                     device.maker.toLowerCase().includes(value.toLowerCase()) ||
                     device.type.toLowerCase().includes(value.toLowerCase()) ||
                     device.barcode.toLowerCase().includes(value.toLowerCase()));
             });
         });
 
-        this.filteredCompositeItems = this.searchControl.valueChanges
-            .pipe(
-                startWith(''),
-                map(value => this._filterCompositeItems(this.compositeItems, value))
-            );
+        this.compositeItems = [];
+
+        this.compositeService.getCompositeItems().subscribe(compositeItems => {
+            compositeItems.forEach(compositeItem => this.compositeItems.push(CompositeItem.fromJSON(compositeItem)));
+            this.sortedComposites = this.compositeItems;
+
+            this.searchControl.valueChanges.subscribe(value => {
+                this.sortedComposites = this.compositeItems.filter(compositeItem =>
+                    compositeItem.name.toLowerCase().includes(value) ||
+                    compositeItem.barcode.toLowerCase().includes(value))
+            });
+        });
     }
 
-    sortData(sort: Sort) {
+    sortDevices(sort: Sort) {
         if (this.devices.length === 0) {
             return;
         }
@@ -98,11 +100,29 @@ export class DevicesComponent implements OnInit {
         });
     }
 
-    private _filterCompositeItems(compositeItems_: CompositeItem[], value: string): CompositeItem[] {
-        const filterValue = value.toLowerCase();
+    sortComposites(sort: Sort) {
+        if (this.compositeItems.length === 0) {
+            return;
+        }
+        const data = this.compositeItems.slice();
+        if (!sort.active || sort.direction === '') {
+            this.sortedComposites = data;
+            return;
+        }
 
-        return compositeItems_.filter(compositeItem => compositeItem.name.toLowerCase().includes(filterValue) ||
-            compositeItem.barcode.toLowerCase().includes(filterValue));
+        this.sortedComposites = data.sort((a, b) => {
+            const isAsc = sort.direction === 'asc';
+            switch (sort.active) {
+                case 'name':
+                    return compare(a.name.toLowerCase(), b.name.toLowerCase(), isAsc);
+                case 'location':
+                    return compare(a.location.name.toLowerCase(), b.location.name.toLowerCase(), isAsc);
+                case 'weight':
+                    return compare(a.getWeight(), b.getWeight(), isAsc);
+                default:
+                    return 0;
+            }
+        });
     }
 
     copyDevice(device: Device) {

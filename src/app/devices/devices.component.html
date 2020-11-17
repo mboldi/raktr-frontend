@@ -49,7 +49,7 @@
                         <div class="tab-content">
                             <div class="tab-pane active" id="devices">
                                 <div class="table-responsive">
-                                    <table class="table" matSort (matSortChange)="sortData($event)">
+                                    <table class="table" matSort (matSortChange)="sortDevices($event)">
                                         <thead class="text-orange">
                                         <th mat-sort-header="name">
                                             Név
@@ -128,19 +128,19 @@
                             </div>
                             <div class="tab-pane" id="composites">
                                 <div class="table-responsive">
-                                    <table class="table">
+                                    <table class="table" matSort (matSortChange)="sortComposites($event)">
                                         <thead class="text-orange">
-                                        <th>
+                                        <th mat-sort-header="name">
                                             Név
                                         </th>
                                         <th>
                                             Tartalmazott eszközök száma
                                         </th>
-                                        <th>
-                                            Tömeg
-                                        </th>
-                                        <th>
+                                        <th mat-sort-header="location">
                                             Tárolási hely
+                                        </th>
+                                        <th mat-sort-header="weight">
+                                            Tömeg
                                         </th>
                                         <th>
                                             Vonalkód
@@ -151,7 +151,7 @@
                                         </thead>
                                         <tbody>
                                         <tr class="device-row"
-                                            *ngFor="let compositeItem of filteredCompositeItems | async">
+                                            *ngFor="let compositeItem of sortedComposites">
                                             <td>
                                                 {{compositeItem.name}}
                                             </td>
@@ -159,10 +159,10 @@
                                                 {{compositeItem.devices.length}}
                                             </td>
                                             <td>
-                                                {{compositeItem.getWeight() / 1000}} kg
+                                                {{compositeItem.location.name}}
                                             </td>
                                             <td>
-                                                {{compositeItem.location.name}}
+                                                {{compositeItem.getWeight() / 1000}} kg
                                             </td>
                                             <td>
                                                 {{compositeItem.barcode}}
