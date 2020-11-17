@@ -15,7 +15,13 @@ export class CompositeItem extends Scannable {
             compositeItem.location)
     }
 
-    constructor(id: number = 0, name: string = '', barcode: string = '', devices: Device[] = [], location: Location = null) {
+    static toJsonString(compositeItem: CompositeItem): string {
+        const compositeJson = JSON.parse(JSON.stringify(compositeItem));
+        compositeJson['@type'] = 'compositeItem';
+        return `{\"CompositeItem\": ${JSON.stringify(compositeJson)}}`;
+    }
+
+    constructor(id: number = -1, name: string = '', barcode: string = '', devices: Device[] = [], location: Location = null) {
         super('compositeItem', id, name, barcode);
         this.devices = devices;
         this.location = location;

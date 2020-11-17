@@ -53,17 +53,21 @@ export class DevicesComponent implements OnInit {
             });
         });
 
+        this.getComposites();
+
+        this.searchControl.valueChanges.subscribe(value => {
+            this.sortedComposites = this.compositeItems.filter(compositeItem =>
+                compositeItem.name.toLowerCase().includes(value) ||
+                compositeItem.barcode.toLowerCase().includes(value))
+        });
+    }
+
+    getComposites() {
         this.compositeItems = [];
 
         this.compositeService.getCompositeItems().subscribe(compositeItems => {
             compositeItems.forEach(compositeItem => this.compositeItems.push(CompositeItem.fromJSON(compositeItem)));
             this.sortedComposites = this.compositeItems;
-
-            this.searchControl.valueChanges.subscribe(value => {
-                this.sortedComposites = this.compositeItems.filter(compositeItem =>
-                    compositeItem.name.toLowerCase().includes(value) ||
-                    compositeItem.barcode.toLowerCase().includes(value))
-            });
         });
     }
 
@@ -153,6 +157,10 @@ export class DevicesComponent implements OnInit {
         const editModal = this.modalService.open(EditCompositeModalComponent, {size: 'lg', windowClass: 'modal-holder'});
         editModal.componentInstance.title = 'Összetett eszköz szerkesztése';
         editModal.componentInstance.compositeItem = compositeItem;
+
+        editModal.result.catch(reason => {
+            this.getComposites();
+        });
     }
 
     create() {
@@ -162,11 +170,11 @@ export class DevicesComponent implements OnInit {
                 editDeviceModal.componentInstance.title = 'Új eszköz';
 
                 editDeviceModal.result.catch(result => {
-                    console.log('create');
                     if (result !== 0) {
                         const index = this.devices.indexOf(result);
                         if (index === -1) {
                             this.devices.push(result as Device);
+                            this.searchControl.setValue('');
                             this.showNotification(result.name + ' hozzáadva sikeresen!', 'success');
                         } else {
                             this.devices[index] = (result as Device);
@@ -177,6 +185,9 @@ export class DevicesComponent implements OnInit {
             case 'composites':
                 const editCompositeModal = this.modalService.open(EditCompositeModalComponent, {size: 'lg', windowClass: 'modal-holder'});
                 editCompositeModal.componentInstance.title = 'Új összetett eszköz';
+                editCompositeModal.result.catch(reason => {
+                    this.getComposites();
+                });
                 break;
         }
     }

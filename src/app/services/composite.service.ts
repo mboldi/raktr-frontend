@@ -1,69 +1,14 @@
 import {Injectable} from '@angular/core';
-import {Device} from '../model/Device';
-import {MOCK_LOCATIONS} from '../mockData/mockLocations';
-import {DeviceStatus} from '../model/DeviceStatus';
-import {MOCK_CATEGORIES} from '../mockData/mockCategories';
 import {CompositeItem} from '../model/CompositeItem';
 import {Observable} from 'rxjs';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {environment} from '../../environments/environment';
+import {Device} from '../model/Device';
 
 @Injectable({
     providedIn: 'root'
 })
 export class CompositeService {
-
-    devices: Device[] = [
-        new Device(
-            0,
-            'Videómixer 2M/E',
-            'B-VMIXER-BMD2ME-1',
-            'Blackmagic Design',
-            'ATEM 2M/E Production Studio',
-            'bbbnnnmb',
-            1500000,
-            6000,
-            MOCK_LOCATIONS[1],
-            DeviceStatus.GOOD,
-            MOCK_CATEGORIES[1],
-            1,
-        ),
-        new Device(
-            1,
-            'Asztali mikroport vevő',
-            'B-MIC-G3DRX-1',
-            'Sennheiser',
-            'G3',
-            '123456dsa',
-            50000,
-            1500,
-            MOCK_LOCATIONS[1],
-            DeviceStatus.GOOD,
-            MOCK_CATEGORIES[0],
-            1,
-        )
-    ];
-
-    mockCompositeItems = [
-        new CompositeItem(
-            0,
-            'Wireless rack',
-            'B-WLRACK-1',
-            [
-                this.devices[1]
-            ],
-            MOCK_LOCATIONS[0]
-        ),
-        new CompositeItem(
-            1,
-            'Közvetítőszett',
-            'B-OBRACK-1',
-            [
-                this.devices[0]
-            ],
-            MOCK_LOCATIONS[0]
-        )
-    ];
 
     constructor(private http: HttpClient) {
     }
@@ -72,7 +17,44 @@ export class CompositeService {
         return this.http.get<CompositeItem[]>(`${environment.apiUrl}/api/composite`);
     }
 
+    addCompositeItem(compositeItem: CompositeItem): Observable<CompositeItem> {
+        const headers = new HttpHeaders().set('Content-Type', 'application/json');
+        compositeItem.id = null;
+
+        return this.http.post<CompositeItem>(`${environment.apiUrl}/api/composite`, CompositeItem.toJsonString(compositeItem),
+            {headers: headers}).pipe();
+    }
+
+    updateCompositeItem(compositeItem: CompositeItem): Observable<CompositeItem> {
+        const headers = new HttpHeaders().set('Content-Type', 'application/json');
+
+        return this.http.put<CompositeItem>(`${environment.apiUrl}/api/composite`, CompositeItem.toJsonString(compositeItem),
+            {headers: headers});
+    }
+
+    addDeviceToComposite(device: Device, compositeId: number): Observable<CompositeItem> {
+        const headers = new HttpHeaders().set('Content-Type', 'application/json');
+
+        return this.http.put<CompositeItem>(`${environment.apiUrl}/api/composite/${compositeId}`, Device.toJsonString(device),
+            {headers: headers});
+    }
+
+    removeDeviceFromComposite(device: Device, compositeId: number) {
+        const headers = new HttpHeaders().set('Content-Type', 'application/json');
+
+        return this.http.request<CompositeItem>('delete', `${environment.apiUrl}/api/composite/${compositeId}`,
+            {body: Device.toJsonString(device), headers: headers});
+    }
+
     getCompositeItemById(id: number): Observable<CompositeItem> {
         return this.http.get<CompositeItem>(`${environment.apiUrl}/api/composite/${id}`);
+    }
+
+    deleteComposite(compositeItem: CompositeItem): Observable<CompositeItem> {
+        const headers = new HttpHeaders().set('Content-Type', 'application/json');
+
+        return this.http.request<CompositeItem>('delete',
+            `${environment.apiUrl}/api/composite`,
+            {body: CompositeItem.toJsonString(compositeItem), headers: headers});
     }
 }

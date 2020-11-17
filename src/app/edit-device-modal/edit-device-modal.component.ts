@@ -68,7 +68,6 @@ export class EditDeviceModalComponent implements OnInit {
         });
 
         this.userService.getCurrentUser().subscribe(user => {
-            console.log(User.isStudioMember(user));
             this.admin = User.isStudioMember(user);
         });
 

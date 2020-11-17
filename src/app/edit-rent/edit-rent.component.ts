@@ -14,6 +14,7 @@ import {Device} from '../model/Device';
 import {DeviceToRentModalComponent} from '../device-to-rent-modal/device-to-rent-modal.component';
 import {Scannable} from '../model/Scannable';
 import {BackStatus} from '../model/BackStatus';
+import {ScannableService} from '../services/scannable.service';
 
 @Component({
     selector: 'app-edit-rent',
@@ -30,6 +31,7 @@ export class EditRentComponent implements OnInit {
 
     constructor(private rentService: RentService,
                 private deviceService: DeviceService,
+                private scannableService: ScannableService,
                 private title: Title,
                 private route: ActivatedRoute,
                 private modalService: NgbModal) {
@@ -63,32 +65,33 @@ export class EditRentComponent implements OnInit {
 
     addItemToRent() {
         if (this.addDeviceFormControl.value !== null && this.addDeviceFormControl.value !== '') {
-            this.deviceService.getDeviceByBarcode(this.addDeviceFormControl.value).subscribe(scannable => {
-                if (scannable === undefined) {
-                    this.showNotification('Nem találok ilyet!', 'warning');
-                }
+            this.scannableService.getScannableByBarcode(this.addDeviceFormControl.value).subscribe(scannable => {
+                    if (scannable === undefined) {
+                        this.showNotification('Nem találtam eszközt ilyen vonalkóddal!', 'warning');
+                    } else if (scannable['@type'] === 'device') {
+                        const device = scannable as Device;
 
-                if (scannable.type_ === 'device') {
-                    const device = scannable as Device;
+                        if (device.quantity > 1) {
+                            const editModal = this.modalService.open(DeviceToRentModalComponent, {size: 'md', windowClass: 'modal-holder'});
+                            editModal.componentInstance.device = device;
 
-                    if (device.quantity > 1) {
-                        const editModal = this.modalService.open(DeviceToRentModalComponent, {size: 'md', windowClass: 'modal-holder'});
-                        editModal.componentInstance.device = device;
-
-                        editModal.result.catch(result => {
-                            if (result !== null && result as number !== 0) {
-                                this.addScannableToRent(device, result);
-                            }
-                        })
-                    } else {
+                            editModal.result.catch(result => {
+                                if (result !== null && result as number !== 0) {
+                                    this.addScannableToRent(device, result);
+                                }
+                            })
+                        } else {
+                            this.addScannableToRent(scannable, 1);
+                        }
+                    } else if (scannable['@type'] === 'compositeItem') {
                         this.addScannableToRent(scannable, 1);
+                    } else {
+                        this.showNotification('Nem találok ilyet!', 'error');
                     }
-                } else if (scannable.type_ === 'composite') {
-                    this.addScannableToRent(scannable, 1);
-                } else {
-                    this.showNotification('Nem találok ilyet!', 'error');
-                }
-            });
+                },
+                error => {
+                    this.showNotification('Nem találtam eszközt ilyen vonalkóddal!', 'warning');
+                });
 
 
             this.addDeviceFormControl.setValue('');
