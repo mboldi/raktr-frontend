@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Observable, of} from 'rxjs';
+import {Observable} from 'rxjs';
 import {Rent} from '../model/Rent';
 import {Device} from '../model/Device';
 import {MOCK_LOCATIONS} from '../mockData/mockLocations';
@@ -7,7 +7,8 @@ import {DeviceStatus} from '../model/DeviceStatus';
 import {MOCK_CATEGORIES} from '../mockData/mockCategories';
 import {RentItem} from '../model/RentItem';
 import {BackStatus} from '../model/BackStatus';
-import {map} from 'rxjs/operators';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {environment} from '../../environments/environment';
 
 @Injectable({
     providedIn: 'root'
@@ -102,25 +103,46 @@ export class RentService {
         )
     ];
 
-    constructor() {
+    constructor(private http: HttpClient) {
     }
 
     getRents(): Observable<Rent[]> {
-        return of(this.mockRents);
+        return this.http.get<Rent[]>(`${environment.apiUrl}/api/rent`);
     }
 
-    getRent(id: number | string) {
-        return this.getRents().pipe(
-            map((rents: Rent[]) => rents.find(rent => rent.id === +id))
-        );
+    addRent(rent: Rent): Observable<Rent> {
+        const headers = new HttpHeaders().set('Content-Type', 'application/json');
+
+        return this.http.post<Rent>(`${environment.apiUrl}/api/rent`, Rent.toJsonString(rent), {headers: headers});
+    }
+
+    getRent(id: number | string): Observable<Rent> {
+        return this.http.get<Rent>(`${environment.apiUrl}/api/rent/${id}`);
     }
 
     removeFromRent(rentId: number, rentItem: RentItem) {
-        // TODO delete
-        return;
+        rentItem.outQuantity = 0;
+        const headers = new HttpHeaders().set('Content-Type', 'application/json');
+
+        return this.http.put<Rent>(`${environment.apiUrl}/api/rent/${rentId}`,
+            RentItem.toJson(rentItem),
+            {headers: headers})
     }
 
     addItemToRent(rentId: number, newRentItem: RentItem): Observable<Rent> {
-        return of(this.mockRents.find(rent => rent.id === rentId));
+        const headers = new HttpHeaders().set('Content-Type', 'application/json');
+
+        console.log(RentItem.toJson(newRentItem));
+
+        return this.http.put<Rent>(`${environment.apiUrl}/api/rent/${rentId}`,
+            RentItem.toJson(newRentItem),
+            {headers: headers})
+    }
+
+    deleteRent(rent: Rent): Observable<Rent> {
+        const headers = new HttpHeaders().set('Content-Type', 'application/json');
+
+        return this.http.request<Rent>('delete', `${environment.apiUrl}/api/rent`,
+            {headers: headers, body: Rent.toJsonString(rent)});
     }
 }

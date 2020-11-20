@@ -8,11 +8,28 @@ export class CompositeItem extends Scannable {
     location: Location;
 
     static fromJSON(compositeItem: CompositeItem): CompositeItem {
-        return new CompositeItem(compositeItem.id,
+        const compositeItem1 = new CompositeItem(compositeItem.id,
             compositeItem.name,
             compositeItem.barcode,
-            compositeItem.devices,
-            compositeItem.location)
+            [],
+            compositeItem.location);
+
+        compositeItem.devices.forEach(deviceJson => compositeItem1.devices.push(new Device(
+            deviceJson.id,
+            deviceJson.name,
+            deviceJson.barcode,
+            deviceJson.maker,
+            deviceJson.type,
+            deviceJson.serial,
+            deviceJson.value,
+            deviceJson.weight,
+            deviceJson.location,
+            deviceJson.status,
+            deviceJson.category,
+            deviceJson.quantity
+        )));
+
+        return compositeItem1
     }
 
     static toJsonString(compositeItem: CompositeItem): string {
@@ -35,5 +52,11 @@ export class CompositeItem extends Scannable {
         });
 
         return sum;
+    }
+
+    toJson(): String {
+        const compositeJson = JSON.parse(JSON.stringify(this));
+        compositeJson['@type'] = 'compositeItem';
+        return `{\"CompositeItem\": ${JSON.stringify(compositeJson)}}`;
     }
 }

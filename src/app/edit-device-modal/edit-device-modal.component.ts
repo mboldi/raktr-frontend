@@ -11,7 +11,6 @@ import {CategoryService} from '../services/category.service';
 import {DeviceService} from '../services/device.service';
 import {UserService} from '../services/user.service';
 import {MatDialog} from '@angular/material/dialog';
-import {ConfirmDialogComponent} from '../confirm-dialog/confirm-dialog.component';
 import {User} from '../model/User';
 
 @Component({

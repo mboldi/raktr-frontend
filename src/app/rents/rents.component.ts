@@ -27,13 +27,17 @@ export class RentsComponent implements OnInit {
     ngOnInit(): void {
         this.rentSearchControl.setValue('');
 
-        this.rentService.getRents().subscribe(rents => this.rents =
-            rents.sort(((a, b) => {
+        this.rentService.getRents().subscribe(rents => {
+            rents.forEach(rent => this.rents.push(Rent.fromJson(rent)));
+
+            this.rents = this.rents.sort(((a, b) => {
                 const aDate = new Date(a.actBackDate === '' ? a.actBackDate : a.expBackDate);
                 const bDate = new Date(b.actBackDate === '' ? b.actBackDate : b.expBackDate);
 
                 return aDate.getTime() - bDate.getTime();
-            })));
+            }));
+            this.rentSearchControl.setValue('');
+        });
 
         this.filteredRents = this.rentSearchControl.valueChanges
             .pipe(

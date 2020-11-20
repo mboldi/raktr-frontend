@@ -54,4 +54,10 @@ export class Device extends Scannable {
     getWeight() {
         return this.weight;
     }
+
+    toJson(): String {
+        const deviceJson = JSON.parse(JSON.stringify(this));
+        deviceJson['@type'] = 'device';
+        return `{\"Device\": ${JSON.stringify(deviceJson)}}`;
+    }
 }
