@@ -14,12 +14,21 @@ export class RentItem {
             rentItemString.scannable['@type'] === 'device' ?
                 Device.fromJson(rentItemString.scannable as Device) :
                 CompositeItem.fromJSON(rentItemString.scannable as CompositeItem),
-            rentItemString.backStatus,
+            this.rentStatusFormatter(rentItemString.backStatus),
             rentItemString.outQuantity)
     }
 
+    static rentStatusFormatter(status: number | string): BackStatus {
+        if (status === 0 || status === 'OUT') {
+            return BackStatus.OUT;
+        } else if (status === 1 || status === 'BACK') {
+            return BackStatus.BACK;
+        } else if (status === 2 || status === 'PACKED_IN') {
+            return BackStatus.PACKED_IN;
+        }
+    }
+
     static toJson(rentItem: RentItem): string {
-        console.log(rentItem);
         const rentItemJson = JSON.parse(JSON.stringify(rentItem));
 
         rentItemJson['scannable'] = rentItem.scannable;

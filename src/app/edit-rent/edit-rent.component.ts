@@ -18,6 +18,7 @@ import {ScannableService} from '../services/scannable.service';
 import {UserService} from '../services/user.service';
 import {User} from '../model/User';
 import {CompositeItem} from '../model/CompositeItem';
+import {MatCheckboxChange} from '@angular/material/checkbox';
 
 @Component({
     selector: 'app-edit-rent',
@@ -33,6 +34,7 @@ export class EditRentComponent implements OnInit {
     addDeviceFormControl = new FormControl();
     rentDataForm: FormGroup;
     admin = false;
+    deleteConfirmed = false;
 
     constructor(private rentService: RentService,
                 private deviceService: DeviceService,
@@ -67,6 +69,7 @@ export class EditRentComponent implements OnInit {
         } else {
             this.rentService.getRent(id).subscribe(rent => {
                     this.rent = Rent.fromJson(rent);
+                    console.log(this.rent);
 
                     this.rentDataForm.setValue({
                         destination: this.rent.destination,
@@ -153,19 +156,29 @@ export class EditRentComponent implements OnInit {
                 BackStatus.OUT,
                 amount);
 
-            this.rentService.addItemToRent(this.rent.id, newRentItem).subscribe(rent => {
-                if (rent === undefined) {
-                    this.showNotification('Nem sikerült hozzáadni', 'warning');
-                } else {
-                    this.rent = Rent.fromJson(rent);
-
-                    if (amount > 1) {
-                        this.showNotification(amount + ' darab ' + scannable.name + ' hozzáadva sikeresen!', 'success');
+            this.rentService.addItemToRent(this.rent.id, newRentItem).subscribe(rent_ => {
+                this.rentService.getRent(this.rent.id).subscribe(rent => {
+                    if (rent === undefined) {
+                        this.showNotification('Nem sikerült hozzáadni', 'warning');
                     } else {
-                        this.showNotification(scannable.name + ' hozzáadva sikeresen!', 'success');
-                    }
+                        console.log(rent);
+                        this.rent = Rent.fromJson(rent);
 
-                    this.searchControl.setValue('');
+                        if (amount > 1) {
+                            this.showNotification(amount + ' darab ' + scannable.name + ' hozzáadva sikeresen!', 'success');
+                        } else {
+                            this.showNotification(scannable.name + ' hozzáadva sikeresen!', 'success');
+                        }
+
+                        this.searchControl.setValue('');
+                    }
+                })
+            }, error => {
+                console.log(error);
+                if (error.status === 409) {
+                    this.showNotification('Nem lehetséges ennyit bérelni ebből az eszközből', 'warning');
+                } else {
+                    this.showNotification('Nem sikerült hozzáadni!', 'warning')
                 }
             })
         }
@@ -173,31 +186,44 @@ export class EditRentComponent implements OnInit {
     }
 
     removeFromRent(rentItem: RentItem) {
-        this.rentService.removeFromRent(this.rent.id, rentItem).subscribe(rent => {
-            if (rent === undefined) {
-                this.showNotification('Nem sikerült törölni', 'error')
-            } else {
-                this.rent = Rent.fromJson(rent);
-                this.searchControl.setValue('');
-                this.showNotification('Törölve!', 'success');
-            }
-        })
+        rentItem.outQuantity = 0;
+        this.rentService.updateInRent(this.rent.id, rentItem).subscribe(rent_ => {
+                this.rentService.getRent(this.rent.id).subscribe(rent => {
+                    this.rent = Rent.fromJson(rent);
+                    this.searchControl.setValue('');
+                    this.showNotification('Törölve!', 'success');
+                })
+            },
+            error => this.showNotification('Nem sikerült törölni', 'warning'))
     }
 
     save() {
+        const value = this.rentDataForm.value;
+        this.rent.destination = value.destination.toString();
+        this.rent.issuer = value.issuer.toString();
+        this.rent.renter = value.renter.toString();
+        this.rent.outDate = this.formatDate(value.outDate.toString());
+        this.rent.expBackDate = this.formatDate(value.expBackDate.toString());
+        this.rent.actBackDate = this.formatDate(value.actBackDate.toString());
+
         if (this.rent.id === -1) {
             // new
-            const value = this.rentDataForm.value;
-            this.rent.destination = value.destination.toString();
-            this.rent.issuer = value.issuer.toString();
-            this.rent.renter = value.renter.toString();
-            this.rent.outDate = this.formatDate(value.outDate.toString());
-            this.rent.expBackDate = this.formatDate(value.expBackDate.toString());
-            this.rent.actBackDate = this.formatDate(value.actBackDate.toString());
             this.rentService.addRent(this.rent).subscribe(rent_ => {
-                this.rent = Rent.fromJson(rent_);
-                console.log(this.rent);
-            })
+                    this.rent = Rent.fromJson(rent_);
+                    this.showNotification('Sikeresen mentve', 'success');
+                },
+                error => {
+                    this.showNotification('Nem sikerült menteni', 'error');
+                })
+        } else {
+            // update
+            this.rentService.updateRent(this.rent).subscribe(rent_ => {
+                    this.rent = Rent.fromJson(rent_);
+                    this.showNotification('Sikeresen mentve', 'success');
+                },
+                error => {
+                    this.showNotification('Nem sikerült menteni', 'error');
+                })
         }
     }
 
@@ -217,6 +243,74 @@ export class EditRentComponent implements OnInit {
         )
     }
 
+    packedChanged(checkboxChange: MatCheckboxChange, rentItem: RentItem) {
+        if (rentItem.backStatus !== BackStatus.BACK) {
+            if (checkboxChange.checked) {
+                rentItem.backStatus = BackStatus.PACKED_IN;
+            } else {
+                rentItem.backStatus = BackStatus.OUT;
+            }
+
+            this.rentService.updateInRent(this.rent.id, rentItem).subscribe(
+                rent => {
+                    this.rent = Rent.fromJson(rent);
+                    this.showNotification('Sikeresen mentve!', 'success');
+                },
+                error => {
+                    this.showNotification('Nem sikerült menteni :(', 'warning')
+                    checkboxChange.source.checked = false;
+                }
+            )
+        } else {
+            this.showNotification('Már visszajött, nem tudod nem elpakolni :D', 'warning')
+            checkboxChange.source.checked = true;
+        }
+    }
+
+    backChanged(checkboxChange: MatCheckboxChange, rentItem: RentItem) {
+        if (rentItem.backStatus === BackStatus.PACKED_IN ||
+            rentItem.backStatus === BackStatus.BACK) {
+            if (checkboxChange.checked) {
+                rentItem.backStatus = BackStatus.BACK;
+            } else {
+                rentItem.backStatus = BackStatus.PACKED_IN;
+            }
+
+            this.rentService.updateInRent(this.rent.id, rentItem).subscribe(
+                rent => {
+                    this.rent = Rent.fromJson(rent);
+                    this.showNotification('Sikeresen mentve!', 'success');
+                },
+                error => {
+                    this.showNotification('Nem sikerült menteni :(', 'warning')
+                    checkboxChange.source.checked = false;
+                }
+            )
+        } else {
+            this.showNotification('Még elpakolva sincs, hogy hoztad volna vissza!?', 'warning')
+            checkboxChange.source.checked = false;
+        }
+
+    }
+
+    quantityChanged(event, rentItem: RentItem) {
+        const oldQuantity = rentItem.outQuantity;
+        rentItem.outQuantity = event.target.value;
+
+        this.rentService.updateInRent(this.rent.id, rentItem).subscribe(rent => {
+                this.showNotification('Új mennyiség mentve', 'success');
+            },
+            error => {
+                this.showNotification('Nem sikerült menteni', 'warning');
+                event.target.value = oldQuantity;
+            }
+        )
+    }
+
+    getPdf() {
+        this.rentService.getPdf(this.rent);
+    }
+
     showNotification(message_: string, type: string) {
         $['notify']({
             icon: 'add_alert',
@@ -231,5 +325,4 @@ export class EditRentComponent implements OnInit {
             z_index: 2000
         })
     }
-
 }

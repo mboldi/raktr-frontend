@@ -29,6 +29,7 @@ import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {AuthInterceptor} from './helpers/auth.interceptor';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 import {MatDialogModule} from '@angular/material/dialog';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 
 @NgModule({
     imports: [
@@ -50,7 +51,8 @@ import {MatDialogModule} from '@angular/material/dialog';
         MatIconModule,
         MatToolbarModule,
         HttpClientModule,
-        MatDialogModule
+        MatDialogModule,
+        MatSlideToggleModule
     ],
     declarations: [
         AppComponent,

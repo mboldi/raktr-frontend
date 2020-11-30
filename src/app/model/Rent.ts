@@ -11,7 +11,15 @@ export class Rent {
     rentItems: RentItem[];
 
     static toJsonString(rent: Rent): string {
-        return `{\"Rent\": ${JSON.stringify(rent)}}`;
+        const rentJson = JSON.parse(JSON.stringify(rent));
+
+        if (rentJson.rentItems !== undefined) {
+            rentJson.rentItems.forEach(rentItem => {
+                rentItem['scannable']['@type'] = rentItem['scannable']['type_']
+            })
+        }
+
+        return `{\"Rent\": ${JSON.stringify(rentJson)}}`;
     }
 
     static fromJson(rent: Rent): Rent {
