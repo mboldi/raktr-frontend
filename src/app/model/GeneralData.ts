@@ -6,4 +6,8 @@ export class GeneralData {
         this.key = key;
         this.data = data;
     }
+
+    static toJsonString(generalData: GeneralData): string {
+        return `{\"GeneralData\": ${JSON.stringify(generalData)}}`;
+    }
 }

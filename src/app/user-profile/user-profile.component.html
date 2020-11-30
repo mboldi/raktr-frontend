@@ -1,7 +1,7 @@
 <div class="main-content">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-xl-8 col-lg-12">
+            <div class="col-xl-10 col-lg-12">
                 <div class="card">
                     <div class="card-header card-header-primary">
                         <h4 class="card-title">Személyes adatok szerkesztése</h4>
@@ -44,7 +44,8 @@
                                 </div>
                             </div>
                             <button mat-raised-button type="submit" class="btn btn-info pull-right"
-                                    (click)="updateUser()">Mentés</button>
+                                    (click)="updateUser()">Mentés
+                            </button>
                             <div class="clearfix"></div>
                         </form>
                     </div>
@@ -52,7 +53,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-xl-8 col-lg-12">
+            <div class="col-xl-10 col-lg-12">
                 <div class="card">
                     <div class="card-header card-header-primary">
                         <h4 class="card-title">Körös adatok szerkesztése</h4>
@@ -65,7 +66,7 @@
                                         <mat-label>Kör neve</mat-label>
                                         <input matInput
                                                formControlName="groupName"
-                                               value="Budavári Schönherz Stúdió">
+                                               autocomplete="off">
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -75,11 +76,13 @@
                                         <mat-label>Körvezető neve</mat-label>
                                         <input matInput
                                                formControlName="groupLeaderName"
-                                               type="text">
+                                               autocomplete="off">
                                     </mat-form-field>
                                 </div>
                             </div>
-                            <button mat-raised-button type="submit" class="btn btn-info pull-right">Mentés</button>
+                            <button mat-raised-button type="submit" class="btn btn-info pull-right"
+                                    (click)="updateGroupData()">Mentés
+                            </button>
                             <div class="clearfix"></div>
                         </form>
                     </div>
@@ -87,7 +90,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-xl-8 col-lg-12">
+            <div class="col-xl-10 col-lg-12">
                 <div class="card">
                     <div class="card-header card-header-primary">
                         <h4 class="card-title">Globális adatok szerkesztése</h4>
@@ -101,7 +104,7 @@
                                         <mat-label>Neve</mat-label>
                                         <input matInput
                                                formControlName="firstSignerName"
-                                               value="Dér Levente">
+                                               autocomplete="off">
                                     </mat-form-field>
                                 </div>
                                 <div class="col-md-6 col-sm-12">
@@ -109,7 +112,7 @@
                                         <mat-label>Titulusa</mat-label>
                                         <input matInput
                                                formControlName="firstSignerTitle"
-                                               value="Üzemeltetési felelős">
+                                               autocomplete="off">
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -120,7 +123,7 @@
                                         <mat-label>Neve</mat-label>
                                         <input matInput
                                                formControlName="secondSignerName"
-                                               value="Németh Ákos">
+                                               autocomplete="off">
                                     </mat-form-field>
                                 </div>
                                 <div class="col-md-6 col-sm-12">
@@ -128,11 +131,14 @@
                                         <mat-label>Titulusa</mat-label>
                                         <input matInput
                                                formControlName="secondSignerTitle"
-                                               value="BME-Hallgatói és Kollégiumi Erőforrások Osztálya">
+                                        autocomplete="off">
                                     </mat-form-field>
                                 </div>
                             </div>
-                            <button mat-raised-button type="submit" class="btn btn-info pull-right">Mentés</button>
+                            <button mat-raised-button type="submit" class="btn btn-info pull-right"
+                                    (click)="updateGlobalData()">
+                                Mentés
+                            </button>
                             <div class="clearfix"></div>
                         </form>
                     </div>

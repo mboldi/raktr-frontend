@@ -2,8 +2,10 @@ import {Component, OnInit} from '@angular/core';
 import {Title} from '@angular/platform-browser';
 import {UserService} from '../services/user.service';
 import {User} from '../model/User';
-import {FormBuilder, FormGroup} from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {GeneralDataService} from '../services/general-data.service';
+import {GeneralData} from '../model/GeneralData';
+import * as $ from 'jquery';
 
 @Component({
     selector: 'app-user-profile',
@@ -31,15 +33,15 @@ export class UserProfileComponent implements OnInit {
         });
 
         this.group_settings = fb.group({
-            groupName: [''],
-            groupLeaderName: [''],
+            groupName: ['', Validators.required],
+            groupLeaderName: ['', Validators.required],
         });
 
         this.global_settings = fb.group({
-            firstSignerName: [''],
-            firstSignerTitle: [''],
-            secondSignerName: [''],
-            secondSignerTitle: [''],
+            firstSignerName: ['', Validators.required],
+            firstSignerTitle: ['', Validators.required],
+            secondSignerName: ['', Validators.required],
+            secondSignerTitle: ['', Validators.required],
         });
 
         this.userService.getCurrentUser().subscribe(user => {
@@ -77,5 +79,56 @@ export class UserProfileComponent implements OnInit {
         this.userService.updateUser(this.user).subscribe(user => {
             console.log(user);
         });
+    }
+
+    updateGroupData() {
+        const val = this.group_settings.value;
+
+        if (val.groupName.toString() !== '' &&
+            val.groupLeaderName.toString() !== '') {
+            const groupNameData = new GeneralData('groupName', val.groupName.toString());
+            const groupLeaderNameData = new GeneralData('groupLeader', val.groupLeaderName.toString());
+
+            this.generalDataService.updateData(groupNameData).subscribe(data => console.log(data));
+            this.generalDataService.updateData(groupLeaderNameData).subscribe(data => console.log(data));
+        } else {
+            this.showNotification('Töltsd ki az összes mezőt!', 'warning');
+        }
+    }
+
+    updateGlobalData() {
+        const val = this.global_settings.value;
+
+        if (val.firstSignerName.toString() !== '' &&
+            val.firstSignerTitle.toString() !== '' &&
+            val.secondSignerName.toString() !== '' &&
+            val.secondSignerTitle.toString() !== '') {
+            const firstSignerName = new GeneralData('firstSignerName', val.firstSignerName.toString());
+            const firstSignerTitle = new GeneralData('firstSignerTitle', val.firstSignerTitle.toString());
+            const secondSignerName = new GeneralData('secondSignerName', val.secondSignerName.toString());
+            const secondSignerTitle = new GeneralData('secondSignerTitle', val.secondSignerTitle.toString());
+
+            this.generalDataService.updateData(firstSignerName).subscribe(data => console.log(data));
+            this.generalDataService.updateData(firstSignerTitle).subscribe(data => console.log(data));
+            this.generalDataService.updateData(secondSignerName).subscribe(data => console.log(data));
+            this.generalDataService.updateData(secondSignerTitle).subscribe(data => console.log(data));
+        } else {
+            this.showNotification('Töltsd ki az összes mezőt!', 'warning');
+        }
+    }
+
+    showNotification(message_: string, type: string) {
+        $['notify']({
+            icon: 'add_alert',
+            message: message_
+        }, {
+            type: type,
+            timer: 1000,
+            placement: {
+                from: 'top',
+                align: 'right'
+            },
+            z_index: 2000
+        })
     }
 }
