@@ -20,70 +20,68 @@
                         </div>
                     </div>
                     <div class="card-body container-fluid">
-                        <form>
-                            <form [formGroup]="rentDataForm">
-                                <div class="row">
-                                    <div class="col-xl-5 col-lg-6 col-md-8 col-sm-12">
-                                        <mat-form-field class="full-width">
-                                            <mat-label>Kivitel célja</mat-label>
-                                            <input matInput type="text"
-                                                   formControlName="destination"
-                                                   autocomplete="off">
-                                        </mat-form-field>
-                                    </div>
+                        <form [formGroup]="rentDataForm">
+                            <div class="row">
+                                <div class="col-xl-5 col-lg-6 col-md-8 col-sm-12">
+                                    <mat-form-field class="full-width">
+                                        <mat-label>Kivitel célja</mat-label>
+                                        <input matInput type="text"
+                                               formControlName="destination"
+                                               autocomplete="off">
+                                    </mat-form-field>
                                 </div>
-                                <div class="row">
-                                    <div class="col-xl-4 col-lg-5 col-md-6 col-sm-12">
-                                        <mat-form-field class="full-width">
-                                            <mat-label>Kiadó</mat-label>
-                                            <input matInput
-                                                   formControlName="issuer"
-                                                   autocomplete="off">
-                                        </mat-form-field>
-                                    </div>
-                                    <div class="col-xl-4 col-lg-5 col-md-6 col-sm-12">
-                                        <mat-form-field class="full-width">
-                                            <mat-label>Felelősségvállaló</mat-label>
-                                            <input matInput
-                                                   formControlName="renter"
-                                                   autocomplete="off">
-                                        </mat-form-field>
-                                    </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-4 col-lg-5 col-md-6 col-sm-12">
+                                    <mat-form-field class="full-width">
+                                        <mat-label>Kiadó</mat-label>
+                                        <input matInput
+                                               formControlName="issuer"
+                                               autocomplete="off">
+                                    </mat-form-field>
                                 </div>
-                                <div class="row">
-                                    <div class="col-xl-3 col-lg-4 col-md-5  col-sm-12">
-                                        <mat-form-field class="full-width">
-                                            <mat-label>Kivitel ideje</mat-label>
-                                            <input matInput [matDatepicker]="picker_out"
-                                                   formControlName="outDate"
-                                                   autocomplete="off">
-                                            <mat-datepicker-toggle matSuffix [for]="picker_out"></mat-datepicker-toggle>
-                                            <mat-datepicker #picker_out></mat-datepicker>
-                                        </mat-form-field>
-                                    </div>
-                                    <div class="col-xl-3 col-lg-4 col-md-5  col-sm-12">
-                                        <mat-form-field class="full-width">
-                                            <mat-label>Várható visszaérkezés</mat-label>
-                                            <input matInput [matDatepicker]="picker_exp"
-                                                   formControlName="expBackDate"
-                                                   autocomplete="off">
-                                            <mat-datepicker-toggle matSuffix [for]="picker_exp"></mat-datepicker-toggle>
-                                            <mat-datepicker #picker_exp></mat-datepicker>
-                                        </mat-form-field>
-                                    </div>
-                                    <div class="col-xl-3 col-lg-4 col-md-5  col-sm-12">
-                                        <mat-form-field class="full-width">
-                                            <mat-label>Tényleges visszaérkezés</mat-label>
-                                            <input matInput [matDatepicker]="picker_back"
-                                                   formControlName="actBackDate"
-                                                   autocomplete="off">
-                                            <mat-datepicker-toggle matSuffix
-                                                                   [for]="picker_back"></mat-datepicker-toggle>
-                                            <mat-datepicker #picker_back></mat-datepicker>
-                                        </mat-form-field>
-                                    </div>
+                                <div class="col-xl-4 col-lg-5 col-md-6 col-sm-12">
+                                    <mat-form-field class="full-width">
+                                        <mat-label>Felelősségvállaló</mat-label>
+                                        <input matInput
+                                               formControlName="renter"
+                                               autocomplete="off">
+                                    </mat-form-field>
                                 </div>
-                            </form>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-3 col-lg-4 col-md-5  col-sm-12">
+                                    <mat-form-field class="full-width">
+                                        <mat-label>Kivitel ideje</mat-label>
+                                        <input matInput [matDatepicker]="picker_out"
+                                               formControlName="outDate"
+                                               autocomplete="off">
+                                        <mat-datepicker-toggle matSuffix [for]="picker_out"></mat-datepicker-toggle>
+                                        <mat-datepicker #picker_out></mat-datepicker>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-xl-3 col-lg-4 col-md-5  col-sm-12">
+                                    <mat-form-field class="full-width">
+                                        <mat-label>Várható visszaérkezés</mat-label>
+                                        <input matInput [matDatepicker]="picker_exp"
+                                               formControlName="expBackDate"
+                                               autocomplete="off">
+                                        <mat-datepicker-toggle matSuffix [for]="picker_exp"></mat-datepicker-toggle>
+                                        <mat-datepicker #picker_exp></mat-datepicker>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-xl-3 col-lg-4 col-md-5  col-sm-12">
+                                    <mat-form-field class="full-width">
+                                        <mat-label>Tényleges visszaérkezés</mat-label>
+                                        <input matInput [matDatepicker]="picker_back"
+                                               formControlName="actBackDate"
+                                               autocomplete="off">
+                                        <mat-datepicker-toggle matSuffix
+                                                               [for]="picker_back"></mat-datepicker-toggle>
+                                        <mat-datepicker #picker_back></mat-datepicker>
+                                    </mat-form-field>
+                                </div>
+                            </div>
 
                             <div class="row">
                                 <div class="col-md-12">

@@ -57,13 +57,11 @@ export class RentService {
             {headers: headers, body: Rent.toJsonString(rent)});
     }
 
-    getPdf(rent: Rent) {
+    getPdf(rent: Rent, pdfRequest: string) {
         const mediaType = 'application/pdf';
         const headers = new HttpHeaders().set('Content-Type', 'application/json');
 
-        const rentPdfRequest = '{"RentPdfRequest": {"teamName": "Budavári Schönherz Stúdió", "teamLeaderName": "Márta Boldizsár", "renterFullName": "Példa János", "renterId": "123456AA"}}';
-
-        this.http.post(`${environment.apiUrl}/api/rent/pdf/${rent.id}`, rentPdfRequest,
+        this.http.post(`${environment.apiUrl}/api/rent/pdf/${rent.id}`, pdfRequest,
             {headers: headers, responseType: 'blob'}).subscribe(res => {
                 const blob = new Blob([res], {type: mediaType});
                 saveAs(blob, `${rent.destination}_szallitolevel.pdf`);

@@ -19,6 +19,7 @@ import {UserService} from '../services/user.service';
 import {User} from '../model/User';
 import {CompositeItem} from '../model/CompositeItem';
 import {MatCheckboxChange} from '@angular/material/checkbox';
+import {PdfGenerationModalComponent} from '../pdf-generation-modal/pdf-generation-modal.component';
 
 @Component({
     selector: 'app-edit-rent',
@@ -69,7 +70,6 @@ export class EditRentComponent implements OnInit {
         } else {
             this.rentService.getRent(id).subscribe(rent => {
                     this.rent = Rent.fromJson(rent);
-                    console.log(this.rent);
 
                     this.rentDataForm.setValue({
                         destination: this.rent.destination,
@@ -161,7 +161,6 @@ export class EditRentComponent implements OnInit {
                     if (rent === undefined) {
                         this.showNotification('Nem sikerült hozzáadni', 'warning');
                     } else {
-                        console.log(rent);
                         this.rent = Rent.fromJson(rent);
 
                         if (amount > 1) {
@@ -191,7 +190,7 @@ export class EditRentComponent implements OnInit {
                 this.rentService.getRent(this.rent.id).subscribe(rent => {
                     this.rent = Rent.fromJson(rent);
                     this.searchControl.setValue('');
-                    this.showNotification('Törölve!', 'success');
+                    this.showNotification(`${rentItem.scannable.name} törölve!`, 'success');
                 })
             },
             error => this.showNotification('Nem sikerült törölni', 'warning'))
@@ -298,7 +297,7 @@ export class EditRentComponent implements OnInit {
         rentItem.outQuantity = event.target.value;
 
         this.rentService.updateInRent(this.rent.id, rentItem).subscribe(rent => {
-                this.showNotification('Új mennyiség mentve', 'success');
+                this.showNotification(rentItem.scannable.name + ' mennyisége frissítve: ' + rentItem.outQuantity + 'db', 'success');
             },
             error => {
                 this.showNotification('Nem sikerült menteni', 'warning');
@@ -308,7 +307,8 @@ export class EditRentComponent implements OnInit {
     }
 
     getPdf() {
-        this.rentService.getPdf(this.rent);
+        const pdfModal = this.modalService.open(PdfGenerationModalComponent, {size: 'md', windowClass: 'modal-holder'});
+        pdfModal.componentInstance.rent = this.rent;
     }
 
     showNotification(message_: string, type: string) {

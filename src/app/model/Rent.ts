@@ -52,7 +52,7 @@ export class Rent {
 
     getSumWeight(): number {
         let sumWeight = 0;
-        this.rentItems.forEach(rentItem => sumWeight += rentItem.scannable.getWeight());
+        this.rentItems.forEach(rentItem => sumWeight += rentItem.outQuantity * rentItem.scannable.getWeight());
 
         return sumWeight;
     }
