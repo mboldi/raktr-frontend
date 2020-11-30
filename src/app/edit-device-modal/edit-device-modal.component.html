@@ -95,9 +95,16 @@
                 </div>
             </div>
             <div class="pull-right">
-                <button *ngIf="admin && device.id !== -1" mat-icon-button color="warn" type="button" (click)="delete(device)">
-                    <mat-icon>delete</mat-icon>
-                </button>
+                <mat-slide-toggle *ngIf="admin && device.id !== -1"
+                                  class="pt-3"
+                                  (change)="deleteConfirmed = $event.checked"
+                                  color="warn">
+                    <button mat-icon-button color="warn" type="button"
+                            (click)="delete(device)"
+                            [disabled]="!deleteConfirmed">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </mat-slide-toggle>
                 <button mat-raised-button type="button" class="btn btn-info pull-right" (click)="save()">
                     Mentés
                 </button>

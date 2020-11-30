@@ -28,6 +28,7 @@ export class EditDeviceModalComponent implements OnInit {
     filteredLocationOptions: Observable<Location[]>;
     deviceForm: FormGroup;
     admin = false;
+    deleteConfirmed = false;
 
     constructor(public activeModal: NgbActiveModal,
                 private fb: FormBuilder,

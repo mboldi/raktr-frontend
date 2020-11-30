@@ -92,8 +92,7 @@
                                                           class="pt-3"
                                                           (change)="deleteConfirmed = $event.checked"
                                                           color="warn">
-                                            <button *ngIf="admin && rent.id !== -1 && rent.actBackDate === ''"
-                                                    mat-icon-button color="warn"
+                                            <button mat-icon-button color="warn"
                                                     type="button" (click)="delete(rent)"
                                                     [disabled]="!deleteConfirmed">
                                                 <mat-icon>delete</mat-icon>
