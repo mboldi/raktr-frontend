@@ -22,6 +22,7 @@ export class OverviewComponent implements OnInit {
     rents: Rent[] = [];
     devices: Device[] = [];
     deviceSearchFormControl = new FormControl();
+    numOfActiveRents = 0;
 
     constructor(private title: Title,
                 private rentService: RentService,
@@ -32,12 +33,19 @@ export class OverviewComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.rentService.getRents().subscribe(rents => this.rents = rents);
-        this.deviceService.getDevices().subscribe(devices => this.devices = devices);
-    }
-
-    getNumOfActiveRents(): number {
-        return this.rents.filter(rent => rent.actBackDate !== '').length;
+        this.rentService.getRents().subscribe(rents => {
+                this.rents = [];
+                rents.forEach(rent => {
+                    this.rents.push(Rent.fromJson(rent));
+                })
+            }
+        );
+        this.deviceService.getDevices().subscribe(devices => {
+            this.devices = [];
+            devices.forEach(device => {
+                this.devices.push(Device.fromJson(device));
+            })
+        });
     }
 
     activeRents(): Rent[] {
@@ -56,11 +64,11 @@ export class OverviewComponent implements OnInit {
                     } else if (scannable['@type'] === 'device') {
                         const editModal = this.modalService.open(EditDeviceModalComponent, {size: 'lg', windowClass: 'modal-holder'});
                         editModal.componentInstance.title = 'Eszköz szerkesztése';
-                        editModal.componentInstance.device = scannable as Device;
+                        editModal.componentInstance.device = Device.fromJson(scannable as Device);
                     } else if (scannable['@type'] === 'compositeItem') {
                         const editModal = this.modalService.open(EditCompositeModalComponent, {size: 'lg', windowClass: 'modal-holder'});
                         editModal.componentInstance.title = 'Összetett eszköz szerkesztése';
-                        editModal.componentInstance.compositeItem = scannable as CompositeItem;
+                        editModal.componentInstance.compositeItem = CompositeItem.fromJSON(scannable as CompositeItem);
                     }
                 },
                 (error => {
