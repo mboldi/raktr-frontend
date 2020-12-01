@@ -16,6 +16,11 @@ export class Rent {
         if (rentJson.rentItems !== undefined) {
             rentJson.rentItems.forEach(rentItem => {
                 rentItem['scannable']['@type'] = rentItem['scannable']['type_']
+                if (rentItem['scannable']['type_'] === 'compositeItem') {
+                    rentItem['scannable']['devices'].forEach(device => {
+                        device['@type'] = device['type_'];
+                    })
+                }
             })
         }
 
@@ -52,7 +57,7 @@ export class Rent {
 
     getSumWeight(): number {
         let sumWeight = 0;
-        this.rentItems.forEach(rentItem => sumWeight += rentItem.scannable.getWeight());
+        this.rentItems.forEach(rentItem => sumWeight += rentItem.outQuantity * rentItem.scannable.getWeight());
 
         return sumWeight;
     }

@@ -30,6 +30,7 @@ import {AuthInterceptor} from './helpers/auth.interceptor';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import { PdfGenerationModalComponent } from './pdf-generation-modal/pdf-generation-modal.component';
 
 @NgModule({
     imports: [
@@ -64,6 +65,7 @@ import {MatSlideToggleModule} from '@angular/material/slide-toggle';
         DeviceToRentModalComponent,
         EditCompositeModalComponent,
         ConfirmDialogComponent,
+        PdfGenerationModalComponent,
     ],
     providers: [
         {provide: MAT_DATE_LOCALE, useValue: 'hu-HU'},

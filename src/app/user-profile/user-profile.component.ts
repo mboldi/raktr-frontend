@@ -15,6 +15,8 @@ import * as $ from 'jquery';
 })
 export class UserProfileComponent implements OnInit {
     user: User;
+    admin = false;
+
     personal_settings: FormGroup;
     group_settings: FormGroup;
     global_settings: FormGroup;
@@ -52,6 +54,8 @@ export class UserProfileComponent implements OnInit {
                 personalId: [user.personalId]
             });
             this.user = user;
+
+            this.admin = User.isStudioMember(user);
         });
 
         this.generalDataService.getAll().subscribe(data => {
