@@ -16,6 +16,11 @@ export class Rent {
         if (rentJson.rentItems !== undefined) {
             rentJson.rentItems.forEach(rentItem => {
                 rentItem['scannable']['@type'] = rentItem['scannable']['type_']
+                if (rentItem['scannable']['type_'] === 'compositeItem') {
+                    rentItem['scannable']['devices'].forEach(device => {
+                        device['@type'] = device['type_'];
+                    })
+                }
             })
         }
 

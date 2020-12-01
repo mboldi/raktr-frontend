@@ -28,6 +28,7 @@ export class EditCompositeModalComponent implements OnInit {
     filteredLocationOptions: Location[];
     addDeviceFormControl = new FormControl();
     admin = false;
+    deleteConfirmed = false;
 
     constructor(public activeModal: NgbActiveModal,
                 private fb: FormBuilder,
