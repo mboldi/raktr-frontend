@@ -75,9 +75,9 @@ export class EditRentComponent implements OnInit {
                         destination: this.rent.destination,
                         issuer: this.rent.issuer,
                         renter: this.rent.renter,
-                        outDate: this.rent.outDate,
-                        expBackDate: this.rent.expBackDate,
-                        actBackDate: this.rent.actBackDate
+                        outDate: this.createDateFromString(this.rent.outDate),
+                        expBackDate: this.createDateFromString(this.rent.expBackDate),
+                        actBackDate: this.rent.actBackDate === '' ? '' : this.createDateFromString(this.rent.actBackDate)
                     })
                 }
             )
@@ -232,6 +232,11 @@ export class EditRentComponent implements OnInit {
         }
         const date = new Date(Date.parse(dateString));
         return `${date.getFullYear()}.${date.getMonth() + 1}.${date.getDate()}.`;
+    }
+
+    createDateFromString(date: string) {
+        const splitDate = date.split('.');
+        return new Date(+splitDate[0], +splitDate[1] - 1, +splitDate[2], 0, 0, 0, 0);
     }
 
     delete(rent: Rent) {
