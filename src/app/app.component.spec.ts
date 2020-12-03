@@ -2,9 +2,9 @@ import {async, TestBed} from '@angular/core/testing';
 
 import {AppComponent} from './app.component';
 import {DeviceService} from './services/device.service';
-import {MockDeviceService} from './services/mock-device.service';
+import {MockDeviceService} from './services/mock/mock-device.service';
 import {AuthService} from './services/auth.service';
-import {MockAuthService} from './services/mock-auth.service';
+import {MockAuthService} from './services/mock/mock-auth.service';
 
 describe('AppComponent', () => {
     beforeEach(async(() => {
@@ -27,7 +27,6 @@ describe('AppComponent', () => {
 /*it(`should have as title 'Raktr - Áttekintés'`, async(() => {
         const fixture = TestBed.createComponent(AppComponent);
         const app = fixture.debugElement.componentInstance;
-        console.log(app);
         expect(app.title).toEqual('Raktr - Áttintés');
     }));
 

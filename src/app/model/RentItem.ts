@@ -11,11 +11,19 @@ export class RentItem {
 
     static fromJson(rentItemString: RentItem): RentItem {
         return new RentItem(rentItemString.id,
-            rentItemString.scannable['@type'] === 'device' ?
-                Device.fromJson(rentItemString.scannable as Device) :
-                CompositeItem.fromJSON(rentItemString.scannable as CompositeItem),
+            RentItem.makeScannable(rentItemString),
             this.rentStatusFormatter(rentItemString.backStatus),
-            rentItemString.outQuantity)
+            rentItemString.outQuantity
+        )
+    }
+
+    static makeScannable(rentItemString: RentItem): Scannable {
+        if (rentItemString.scannable['type_'] === 'device' || rentItemString.scannable['@type'] === 'device') {
+            return Device.fromJson(rentItemString.scannable as Device)
+        } else if (rentItemString.scannable['type_'] === 'compositeItem' || rentItemString.scannable['@type'] === 'compositeItem') {
+            return CompositeItem.fromJSON(rentItemString.scannable as CompositeItem)
+        }
+        return null;
     }
 
     static rentStatusFormatter(status: number | string): BackStatus {

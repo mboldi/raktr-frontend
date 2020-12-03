@@ -10,7 +10,6 @@ import {LocationService} from '../services/location.service';
 import {CategoryService} from '../services/category.service';
 import {DeviceService} from '../services/device.service';
 import {UserService} from '../services/user.service';
-import {MatDialog} from '@angular/material/dialog';
 import {User} from '../model/User';
 
 @Component({
@@ -35,8 +34,7 @@ export class EditDeviceModalComponent implements OnInit {
                 private locationService: LocationService,
                 private categoryService: CategoryService,
                 private deviceService: DeviceService,
-                private userService: UserService,
-                public dialog: MatDialog) {
+                private userService: UserService) {
         if (this.device === undefined) {
             this.device = new Device();
         }
@@ -127,18 +125,6 @@ export class EditDeviceModalComponent implements OnInit {
     }
 
     delete(device: Device) {
-        /*const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-            width: '250px',
-            panelClass: 'confirm-dialog'
-        });
-
-        dialogRef.afterClosed().subscribe(result => {
-            if (result) {
-                this.deviceService.deleteDevice(device).subscribe(device_ => {
-                    this.activeModal.dismiss('delete')
-                });
-            }
-        });*/
         this.deviceService.deleteDevice(device).subscribe(device_ => {
             this.activeModal.dismiss('delete')
         });

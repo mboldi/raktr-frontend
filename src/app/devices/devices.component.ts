@@ -28,10 +28,10 @@ export class DevicesComponent implements OnInit {
     compositeItems: CompositeItem[];
     sortedComposites: CompositeItem[];
 
-    constructor(private title: Title,
-                private deviceService: DeviceService,
-                private compositeService: CompositeService,
-                private modalService: NgbModal) {
+    constructor(public title: Title,
+                public deviceService: DeviceService,
+                public compositeService: CompositeService,
+                public modalService: NgbModal) {
         this.title.setTitle('Raktr - Eszközök');
     }
 

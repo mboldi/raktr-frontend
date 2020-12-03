@@ -20,7 +20,8 @@ export class RentsComponent implements OnInit {
     currRent: Rent;
     rentSearchControl = new FormControl();
 
-    constructor(private title: Title, private rentService: RentService) {
+    constructor(public title: Title,
+                public rentService: RentService) {
         this.title.setTitle('Raktr - Bérlések');
     }
 
@@ -42,19 +43,15 @@ export class RentsComponent implements OnInit {
         this.filteredRents = this.rentSearchControl.valueChanges
             .pipe(
                 startWith(''),
-                map(value => this._filterDevices(this.rents, value))
+                map(value => this._filterRents(this.rents, value))
             );
     }
 
-    private _filterDevices(rents_: Rent[], value: string): Rent[] {
+    private _filterRents(rents_: Rent[], value: string): Rent[] {
         const filterValue = value.toLowerCase();
 
         return rents_.filter(rent => rent.destination.toLowerCase().includes(filterValue) ||
             rent.issuer.toLowerCase().includes(filterValue) ||
             rent.renter.toLowerCase().includes(filterValue));
-    }
-
-    onSelect(rent: Rent) {
-        this.currRent = rent;
     }
 }

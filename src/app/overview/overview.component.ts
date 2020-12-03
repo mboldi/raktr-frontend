@@ -24,10 +24,10 @@ export class OverviewComponent implements OnInit {
     deviceSearchFormControl = new FormControl();
     numOfActiveRents = 0;
 
-    constructor(private title: Title,
-                private rentService: RentService,
+    constructor(public title: Title,
+                public rentService: RentService,
                 private deviceService: DeviceService,
-                private scannableService: ScannableService,
+                public scannableService: ScannableService,
                 private modalService: NgbModal) {
         this.title.setTitle('Raktr - Áttekintés');
     }

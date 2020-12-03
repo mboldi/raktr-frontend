@@ -32,7 +32,7 @@ export class EditCompositeModalComponent implements OnInit {
 
     constructor(public activeModal: NgbActiveModal,
                 private fb: FormBuilder,
-                private compositeItemService: CompositeService,
+                public compositeItemService: CompositeService,
                 private locationService: LocationService,
                 private deviceService: DeviceService,
                 private scannableService: ScannableService,

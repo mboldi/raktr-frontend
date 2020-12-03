@@ -27,7 +27,6 @@ import { DeviceToRentModalComponent } from './device-to-rent-modal/device-to-ren
 import { EditCompositeModalComponent } from './edit-composite-modal/edit-composite-modal.component';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {AuthInterceptor} from './helpers/auth.interceptor';
-import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import { PdfGenerationModalComponent } from './pdf-generation-modal/pdf-generation-modal.component';
@@ -64,7 +63,6 @@ import { PdfGenerationModalComponent } from './pdf-generation-modal/pdf-generati
         LoginComponent,
         DeviceToRentModalComponent,
         EditCompositeModalComponent,
-        ConfirmDialogComponent,
         PdfGenerationModalComponent,
     ],
     providers: [

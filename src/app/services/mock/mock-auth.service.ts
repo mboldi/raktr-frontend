@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {UserService} from './user.service';
+import {UserService} from '../user.service';
 // @ts-ignore
 import moment = require('moment');
 
@@ -9,13 +9,11 @@ import moment = require('moment');
 })
 export class MockAuthService {
 
-    constructor(private http: HttpClient,
-                private userService: UserService) {
+    constructor() {
     }
 
-    // @ts-ignore
     login(username: string, password: string) {
-        this.setSession(JSON.parse('{"body": {"expiresAt": "1111.11.11.", "token": "asdassd.asdasd.asdasddsa"}}'), username);
+        this.setSession(JSON.parse('{"body": {"expiresAt": "1111.11.11.", "token": "token"}}'), username);
         return true;
     }
 

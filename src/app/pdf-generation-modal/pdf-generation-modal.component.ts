@@ -18,7 +18,7 @@ export class PdfGenerationModalComponent implements OnInit {
     user: User;
 
     constructor(private userService: UserService,
-                private rentService: RentService,
+                public rentService: RentService,
                 private fb: FormBuilder,
                 private activeModal: NgbActiveModal) {
         this.dataFormGroup = fb.group({

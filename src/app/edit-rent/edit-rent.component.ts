@@ -9,7 +9,6 @@ import {map, startWith} from 'rxjs/operators';
 import {RentItem} from '../model/RentItem';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {DeviceService} from '../services/device.service';
 import {Device} from '../model/Device';
 import {DeviceToRentModalComponent} from '../device-to-rent-modal/device-to-rent-modal.component';
 import {Scannable} from '../model/Scannable';
@@ -38,7 +37,6 @@ export class EditRentComponent implements OnInit {
     deleteConfirmed = false;
 
     constructor(private rentService: RentService,
-                private deviceService: DeviceService,
                 private scannableService: ScannableService,
                 private userService: UserService,
                 private title: Title,

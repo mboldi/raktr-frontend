@@ -21,7 +21,7 @@ export class UserProfileComponent implements OnInit {
     group_settings: FormGroup;
     global_settings: FormGroup;
 
-    constructor(private title: Title,
+    constructor(public title: Title,
                 private fb: FormBuilder,
                 private userService: UserService,
                 private generalDataService: GeneralDataService) {
