@@ -18,7 +18,7 @@ export class ScannableService {
     // @ts-ignore
     getScannableByBarcode(barcode: string): Observable<Scannable> {
         // @ts-ignore
-        return this.http.get(`${environment.apiUrl}/api/scannable/${barcode}`, {observe: 'response'})
+        return this.http.get(`${environment.apiUrl}/api/scannable/barcode/${barcode}`, {observe: 'response'})
             .pipe(
                 map(res => {
                     if (res.status === 404) {
@@ -32,6 +32,28 @@ export class ScannableService {
                     }
                 })
             )
+    }
+
+    getScannableByTextIdentifier(textIdentifier: string): Observable<Scannable> {
+        // @ts-ignore
+        return this.http.get(`${environment.apiUrl}/api/scannable/textid/${textIdentifier}`, {observe: 'response'})
+            .pipe(
+                map(res => {
+                    if (res.status === 404) {
+                        return undefined;
+                    } else {
+                        if (res.body['@type'] === 'device') {
+                            return res.body as Device;
+                        } else if (res.body['@type'] === 'compositeItem') {
+                            return res.body as CompositeItem;
+                        }
+                    }
+                })
+            )
+    }
+
+    getScannableAmount(): Observable<number> {
+        return this.http.get<number>(`${environment.apiUrl}/api/scannable/count`);
     }
 
 }

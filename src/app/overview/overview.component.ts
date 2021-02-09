@@ -20,9 +20,9 @@ import {CompositeItem} from '../model/CompositeItem';
 export class OverviewComponent implements OnInit {
 
     rents: Rent[] = [];
-    devices: Device[] = [];
     deviceSearchFormControl = new FormControl();
     numOfActiveRents = 0;
+    scannableAmount = 0;
 
     constructor(private title: Title,
                 private rentService: RentService,
@@ -40,12 +40,8 @@ export class OverviewComponent implements OnInit {
                 })
             }
         );
-        this.deviceService.getDevices().subscribe(devices => {
-            this.devices = [];
-            devices.forEach(device => {
-                this.devices.push(Device.fromJson(device));
-            })
-        });
+
+        this.scannableService.getScannableAmount().subscribe(amount => this.scannableAmount = amount)
     }
 
     activeRents(): Rent[] {
