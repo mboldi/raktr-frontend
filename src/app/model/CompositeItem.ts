@@ -11,6 +11,7 @@ export class CompositeItem extends Scannable {
         const compositeItem1 = new CompositeItem(compositeItem.id,
             compositeItem.name,
             compositeItem.barcode,
+            compositeItem.textIdentifier,
             [],
             compositeItem.location);
 
@@ -18,6 +19,7 @@ export class CompositeItem extends Scannable {
             deviceJson.id,
             deviceJson.name,
             deviceJson.barcode,
+            deviceJson.textIdentifier,
             deviceJson.maker,
             deviceJson.type,
             deviceJson.serial,
@@ -38,8 +40,9 @@ export class CompositeItem extends Scannable {
         return `{\"CompositeItem\": ${JSON.stringify(compositeJson)}}`;
     }
 
-    constructor(id: number = -1, name: string = '', barcode: string = '', devices: Device[] = [], location: Location = null) {
-        super('compositeItem', id, name, barcode);
+    constructor(id: number = -1, name: string = '', barcode: string = '', textIdentifier: string = '',
+                devices: Device[] = [], location: Location = null) {
+        super('compositeItem', id, name, barcode, textIdentifier);
         this.devices = devices;
         this.location = location;
     }

@@ -48,6 +48,7 @@ export class EditDeviceModalComponent implements OnInit {
             category: ['', Validators.required],
             location: ['', Validators.required],
             barcode: ['', Validators.required],
+            textIdentifier: ['', Validators.required],
             weight: ['0'],
             value: ['0'],
             quantity: ['1']
@@ -62,6 +63,7 @@ export class EditDeviceModalComponent implements OnInit {
             category: this.device.category === null ? '' : this.device.category.name,
             location: this.device.location === null ? '' : this.device.location.name,
             barcode: this.device.barcode,
+            textIdentifier: this.device.textIdentifier,
             weight: this.device.weight,
             value: this.device.value,
             quantity: this.device.quantity
@@ -113,6 +115,7 @@ export class EditDeviceModalComponent implements OnInit {
         this.device.category = new Category(-1, values.category.toString());
         this.device.location = new Location(-1, values.location.toString());
         this.device.barcode = values.barcode.toString();
+        this.device.textIdentifier = values.textIdentifier.toString();
         this.device.weight = values.weight;
         this.device.value = values.value;
         this.device.quantity = values.quantity;

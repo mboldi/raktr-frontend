@@ -49,6 +49,7 @@ export class DevicesComponent implements OnInit {
                     device.name.toLowerCase().includes(value.toLowerCase()) ||
                     device.maker.toLowerCase().includes(value.toLowerCase()) ||
                     device.type.toLowerCase().includes(value.toLowerCase()) ||
+                    device.textIdentifier.toLowerCase().includes(value.toLowerCase()) ||
                     device.barcode.toLowerCase().includes(value.toLowerCase()));
             });
         });
@@ -58,6 +59,7 @@ export class DevicesComponent implements OnInit {
         this.searchControl.valueChanges.subscribe(value => {
             this.sortedComposites = this.compositeItems.filter(compositeItem =>
                 compositeItem.name.toLowerCase().includes(value) ||
+                compositeItem.textIdentifier.toLowerCase().includes(value) ||
                 compositeItem.barcode.toLowerCase().includes(value))
         });
     }

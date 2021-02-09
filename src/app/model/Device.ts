@@ -25,6 +25,7 @@ export class Device extends Scannable {
             deviceJson.id,
             deviceJson.name,
             deviceJson.barcode,
+            deviceJson.textIdentifier,
             deviceJson.maker,
             deviceJson.type,
             deviceJson.serial,
@@ -37,9 +38,10 @@ export class Device extends Scannable {
         )
     }
 
-    constructor(id: number = -1, name: string = '', barcode: string = '', maker: string = '', type: string = '', serial: string = '', value: number = 0, weight: number = 0,
-                location: Location = null, status: DeviceStatus = DeviceStatus.GOOD, category: Category = null, quantity: number = 1) {
-        super('device', id, name, barcode);
+    constructor(id: number = -1, name: string = '', barcode: string = '', textIdentifier: string = '', maker: string = '',
+                type: string = '', serial: string = '', value: number = 0, weight: number = 0, location: Location = null,
+                status: DeviceStatus = DeviceStatus.GOOD, category: Category = null, quantity: number = 1) {
+        super('device', id, name, barcode, textIdentifier);
         this.maker = maker;
         this.type = type;
         this.serial = serial;

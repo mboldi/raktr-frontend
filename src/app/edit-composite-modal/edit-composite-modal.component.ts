@@ -44,7 +44,8 @@ export class EditCompositeModalComponent implements OnInit {
         this.compositeDataForm = fb.group({
             name: ['', Validators.required],
             location: ['', Validators.required],
-            barcode: ['', Validators.required]
+            barcode: ['', Validators.required],
+            textIdentifier: ['', Validators.required]
         });
 
         this.userService.getCurrentUser().subscribe(user => {
@@ -66,7 +67,8 @@ export class EditCompositeModalComponent implements OnInit {
         this.compositeDataForm.setValue({
             name: this.compositeItem.name,
             location: this.compositeItem.location === null ? '' : this.compositeItem.location.name,
-            barcode: this.compositeItem.barcode
+            barcode: this.compositeItem.barcode,
+            textIdentifier: this.compositeItem.textIdentifier,
         });
     }
 
@@ -80,6 +82,7 @@ export class EditCompositeModalComponent implements OnInit {
         const value = this.compositeDataForm.value;
         this.compositeItem.name = value.name.toString();
         this.compositeItem.barcode = value.barcode.toString();
+        this.compositeItem.textIdentifier = value.textIdentifier.toString();
         this.compositeItem.location = new Location(-1, value.location.toString());
 
         if (this.compositeItem.id === -1) {
@@ -94,7 +97,8 @@ export class EditCompositeModalComponent implements OnInit {
                 this.compositeDataForm.setValue({
                     name: compositeItem.name,
                     location: compositeItem.location.name,
-                    barcode: compositeItem.barcode
+                    barcode: compositeItem.barcode,
+                    textIdentifier: compositeItem.textIdentifier
                 });
 
                 this.showNotification('Mentve', 'success');

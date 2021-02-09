@@ -73,7 +73,7 @@
                                             Tömeg
                                         </th>
                                         <th>
-                                            Vonalkód
+                                            Azonosító
                                         </th>
                                         <th>
                                             Másolás
@@ -106,7 +106,7 @@
                                                 {{device.weight / 1000}} kg
                                             </td>
                                             <td>
-                                                {{device.barcode}}
+                                                {{device.textIdentifier}}
                                             </td>
                                             <td class="pb-0 pt-0">
                                                 <button mat-raised-button type="button"
@@ -143,7 +143,7 @@
                                             Tömeg
                                         </th>
                                         <th>
-                                            Vonalkód
+                                            Azonosító
                                         </th>
                                         <th>
                                             Szerkesztés
@@ -165,7 +165,7 @@
                                                 {{compositeItem.getWeight() / 1000}} kg
                                             </td>
                                             <td>
-                                                {{compositeItem.barcode}}
+                                                {{compositeItem.textIdentifier}}
                                             </td>
                                             <td class="pb-0 pt-0">
                                                 <button mat-raised-button type="button"
