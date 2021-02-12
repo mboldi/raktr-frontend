@@ -81,7 +81,7 @@ export class UserProfileComponent implements OnInit {
         this.user.personalId = this.personal_settings.value.personalId.toString();
 
         this.userService.updateUser(this.user).subscribe(user => {
-            console.log(user);
+            this.showNotification('Személyes beállítások sikeresen mentve!', 'success')
         });
     }
 
@@ -93,8 +93,9 @@ export class UserProfileComponent implements OnInit {
             const groupNameData = new GeneralData('groupName', val.groupName.toString());
             const groupLeaderNameData = new GeneralData('groupLeader', val.groupLeaderName.toString());
 
-            this.generalDataService.updateData(groupNameData).subscribe(data => console.log(data));
-            this.generalDataService.updateData(groupLeaderNameData).subscribe(data => console.log(data));
+            this.generalDataService.updateData(groupNameData).subscribe();
+            this.generalDataService.updateData(groupLeaderNameData)
+                .subscribe(data => this.showNotification('Körös beállítások sikeresen mentve!', 'success'));
         } else {
             this.showNotification('Töltsd ki az összes mezőt!', 'warning');
         }
@@ -112,10 +113,11 @@ export class UserProfileComponent implements OnInit {
             const secondSignerName = new GeneralData('secondSignerName', val.secondSignerName.toString());
             const secondSignerTitle = new GeneralData('secondSignerTitle', val.secondSignerTitle.toString());
 
-            this.generalDataService.updateData(firstSignerName).subscribe(data => console.log(data));
-            this.generalDataService.updateData(firstSignerTitle).subscribe(data => console.log(data));
-            this.generalDataService.updateData(secondSignerName).subscribe(data => console.log(data));
-            this.generalDataService.updateData(secondSignerTitle).subscribe(data => console.log(data));
+            this.generalDataService.updateData(firstSignerName).subscribe();
+            this.generalDataService.updateData(firstSignerTitle).subscribe();
+            this.generalDataService.updateData(secondSignerName).subscribe();
+            this.generalDataService.updateData(secondSignerTitle)
+                .subscribe(data => this.showNotification('Globális beállítások sikeresen mentve!', 'success'));
         } else {
             this.showNotification('Töltsd ki az összes mezőt!', 'warning');
         }
