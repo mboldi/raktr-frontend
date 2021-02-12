@@ -6,6 +6,7 @@ import {RentService} from '../services/rent.service';
 import {FormControl} from '@angular/forms';
 import {map, startWith} from 'rxjs/operators';
 import {Observable} from 'rxjs';
+import {Router} from '@angular/router';
 
 @Component({
     selector: 'app-rents',
@@ -20,7 +21,9 @@ export class RentsComponent implements OnInit {
     currRent: Rent;
     rentSearchControl = new FormControl();
 
-    constructor(private title: Title, private rentService: RentService) {
+    constructor(private title: Title,
+                private rentService: RentService,
+                private router: Router) {
         this.title.setTitle('Raktr - Bérlések');
     }
 
@@ -56,5 +59,9 @@ export class RentsComponent implements OnInit {
 
     onSelect(rent: Rent) {
         this.currRent = rent;
+    }
+
+    openRent(id: number) {
+        this.router.navigateByUrl('/rent/' + id);
     }
 }

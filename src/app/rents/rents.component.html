@@ -57,7 +57,7 @@
                                 </th>
                                 </thead>
                                 <tbody>
-                                <tr class="rent-row" *ngFor="let rent of filteredRents | async">
+                                <tr class="rent-row" *ngFor="let rent of filteredRents | async" (click)="openRent(rent.id)">
                                     <td>
                                         {{rent.issuer}}
                                     </td>

@@ -10,6 +10,7 @@ import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ScannableService} from '../services/scannable.service';
 import {EditCompositeModalComponent} from '../edit-composite-modal/edit-composite-modal.component';
 import {CompositeItem} from '../model/CompositeItem';
+import {Router} from '@angular/router';
 
 @Component({
     selector: 'app-overview',
@@ -28,6 +29,7 @@ export class OverviewComponent implements OnInit {
                 private rentService: RentService,
                 private deviceService: DeviceService,
                 private scannableService: ScannableService,
+                private router: Router,
                 private modalService: NgbModal) {
         this.title.setTitle('Raktr - Áttekintés');
     }
@@ -73,6 +75,10 @@ export class OverviewComponent implements OnInit {
         }
 
         this.deviceSearchFormControl.setValue('');
+    }
+
+    openRent(id: number) {
+        this.router.navigateByUrl('/rent/' + id);
     }
 
     showNotification(message_: string, type: string) {

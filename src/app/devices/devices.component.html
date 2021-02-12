@@ -83,7 +83,7 @@
                                         </th>
                                         </thead>
                                         <tbody>
-                                        <tr class="device-row" *ngFor="let device of sortedDevices">
+                                        <tr class="device-row" *ngFor="let device of sortedDevices" (click)="editDevice(device)">
                                             <td>
                                                 {{device.name}}
                                             </td>
@@ -151,7 +151,7 @@
                                         </thead>
                                         <tbody>
                                         <tr class="device-row"
-                                            *ngFor="let compositeItem of sortedComposites">
+                                            *ngFor="let compositeItem of sortedComposites" (click)="editCompositeItem(compositeItem)">
                                             <td>
                                                 {{compositeItem.name}}
                                             </td>

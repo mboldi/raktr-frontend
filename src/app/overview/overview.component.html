@@ -95,7 +95,7 @@
                                 </th>
                                 </thead>
                                 <tbody>
-                                <tr class="rent-row" *ngFor="let rent of activeRents()">
+                                <tr class="rent-row" *ngFor="let rent of activeRents()" (click)="openRent(rent.id)">
                                     <td>
                                         {{rent.issuer}}
                                     </td>
