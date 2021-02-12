@@ -11,6 +11,7 @@ import {ScannableService} from '../services/scannable.service';
 import {EditCompositeModalComponent} from '../edit-composite-modal/edit-composite-modal.component';
 import {CompositeItem} from '../model/CompositeItem';
 import {Router} from '@angular/router';
+import {BarcodePurifier} from '../services/barcode-purifier.service';
 
 @Component({
     selector: 'app-overview',
@@ -51,11 +52,13 @@ export class OverviewComponent implements OnInit {
     }
 
     searchScannable() {
-        const barcode = this.deviceSearchFormControl.value;
+        let barcode = this.deviceSearchFormControl.value;
 
         if (barcode === '') {
             this.showNotification('Kérlek adj meg egy vonalkódot!', 'warning');
         } else {
+            barcode = BarcodePurifier.purify(barcode);
+
             this.scannableService.getScannableByBarcode(barcode).subscribe(scannable => {
                     if (scannable === undefined) {
                         this.showNotification('Nem találtam eszközt ilyen vonalkóddal!', 'warning');

@@ -17,7 +17,6 @@ export class ScannableService {
 
     // @ts-ignore
     getScannableByBarcode(barcode: string): Observable<Scannable> {
-        // @ts-ignore
         return this.http.get(`${environment.apiUrl}/api/scannable/barcode/${barcode}`, {observe: 'response'})
             .pipe(
                 map(res => {

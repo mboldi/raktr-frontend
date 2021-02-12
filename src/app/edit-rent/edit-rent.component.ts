@@ -20,6 +20,7 @@ import {User} from '../model/User';
 import {CompositeItem} from '../model/CompositeItem';
 import {MatCheckboxChange} from '@angular/material/checkbox';
 import {PdfGenerationModalComponent} from '../pdf-generation-modal/pdf-generation-modal.component';
+import {BarcodePurifier} from '../services/barcode-purifier.service';
 
 @Component({
     selector: 'app-edit-rent',
@@ -27,7 +28,6 @@ import {PdfGenerationModalComponent} from '../pdf-generation-modal/pdf-generatio
     styleUrls: ['./edit-rent.component.css']
 })
 export class EditRentComponent implements OnInit {
-    rent$: Observable<Rent>;
     rent: Rent;
     filteredRentItems: Observable<RentItem[]>;
 
@@ -99,7 +99,9 @@ export class EditRentComponent implements OnInit {
 
     addItemToRent() {
         if (this.addDeviceFormControl.value !== null && this.addDeviceFormControl.value !== '') {
-            this.scannableService.getScannableByBarcode(this.addDeviceFormControl.value).subscribe(scannable => {
+            const barcode = BarcodePurifier.purify(this.addDeviceFormControl.value)
+
+            this.scannableService.getScannableByBarcode(barcode).subscribe(scannable => {
                     if (scannable === undefined) {
                         this.showNotification('Nem találtam eszközt ilyen vonalkóddal!', 'warning');
                     } else if (scannable['@type'] === 'device') {

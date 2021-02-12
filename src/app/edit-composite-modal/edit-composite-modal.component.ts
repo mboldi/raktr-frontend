@@ -11,6 +11,7 @@ import {DeviceService} from '../services/device.service';
 import {ScannableService} from '../services/scannable.service';
 import {UserService} from '../services/user.service';
 import {User} from '../model/User';
+import {BarcodePurifier} from '../services/barcode-purifier.service';
 
 @Component({
     selector: 'app-edit-composite-modal',
@@ -121,7 +122,9 @@ export class EditCompositeModalComponent implements OnInit {
     }
 
     addDeviceToComposite() {
-        this.scannableService.getScannableByBarcode(this.addDeviceFormControl.value).subscribe(scannable => {
+        const barcode = BarcodePurifier.purify(this.addDeviceFormControl.value);
+
+        this.scannableService.getScannableByBarcode(barcode).subscribe(scannable => {
                 if (scannable === undefined) {
                     this.showNotification('Nem találtam ilyen eszközt', 'warning');
                 } else if (scannable['@type'] === 'compositeItem') {

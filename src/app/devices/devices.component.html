@@ -83,29 +83,29 @@
                                         </th>
                                         </thead>
                                         <tbody>
-                                        <tr class="device-row" *ngFor="let device of sortedDevices" (click)="editDevice(device)">
-                                            <td>
+                                        <tr class="device-row" *ngFor="let device of sortedDevices">
+                                            <td (click)="editDevice(device)">
                                                 {{device.name}}
                                             </td>
-                                            <td>
+                                            <td (click)="editDevice(device)">
                                                 {{device.maker}}
                                             </td>
-                                            <td>
+                                            <td (click)="editDevice(device)">
                                                 {{device.type}}
                                             </td>
-                                            <td>
+                                            <td (click)="editDevice(device)">
                                                 {{device.quantity}}
                                             </td>
-                                            <td>
+                                            <td (click)="editDevice(device)">
                                                 {{device.category.name}}
                                             </td>
-                                            <td>
+                                            <td (click)="editDevice(device)">
                                                 {{device.location.name}}
                                             </td>
-                                            <td>
+                                            <td (click)="editDevice(device)">
                                                 {{device.weight / 1000}} kg
                                             </td>
-                                            <td>
+                                            <td (click)="editDevice(device)">
                                                 {{device.textIdentifier}}
                                             </td>
                                             <td class="pb-0 pt-0">
@@ -151,20 +151,20 @@
                                         </thead>
                                         <tbody>
                                         <tr class="device-row"
-                                            *ngFor="let compositeItem of sortedComposites" (click)="editCompositeItem(compositeItem)">
-                                            <td>
+                                            *ngFor="let compositeItem of sortedComposites">
+                                            <td (click)="editCompositeItem(compositeItem)">
                                                 {{compositeItem.name}}
                                             </td>
-                                            <td>
+                                            <td (click)="editCompositeItem(compositeItem)">
                                                 {{compositeItem.devices.length}}
                                             </td>
-                                            <td>
+                                            <td (click)="editCompositeItem(compositeItem)">
                                                 {{compositeItem.location.name}}
                                             </td>
-                                            <td>
+                                            <td (click)="editCompositeItem(compositeItem)">
                                                 {{compositeItem.getWeight() / 1000}} kg
                                             </td>
-                                            <td>
+                                            <td (click)="editCompositeItem(compositeItem)">
                                                 {{compositeItem.textIdentifier}}
                                             </td>
                                             <td class="pb-0 pt-0">
