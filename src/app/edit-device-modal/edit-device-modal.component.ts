@@ -141,7 +141,7 @@ export class EditDeviceModalComponent implements OnInit {
             this.deviceService.addDevice(this.device).subscribe(
                 (device) => {
                     this.device = device;
-                    this.activeModal.dismiss('new')
+                    this.activeModal.dismiss(device)
                 },
                 (error) => {
                     this.device.id = -1;

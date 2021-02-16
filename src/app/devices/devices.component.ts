@@ -142,12 +142,10 @@ export class DevicesComponent implements OnInit {
         editModal.componentInstance.device.id = -1;
 
         editModal.result.catch(reason => {
-            if (reason === 'delete' || reason === 'new') {
-                this.deviceService.getDevices().subscribe(devices => {
-                    this.devices = devices;
-                    this.sortedDevices = devices;
-                });
-            }
+            this.deviceService.getDevices().subscribe(devices => {
+                this.devices = devices;
+                this.sortedDevices = devices;
+            });
         })
     }
 
