@@ -77,10 +77,10 @@
                                         </th>
                                         <th>
                                             Másolás
-                                        </th>
+                                        </th><!--
                                         <th>
                                             Szerkesztés
-                                        </th>
+                                        </th>-->
                                         </thead>
                                         <tbody>
                                         <tr class="device-row" *ngFor="let device of sortedDevices">
@@ -114,13 +114,13 @@
                                                         class="material-icons pb-0 pt-0"
                                                         (click)="copyDevice(device)">content_copy</i>
                                                 </button>
-                                            </td>
+                                            </td><!--
                                             <td class="pb-0 pt-0">
                                                 <button mat-raised-button type="button"
                                                         class="btn btn-info pull-center btn-just-icon pb-0 pt-0">
                                                     <i class="material-icons" (click)="editDevice(device)">create</i>
                                                 </button>
-                                            </td>
+                                            </td>-->
                                         </tr>
                                         </tbody>
                                     </table>
@@ -144,10 +144,10 @@
                                         </th>
                                         <th>
                                             Azonosító
-                                        </th>
+                                        </th><!--
                                         <th>
                                             Szerkesztés
-                                        </th>
+                                        </th>-->
                                         </thead>
                                         <tbody>
                                         <tr class="device-row"
@@ -166,14 +166,14 @@
                                             </td>
                                             <td (click)="editCompositeItem(compositeItem)">
                                                 {{compositeItem.textIdentifier}}
-                                            </td>
+                                            </td><!--
                                             <td class="pb-0 pt-0">
                                                 <button mat-raised-button type="button"
                                                         class="btn btn-info pull-center btn-just-icon"
                                                         (click)="editCompositeItem(compositeItem)">
                                                     <mat-icon>create</mat-icon>
                                                 </button>
-                                            </td>
+                                            </td>-->
                                         </tr>
                                         </tbody>
                                     </table>
