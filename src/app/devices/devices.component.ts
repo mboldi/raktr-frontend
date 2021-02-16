@@ -100,6 +100,8 @@ export class DevicesComponent implements OnInit {
                     return compare(a.location.name.toLowerCase(), b.location.name.toLowerCase(), isAsc);
                 case 'weight':
                     return compare(a.weight, b.weight, isAsc);
+                case 'textId':
+                    return compare(a.textIdentifier.toLowerCase(), b.textIdentifier.toLowerCase(), isAsc);
                 default:
                     return 0;
             }
@@ -125,6 +127,8 @@ export class DevicesComponent implements OnInit {
                     return compare(a.location.name.toLowerCase(), b.location.name.toLowerCase(), isAsc);
                 case 'weight':
                     return compare(a.getWeight(), b.getWeight(), isAsc);
+                case 'textId':
+                    return compare(a.textIdentifier.toLowerCase(), b.textIdentifier.toLowerCase(), isAsc);
                 default:
                     return 0;
             }

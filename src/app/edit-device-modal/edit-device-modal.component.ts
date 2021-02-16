@@ -13,6 +13,7 @@ import {UserService} from '../services/user.service';
 import {MatDialog} from '@angular/material/dialog';
 import {User} from '../model/User';
 import * as $ from 'jquery';
+import {ScannableService} from '../services/scannable.service';
 
 @Component({
     selector: 'app-edit-device-modal',
@@ -36,6 +37,7 @@ export class EditDeviceModalComponent implements OnInit {
                 private locationService: LocationService,
                 private categoryService: CategoryService,
                 private deviceService: DeviceService,
+                private scannableService: ScannableService,
                 private userService: UserService,
                 public dialog: MatDialog) {
         if (this.device === undefined) {
@@ -57,18 +59,16 @@ export class EditDeviceModalComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.deviceForm.setValue({
-            name: this.device.name,
-            maker: this.device.maker,
-            type: this.device.type,
-            category: this.device.category === null ? '' : this.device.category.name,
-            location: this.device.location === null ? '' : this.device.location.name,
-            barcode: this.device.barcode,
-            textIdentifier: this.device.textIdentifier,
-            weight: this.device.weight,
-            value: this.device.value,
-            quantity: this.device.quantity
-        });
+        if (this.device.id === null || this.device.id === -1) {
+            this.scannableService.getNextId().subscribe(nextid => {
+                // @ts-ignore
+                this.device.barcode = nextid.toString().padStart(7, '0');
+
+                this.setFormFields();
+            })
+        } else {
+            this.setFormFields();
+        }
 
         this.userService.getCurrentUser().subscribe(user => {
             this.admin = User.isStudioMember(user);
@@ -94,6 +94,21 @@ export class EditDeviceModalComponent implements OnInit {
                 );
         });
 
+    }
+
+    private setFormFields() {
+        this.deviceForm.setValue({
+            name: this.device.name,
+            maker: this.device.maker,
+            type: this.device.type,
+            category: this.device.category === null ? '' : this.device.category.name,
+            location: this.device.location === null ? '' : this.device.location.name,
+            barcode: this.device.barcode,
+            textIdentifier: this.device.textIdentifier,
+            weight: this.device.weight,
+            value: this.device.value,
+            quantity: this.device.quantity
+        });
     }
 
     private _filterCategories(categories: Category[], value: string): Category[] {

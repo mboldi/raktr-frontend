@@ -65,6 +65,20 @@ export class EditCompositeModalComponent implements OnInit {
             )
         });
 
+        if (this.compositeItem.id === null || this.compositeItem.id === -1) {
+            this.scannableService.getNextId().subscribe(
+                nextid => {
+                    // @ts-ignore
+                    this.compositeItem.barcode = nextid.toString().padStart(7, '0');
+
+                    this.setFormData();
+                });
+        } else {
+            this.setFormData();
+        }
+    }
+
+    private setFormData() {
         this.compositeDataForm.setValue({
             name: this.compositeItem.name,
             location: this.compositeItem.location === null ? '' : this.compositeItem.location.name,

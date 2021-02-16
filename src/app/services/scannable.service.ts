@@ -15,6 +15,10 @@ export class ScannableService {
     constructor(private http: HttpClient) {
     }
 
+    getNextId(): Observable<number> {
+        return this.http.get<number>(`${environment.apiUrl}/api/scannable/nextid`);
+    }
+
     // @ts-ignore
     getScannableByBarcode(barcode: string): Observable<Scannable> {
         return this.http.get(`${environment.apiUrl}/api/scannable/barcode/${barcode}`, {observe: 'response'})
