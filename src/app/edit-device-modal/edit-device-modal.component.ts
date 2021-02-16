@@ -12,6 +12,7 @@ import {DeviceService} from '../services/device.service';
 import {UserService} from '../services/user.service';
 import {MatDialog} from '@angular/material/dialog';
 import {User} from '../model/User';
+import * as $ from 'jquery';
 
 @Component({
     selector: 'app-edit-device-modal',
@@ -122,10 +123,25 @@ export class EditDeviceModalComponent implements OnInit {
 
         if (this.device.id === -1) {
             // new
-            this.deviceService.addDevice(this.device).subscribe(device => this.activeModal.dismiss(device));
+            this.deviceService.addDevice(this.device).subscribe(
+                (device) => {
+                    this.device = device;
+                    this.activeModal.dismiss('new')
+                },
+                (error) => {
+                    this.device.id = -1;
+                    this.showNotification('Nem sikerült menteni, ütközés!', 'warning');
+                });
         } else {
             // update
-            this.deviceService.updateDevice(this.device as Device).subscribe(device => this.activeModal.dismiss(device));
+            this.deviceService.updateDevice(this.device as Device).subscribe(
+                (device) => {
+                    this.device = device;
+                    this.activeModal.dismiss(device);
+                },
+                (error) => {
+                    this.showNotification('Nem sikerült menteni, ütközés!', 'warning');
+                })
         }
     }
 
@@ -145,5 +161,21 @@ export class EditDeviceModalComponent implements OnInit {
         this.deviceService.deleteDevice(device).subscribe(device_ => {
             this.activeModal.dismiss('delete')
         });
+    }
+
+
+    showNotification(message_: string, type: string) {
+        $['notify']({
+            icon: 'add_alert',
+            message: message_
+        }, {
+            type: type,
+            timer: 1000,
+            placement: {
+                from: 'top',
+                align: 'right'
+            },
+            z_index: 2000
+        })
     }
 }

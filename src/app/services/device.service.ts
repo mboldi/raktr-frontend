@@ -5,7 +5,7 @@ import {Observable, of} from 'rxjs';
 import {Scannable} from '../model/Scannable';
 import {Location} from '../model/Location';
 import {Category} from '../model/Category';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpResponse} from '@angular/common/http';
 import {environment} from '../../environments/environment';
 
 @Injectable({

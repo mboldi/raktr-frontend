@@ -132,7 +132,19 @@ export class DevicesComponent implements OnInit {
     }
 
     copyDevice(device: Device) {
-        return;
+        const editModal = this.modalService.open(EditDeviceModalComponent, {size: 'lg', windowClass: 'modal-holder'});
+        editModal.componentInstance.title = 'Új eszköz másik alapján';
+        editModal.componentInstance.device = device;
+        editModal.componentInstance.device.id = -1;
+
+        editModal.result.catch(reason => {
+            if (reason === 'delete' || reason === 'new') {
+                this.deviceService.getDevices().subscribe(devices => {
+                    this.devices = devices;
+                    this.sortedDevices = devices;
+                });
+            }
+        })
     }
 
     editDevice(device: Device) {
@@ -149,10 +161,6 @@ export class DevicesComponent implements OnInit {
                 });
             }
         })
-    }
-
-    copyCompositeItem(compositeItem: CompositeItem) {
-        return;
     }
 
     editCompositeItem(compositeItem: CompositeItem) {

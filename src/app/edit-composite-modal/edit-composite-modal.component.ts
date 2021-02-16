@@ -88,30 +88,37 @@ export class EditCompositeModalComponent implements OnInit {
 
         if (this.compositeItem.id === -1) {
             // new
-            this.compositeItemService.addCompositeItem(this.compositeItem).subscribe(compositeItem => {
-                this.compositeItem = CompositeItem.fromJSON(compositeItem);
-                this.showNotification('Mentve', 'success');
-            });
-        } else {
-            this.compositeItemService.updateCompositeItem(this.compositeItem).subscribe(compositeItem => {
-                this.compositeItem = CompositeItem.fromJSON(compositeItem);
-                this.compositeDataForm.setValue({
-                    name: compositeItem.name,
-                    location: compositeItem.location.name,
-                    barcode: compositeItem.barcode,
-                    textIdentifier: compositeItem.textIdentifier
+            this.compositeItemService.addCompositeItem(this.compositeItem).subscribe(
+                compositeItem => {
+                    this.compositeItem = CompositeItem.fromJSON(compositeItem);
+                    this.showNotification('Mentve', 'success');
+                },
+                (error) => {
+                    this.compositeItem.id = -1;
+                    this.showNotification('Hiba!', 'warning');
                 });
+        } else {
+            this.compositeItemService.updateCompositeItem(this.compositeItem).subscribe(
+                compositeItem => {
+                    this.compositeItem = CompositeItem.fromJSON(compositeItem);
+                    this.compositeDataForm.setValue({
+                        name: compositeItem.name,
+                        location: compositeItem.location.name,
+                        barcode: compositeItem.barcode,
+                        textIdentifier: compositeItem.textIdentifier
+                    });
 
-                this.showNotification('Mentve', 'success');
-            });
+                    this.showNotification('Mentve', 'success');
+                },
+                error => {
+                    this.showNotification('Hiba!', 'warning');
+                });
         }
     }
 
     removeFromComposite(device: Device) {
 
         if (this.inComposite(device)) {
-            /*const indexOfDevice = this.compositeItem.devices.indexOf(device);
-            this.compositeItem.devices.splice(indexOfDevice, 1);*/
             this.compositeItemService.removeDeviceFromComposite(device, this.compositeItem.id).subscribe(composite => {
                 this.compositeItem = CompositeItem.fromJSON(composite);
                 this.compositeItem.devices.push();
