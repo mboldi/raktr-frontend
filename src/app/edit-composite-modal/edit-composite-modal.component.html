@@ -4,39 +4,71 @@
 
 <div class="modal-body">
     <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-7  col-sm-12">
-                <mat-form-field class="full-width-form-element">
-                    <mat-label>Összetett eszköz neve</mat-label>
-                    <input matInput type="text" required autocomplete="off"
-                           value="{{compositeItem ? compositeItem.name : ''}}">
-                </mat-form-field>
+        <form [formGroup]="compositeDataForm" class="mb-0">
+            <div class="row">
+                <div class="col-md-7  col-sm-12">
+                    <mat-form-field class="full-width-form-element">
+                        <mat-label>Összetett eszköz neve</mat-label>
+                        <input matInput type="text" autocomplete="off"
+                               formControlName="name">
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6  col-sm-12">
+                    <mat-form-field class="full-width-form-element">
+                        <mat-label>Tárolási hely</mat-label>
+                        <input type="text" matInput
+                               formControlName="location"
+                               [matAutocomplete]="autoLocation">
+                        <mat-autocomplete #autoLocation="matAutocomplete">
+                            <mat-option *ngFor="let option of filteredLocationOptions"
+                                        [value]="option.name">
+                                {{option.name}}
+                            </mat-option>
+                        </mat-autocomplete>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-7  col-sm-12">
+                    <mat-form-field class="full-width-form-element">
+                        <mat-label>Azonosító</mat-label>
+                        <input matInput type="text" autocomplete="off"
+                               formControlName="textIdentifier">
+                    </mat-form-field>
+                </div>
+
+                <div class="col-md-5  col-sm-12">
+                    <mat-form-field class="full-width-form-element">
+                        <mat-label>Vonalkód tartalma</mat-label>
+                        <input matInput type="text" autocomplete="off"
+                               formControlName="barcode">
+                    </mat-form-field>
+                </div>
+            </div>
+        </form>
+        <div class="row ">
+            <div class="col-md-12">
+                <div class=" pull-right">
+                    <mat-slide-toggle *ngIf="admin && compositeItem.id !== -1"
+                                      class="pt-3"
+                                      (change)="deleteConfirmed = $event.checked"
+                                      color="warn">
+                        <button mat-icon-button color="warn" type="button"
+                                (click)="delete(compositeItem)"
+                                [disabled]="!deleteConfirmed">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </mat-slide-toggle>
+                    <button mat-raised-button type="submit" class="btn btn-info pb-2" (click)="save()">
+                        Mentés
+                    </button>
+                </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-6  col-sm-12">
-                <mat-form-field class="full-width-form-element">
-                    <mat-label>Tárolási hely</mat-label>
-                    <input type="text" matInput
-                           [formControl]="locationControl"
-                           [matAutocomplete]="autoLocation"
-                           required>
-                    <mat-autocomplete #autoLocation="matAutocomplete">
-                        <mat-option *ngFor="let option of filteredLocationOptions | async"
-                                    [value]="option.name">
-                            {{option.name}}
-                        </mat-option>
-                    </mat-autocomplete>
-                </mat-form-field>
-            </div>
-            <div class="col-md-5  col-sm-12">
-                <mat-form-field class="full-width-form-element">
-                    <input matInput placeholder="Vonalkód tartalma" type="text" autocomplete="off" required
-                           value="{{compositeItem ? compositeItem.barcode : ''}}">
-                </mat-form-field>
-            </div>
-        </div>
-        <div class="row">
+
+        <div class="row" *ngIf="compositeItem.id !== -1">
             <h5 class="col-lg-7 col-md-12 pt-3">Tartalmazott eszközök</h5>
             <mat-form-field class="col-lg-5 col-md-12">
                 <input matInput placeholder="Új hozzáadása"
@@ -50,7 +82,7 @@
                 </button>
             </mat-form-field>
         </div>
-        <div class="table-responsive">
+        <div class="table-responsive" *ngIf="compositeItem.id !== -1">
             <table class="table">
                 <thead class="text-orange">
                 <th>
@@ -83,9 +115,6 @@
                 </tbody>
             </table>
         </div>
-        <button mat-raised-button type="submit" class="btn btn-info pb-2 pull-right" (click)="save()">
-            Mentés
-        </button>
         <div class="clearfix"></div>
     </div>
 </div>

@@ -13,6 +13,7 @@ import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatSelectModule} from '@angular/material/select';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatIconModule} from '@angular/material/icon';
+import {MatSortModule} from '@angular/material/sort';
 
 @NgModule({
     imports: [
@@ -28,6 +29,7 @@ import {MatIconModule} from '@angular/material/icon';
         MatTooltipModule,
         MatAutocompleteModule,
         MatIconModule,
+        MatSortModule,
     ],
   declarations: [
     UserProfileComponent,

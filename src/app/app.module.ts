@@ -25,6 +25,12 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import {LoginComponent} from './login/login.component';
 import { DeviceToRentModalComponent } from './device-to-rent-modal/device-to-rent-modal.component';
 import { EditCompositeModalComponent } from './edit-composite-modal/edit-composite-modal.component';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
+import {AuthInterceptor} from './helpers/auth.interceptor';
+import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
+import {MatDialogModule} from '@angular/material/dialog';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import { PdfGenerationModalComponent } from './pdf-generation-modal/pdf-generation-modal.component';
 
 @NgModule({
     imports: [
@@ -44,7 +50,10 @@ import { EditCompositeModalComponent } from './edit-composite-modal/edit-composi
         NgbModule,
         MatButtonModule,
         MatIconModule,
-        MatToolbarModule
+        MatToolbarModule,
+        HttpClientModule,
+        MatDialogModule,
+        MatSlideToggleModule
     ],
     declarations: [
         AppComponent,
@@ -55,9 +64,12 @@ import { EditCompositeModalComponent } from './edit-composite-modal/edit-composi
         LoginComponent,
         DeviceToRentModalComponent,
         EditCompositeModalComponent,
+        ConfirmDialogComponent,
+        PdfGenerationModalComponent,
     ],
     providers: [
         {provide: MAT_DATE_LOCALE, useValue: 'hu-HU'},
+        {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}
     ],
     bootstrap: [AppComponent]
 })

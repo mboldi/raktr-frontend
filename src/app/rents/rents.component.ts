@@ -6,6 +6,7 @@ import {RentService} from '../services/rent.service';
 import {FormControl} from '@angular/forms';
 import {map, startWith} from 'rxjs/operators';
 import {Observable} from 'rxjs';
+import {Router} from '@angular/router';
 
 @Component({
     selector: 'app-rents',
@@ -20,20 +21,26 @@ export class RentsComponent implements OnInit {
     currRent: Rent;
     rentSearchControl = new FormControl();
 
-    constructor(private title: Title, private rentService: RentService) {
+    constructor(private title: Title,
+                private rentService: RentService,
+                private router: Router) {
         this.title.setTitle('Raktr - Bérlések');
     }
 
     ngOnInit(): void {
         this.rentSearchControl.setValue('');
 
-        this.rentService.getRents().subscribe(rents => this.rents =
-            rents.sort(((a, b) => {
+        this.rentService.getRents().subscribe(rents => {
+            rents.forEach(rent => this.rents.push(Rent.fromJson(rent)));
+
+            this.rents = this.rents.sort(((a, b) => {
                 const aDate = new Date(a.actBackDate === '' ? a.actBackDate : a.expBackDate);
                 const bDate = new Date(b.actBackDate === '' ? b.actBackDate : b.expBackDate);
 
                 return aDate.getTime() - bDate.getTime();
-            })));
+            }));
+            this.rentSearchControl.setValue('');
+        });
 
         this.filteredRents = this.rentSearchControl.valueChanges
             .pipe(
@@ -52,5 +59,9 @@ export class RentsComponent implements OnInit {
 
     onSelect(rent: Rent) {
         this.currRent = rent;
+    }
+
+    openRent(id: number) {
+        this.router.navigateByUrl('/rent/' + id);
     }
 }

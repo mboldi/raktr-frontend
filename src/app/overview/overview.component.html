@@ -15,10 +15,10 @@
                             <input matInput autofocus type="text"
                                    autocomplete="off"
                                    [formControl]="deviceSearchFormControl"
-                                   (keyup.enter)="searchDevice()">
+                                   (keyup.enter)="searchScannable()">
                             <button mat-button *ngIf="deviceSearchFormControl.value" matSuffix mat-icon-button
                                     aria-label="Search"
-                                    (click)="searchDevice()">
+                                    (click)="searchScannable()">
                                 <i class="material-icons">search</i>
                             </button>
                         </mat-form-field>
@@ -32,7 +32,7 @@
                             <i class="material-icons">sd_storage</i>
                         </div>
                         <p class="card-category">Összes eszköz a rendszerben</p>
-                        <h3 class="card-title">{{devices.length}}
+                        <h3 class="card-title">{{scannableAmount}}
                             <small>db</small>
                         </h3>
                     </div>
@@ -47,7 +47,7 @@
                             <i class="material-icons">content_paste</i>
                         </div>
                         <p class="card-category">Aktív bérlések</p>
-                        <h3 class="card-title">{{getNumOfActiveRents()}}
+                        <h3 class="card-title">{{activeRents().length}}
                             <small>db</small>
                         </h3>
                     </div>
@@ -95,7 +95,7 @@
                                 </th>
                                 </thead>
                                 <tbody>
-                                <tr class="rent-row" *ngFor="let rent of activeRents()">
+                                <tr class="rent-row" *ngFor="let rent of activeRents()" (click)="openRent(rent.id)">
                                     <td>
                                         {{rent.issuer}}
                                     </td>
@@ -117,7 +117,7 @@
                                     <td>
                                         {{rent.getSumWeight() / 1000}} kg
                                     </td>
-                                    <td class="pb-0 pt-0">
+                                    <td class="pb-0 pt-0" style="z-index: 1500">
                                         <button mat-button mat-raised-button type="button"
                                                 class="btn btn-info pull-center btn-just-icon"
                                                 [routerLink]="['/rent', rent.id]">

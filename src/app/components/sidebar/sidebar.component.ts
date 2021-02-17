@@ -1,4 +1,6 @@
 import {Component, OnInit} from '@angular/core';
+import {AuthService} from '../../services/auth.service';
+import {Router} from '@angular/router';
 
 declare const $: any;
 
@@ -14,7 +16,7 @@ export const ROUTES: RouteInfo[] = [
     {path: '/overview', title: 'Áttekintés', icon: 'dashboard', class: '', inMenuBar: true},
     {path: '/devices', title: 'Eszközök kezelése', icon: 'sd_storage', class: '', inMenuBar: true}, //content_paste
     {path: '/rents', title: 'Bérlések kezelése', icon: 'content_paste', class: '', inMenuBar: true},
-    {path: '/user-profile', title: 'Személyes beállítások', icon: 'person', class: '', inMenuBar: true},
+    {path: '/user-profile', title: 'Beállítások', icon: 'person', class: '', inMenuBar: true},
 ];
 
 @Component({
@@ -25,7 +27,8 @@ export const ROUTES: RouteInfo[] = [
 export class SidebarComponent implements OnInit {
     menuItems: any[];
 
-    constructor() {
+    constructor(private authService: AuthService,
+                private router: Router) {
     }
 
     ngOnInit() {
@@ -35,4 +38,9 @@ export class SidebarComponent implements OnInit {
     isMobileMenu() {
         return $(window).width() <= 991;
     };
+
+    logout() {
+        this.authService.logout();
+        this.router.navigateByUrl('/login');
+    }
 }
