@@ -12,6 +12,7 @@ import {ScannableService} from '../services/scannable.service';
 import {UserService} from '../services/user.service';
 import {User} from '../model/User';
 import {BarcodePurifier} from '../services/barcode-purifier.service';
+import {switchMap, tap} from 'rxjs/operators';
 
 @Component({
     selector: 'app-edit-composite-modal',
@@ -24,12 +25,12 @@ export class EditCompositeModalComponent implements OnInit {
 
     compositeDataForm: FormGroup;
 
-    locationControl = new FormControl();
     locationOptions: Location[];
     filteredLocationOptions: Location[];
     addDeviceFormControl = new FormControl();
     admin = false;
     deleteConfirmed = false;
+    private currentLocationInput = '';
 
     constructor(public activeModal: NgbActiveModal,
                 private fb: FormBuilder,
@@ -55,15 +56,18 @@ export class EditCompositeModalComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.locationService.getLocations().subscribe(locations => {
-            this.locationOptions = locations;
-            this.filteredLocationOptions = this.locationOptions;
-
-            this.compositeDataForm.get('location').valueChanges.subscribe(value => {
-                    this.filteredLocationOptions = this._filterLocations(this.locationOptions, value);
-                }
+        this.compositeDataForm
+            .get('location')
+            .valueChanges
+            .pipe(
+                tap(value => this.currentLocationInput = value),
+                switchMap(value => this.locationService.getLocations())
             )
-        });
+            .subscribe(locations => {
+                this.locationOptions = locations;
+                this.filteredLocationOptions = this._filterLocations(locations, this.currentLocationInput);
+                console.log(this.filteredLocationOptions)
+            });
 
         if (this.compositeItem.id === null || this.compositeItem.id === -1) {
             this.scannableService.getNextId().subscribe(

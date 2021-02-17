@@ -3,7 +3,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Category} from '../model/Category';
 import {Observable} from 'rxjs';
 import {Location} from '../model/Location';
-import {map, startWith} from 'rxjs/operators';
+import {map, startWith, switchMap, tap} from 'rxjs/operators';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {Device} from '../model/Device';
 import {LocationService} from '../services/location.service';
@@ -25,12 +25,15 @@ export class EditDeviceModalComponent implements OnInit {
     @Input() device: Device;
 
     categoryOptions: Category[];
-    filteredCategoryOptions: Observable<Category[]>;
+    filteredCategoryOptions: Category[];
     locationOptions: Location[];
-    filteredLocationOptions: Observable<Location[]>;
+    filteredLocationOptions: Location[];
     deviceForm: FormGroup;
     admin = false;
     deleteConfirmed = false;
+
+    currentCategoryInput = '';
+    currentLocationInput = '';
 
     constructor(public activeModal: NgbActiveModal,
                 private fb: FormBuilder,
@@ -74,26 +77,30 @@ export class EditDeviceModalComponent implements OnInit {
             this.admin = User.isStudioMember(user);
         });
 
-        this.categoryService.getCategories().subscribe(categories => {
-            this.categoryOptions = categories;
+        this.deviceForm
+            .get('category')
+            .valueChanges
+            .pipe(
+                tap(value => this.currentCategoryInput = value),
+                switchMap(value => this.categoryService.getCategories())
+            )
+            .subscribe(categories => {
+                this.categoryOptions = categories;
+                this.filteredCategoryOptions = this._filterCategories(categories, this.currentCategoryInput);
+            });
 
-            this.filteredCategoryOptions = this.deviceForm.get('category').valueChanges
-                .pipe(
-                    startWith(''),
-                    map(value => value ? this._filterCategories(this.categoryOptions, value) : this.categoryOptions.slice())
-                );
-        })
-
-        this.locationService.getLocations().subscribe(locations => {
-            this.locationOptions = locations;
-
-            this.filteredLocationOptions = this.deviceForm.get('location').valueChanges
-                .pipe(
-                    startWith(''),
-                    map(value => value ? this._filterLocations(this.locationOptions, value) : this.locationOptions.slice())
-                );
-        });
-
+        this.deviceForm
+            .get('location')
+            .valueChanges
+            .pipe(
+                tap(value => this.currentLocationInput = value),
+                switchMap(value => this.locationService.getLocations())
+            )
+            .subscribe(locations => {
+                this.locationOptions = locations;
+                this.filteredLocationOptions = this._filterLocations(locations, this.currentLocationInput);
+                console.log(this.filteredLocationOptions)
+            });
     }
 
     private setFormFields() {

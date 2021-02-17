@@ -37,7 +37,7 @@
                                [matAutocomplete]="autoCategory"
                                required>
                         <mat-autocomplete #autoCategory="matAutocomplete">
-                            <mat-option *ngFor="let option of filteredCategoryOptions | async"
+                            <mat-option *ngFor="let option of filteredCategoryOptions"
                                         [value]="option.name">
                                 {{option.name}}
                             </mat-option>
@@ -52,7 +52,7 @@
                                [matAutocomplete]="autoLocation"
                                required>
                         <mat-autocomplete #autoLocation="matAutocomplete">
-                            <mat-option *ngFor="let option of filteredLocationOptions | async"
+                            <mat-option *ngFor="let option of filteredLocationOptions"
                                         [value]="option.name">
                                 {{option.name}}
                             </mat-option>
