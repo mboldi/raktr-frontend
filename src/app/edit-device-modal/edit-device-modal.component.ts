@@ -99,7 +99,6 @@ export class EditDeviceModalComponent implements OnInit {
             .subscribe(locations => {
                 this.locationOptions = locations;
                 this.filteredLocationOptions = this._filterLocations(locations, this.currentLocationInput);
-                console.log(this.filteredLocationOptions)
             });
     }
 

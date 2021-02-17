@@ -1,7 +1,3 @@
-::ng-deep .cdk-overlay-container {
-    z-index:2000;
-}
-
 .list-title {
     display: inline-block
 }

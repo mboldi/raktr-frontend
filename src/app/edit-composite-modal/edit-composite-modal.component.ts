@@ -66,7 +66,6 @@ export class EditCompositeModalComponent implements OnInit {
             .subscribe(locations => {
                 this.locationOptions = locations;
                 this.filteredLocationOptions = this._filterLocations(locations, this.currentLocationInput);
-                console.log(this.filteredLocationOptions)
             });
 
         if (this.compositeItem.id === null || this.compositeItem.id === -1) {
