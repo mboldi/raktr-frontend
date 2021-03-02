@@ -59,4 +59,12 @@ export class ScannableService {
         return this.http.get<number>(`${environment.apiUrl}/api/scannable/count`);
     }
 
+    getTakenByTextId(textId: string): Observable<number> {
+        return this.http.get<number>(`${environment.apiUrl}/api/scannable/textidtaken/${textId}`);
+    }
+
+    getTakenByBarcode(barcode: string): Observable<number> {
+        return this.http.get<number>(`${environment.apiUrl}/api/scannable/barcodetaken/${barcode}`);
+    }
+
 }

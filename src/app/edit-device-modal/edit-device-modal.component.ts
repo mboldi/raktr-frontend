@@ -1,9 +1,8 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Category} from '../model/Category';
-import {Observable} from 'rxjs';
 import {Location} from '../model/Location';
-import {map, startWith, switchMap, tap} from 'rxjs/operators';
+import {switchMap, tap} from 'rxjs/operators';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {Device} from '../model/Device';
 import {LocationService} from '../services/location.service';
@@ -14,6 +13,8 @@ import {MatDialog} from '@angular/material/dialog';
 import {User} from '../model/User';
 import * as $ from 'jquery';
 import {ScannableService} from '../services/scannable.service';
+import {barcodeValidator} from '../helpers/barcode.validator';
+import {textIdValidator} from '../helpers/textId.validator';
 
 @Component({
     selector: 'app-edit-device-modal',
@@ -45,23 +46,24 @@ export class EditDeviceModalComponent implements OnInit {
                 public dialog: MatDialog) {
         if (this.device === undefined) {
             this.device = new Device();
+            this.device.id = -1;
         }
+    }
 
-        this.deviceForm = fb.group({
+    ngOnInit(): void {
+        this.deviceForm = this.fb.group({
             name: ['', Validators.required],
             maker: [''],
             type: [''],
             category: ['', Validators.required],
             location: ['', Validators.required],
-            barcode: ['', Validators.required],
-            textIdentifier: ['', Validators.required],
+            barcode: ['', Validators.required, barcodeValidator(this.scannableService, this.device.id)],
+            textIdentifier: ['', Validators.required, textIdValidator(this.scannableService, this.device.id)],
             weight: ['0'],
             value: ['0'],
             quantity: ['1']
         });
-    }
 
-    ngOnInit(): void {
         if (this.device.id === null || this.device.id === -1) {
             this.scannableService.getNextId().subscribe(nextid => {
                 // @ts-ignore
@@ -100,6 +102,9 @@ export class EditDeviceModalComponent implements OnInit {
                 this.locationOptions = locations;
                 this.filteredLocationOptions = this._filterLocations(locations, this.currentLocationInput);
             });
+
+        this.deviceForm.get('barcode').markAsTouched();
+        this.deviceForm.get('textIdentifier').markAsTouched();
     }
 
     private setFormFields() {
@@ -167,23 +172,10 @@ export class EditDeviceModalComponent implements OnInit {
     }
 
     delete(device: Device) {
-        /*const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-            width: '250px',
-            panelClass: 'confirm-dialog'
-        });
-
-        dialogRef.afterClosed().subscribe(result => {
-            if (result) {
-                this.deviceService.deleteDevice(device).subscribe(device_ => {
-                    this.activeModal.dismiss('delete')
-                });
-            }
-        });*/
         this.deviceService.deleteDevice(device).subscribe(device_ => {
             this.activeModal.dismiss('delete')
         });
     }
-
 
     showNotification(message_: string, type: string) {
         $['notify']({
