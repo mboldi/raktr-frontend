@@ -52,9 +52,6 @@
                                 <th>
                                     Össztömeg
                                 </th>
-                                <th>
-                                    Szerkesztés
-                                </th>
                                 </thead>
                                 <tbody>
                                 <tr class="rent-row" *ngFor="let rent of filteredRents | async" (click)="openRent(rent.id)">
@@ -82,13 +79,6 @@
                                     </td>
                                     <td>
                                         {{rent.getSumWeight() / 1000}} kg
-                                    </td>
-                                    <td class="pb-0 pt-0" style="z-index: 1500">
-                                        <button mat-raised-button type="button"
-                                                class="btn btn-info pull-center btn-just-icon"
-                                                data-toggle="modal" [routerLink]="['/rent', rent.id]">
-                                                    <i class="material-icons">create</i>
-                                        </button>
                                     </td>
                                 </tr>
                                 </tbody>

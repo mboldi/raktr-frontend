@@ -19,6 +19,10 @@
     background-color: white !important;
 }
 
+.rent-row {
+    cursor: pointer;
+}
+
 .rent-row:hover {
     background: #f2f2f2 !important;
 }
