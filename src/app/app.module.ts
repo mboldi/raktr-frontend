@@ -23,14 +23,15 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {LoginComponent} from './login/login.component';
-import { DeviceToRentModalComponent } from './device-to-rent-modal/device-to-rent-modal.component';
-import { EditCompositeModalComponent } from './edit-composite-modal/edit-composite-modal.component';
+import {DeviceToRentModalComponent} from './device-to-rent-modal/device-to-rent-modal.component';
+import {EditCompositeModalComponent} from './edit-composite-modal/edit-composite-modal.component';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {AuthInterceptor} from './helpers/auth.interceptor';
-import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
+import {ConfirmDialogComponent} from './confirm-dialog/confirm-dialog.component';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
-import { PdfGenerationModalComponent } from './pdf-generation-modal/pdf-generation-modal.component';
+import {PdfGenerationModalComponent} from './pdf-generation-modal/pdf-generation-modal.component';
+import {MatRadioModule} from '@angular/material/radio';
 
 @NgModule({
     imports: [
@@ -53,6 +54,7 @@ import { PdfGenerationModalComponent } from './pdf-generation-modal/pdf-generati
         MatToolbarModule,
         HttpClientModule,
         MatDialogModule,
+        MatRadioModule,
         MatSlideToggleModule
     ],
     declarations: [

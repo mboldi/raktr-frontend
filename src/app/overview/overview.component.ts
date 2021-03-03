@@ -62,11 +62,11 @@ export class OverviewComponent implements OnInit {
             this.scannableService.getScannableByBarcode(barcode).subscribe(scannable => {
                     if (scannable === undefined) {
                         this.showNotification('Nem találtam eszközt ilyen vonalkóddal!', 'warning');
-                    } else if (scannable['@type'] === 'device') {
+                    } else if (scannable['type_'] === 'device') {
                         const editModal = this.modalService.open(EditDeviceModalComponent, {size: 'lg', windowClass: 'modal-holder'});
                         editModal.componentInstance.title = 'Eszköz szerkesztése';
                         editModal.componentInstance.device = scannable as Device;
-                    } else if (scannable['@type'] === 'compositeItem') {
+                    } else if (scannable['type_'] === 'compositeItem') {
                         const editModal = this.modalService.open(EditCompositeModalComponent, {size: 'lg', windowClass: 'modal-holder'});
                         editModal.componentInstance.title = 'Összetett eszköz szerkesztése';
                         editModal.componentInstance.compositeItem = scannable as CompositeItem;

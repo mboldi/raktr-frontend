@@ -9,3 +9,11 @@
 .confirm-dialog {
     z-index: 9999999 !important;
 }
+
+.mat-radio-button ~ .mat-radio-button {
+    margin-left: 16px;
+}
+
+.state-radio-buttons {
+    vertical-align: bottom;
+}

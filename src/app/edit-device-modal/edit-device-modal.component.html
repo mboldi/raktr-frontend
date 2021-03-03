@@ -106,6 +106,25 @@
                                type="number" min="1" [defaultValue]="1" required>
                     </mat-form-field>
                 </div>
+                <div class="col-lg-6 col-md-12">
+                    <mat-radio-group aria-label="state" class="state-radio-buttons">
+                        <mat-radio-button value="0" (change)="onStatusChange($event.value)"
+                                          [checked]="device.status.toString() === 'GOOD' ||
+                                                        device.status == 0">
+                            Jó
+                        </mat-radio-button>
+                        <mat-radio-button value="1" (change)="onStatusChange($event.value)"
+                                          [checked]="device.status.toString() === 'NEEDS_REPAIR' ||
+                                                        device.status == 1">
+                            Javításra szorul
+                        </mat-radio-button>
+                        <mat-radio-button value="2" (change)="onStatusChange($event.value)"
+                                          [checked]="device.status.toString() === 'SCRAPPED' ||
+                                                        device.status == 2">
+                            Kuka
+                        </mat-radio-button>
+                    </mat-radio-group>
+                </div>
             </div>
             <div class="pull-right">
                 <mat-slide-toggle *ngIf="admin && device.id !== -1"

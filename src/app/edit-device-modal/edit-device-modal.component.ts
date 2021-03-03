@@ -15,6 +15,7 @@ import * as $ from 'jquery';
 import {ScannableService} from '../services/scannable.service';
 import {barcodeValidator} from '../helpers/barcode.validator';
 import {textIdValidator} from '../helpers/textId.validator';
+import {DeviceStatus} from '../model/DeviceStatus';
 
 @Component({
     selector: 'app-edit-device-modal',
@@ -168,6 +169,20 @@ export class EditDeviceModalComponent implements OnInit {
                 (error) => {
                     this.showNotification('Nem sikerült menteni, ütközés!', 'warning');
                 })
+        }
+    }
+
+    onStatusChange(value: string) {
+        switch (value) {
+            case '0':
+                this.device.status = DeviceStatus.GOOD;
+                break;
+            case '1':
+                this.device.status = DeviceStatus.NEEDS_REPAIR;
+                break;
+            case '2':
+                this.device.status = DeviceStatus.SCRAPPED;
+                break;
         }
     }
 
