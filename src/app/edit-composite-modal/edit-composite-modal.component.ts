@@ -13,6 +13,8 @@ import {UserService} from '../services/user.service';
 import {User} from '../model/User';
 import {BarcodePurifier} from '../services/barcode-purifier.service';
 import {switchMap, tap} from 'rxjs/operators';
+import {barcodeValidator} from '../helpers/barcode.validator';
+import {textIdValidator} from '../helpers/textId.validator';
 
 @Component({
     selector: 'app-edit-composite-modal',
@@ -43,19 +45,19 @@ export class EditCompositeModalComponent implements OnInit {
             this.compositeItem = new CompositeItem();
         }
 
-        this.compositeDataForm = fb.group({
-            name: ['', Validators.required],
-            location: ['', Validators.required],
-            barcode: ['', Validators.required],
-            textIdentifier: ['', Validators.required]
-        });
-
         this.userService.getCurrentUser().subscribe(user => {
             this.admin = User.isStudioMember(user);
         });
     }
 
     ngOnInit(): void {
+        this.compositeDataForm = this.fb.group({
+            name: ['', Validators.required],
+            location: ['', Validators.required],
+            barcode: ['', Validators.required, barcodeValidator(this.scannableService, this.compositeItem.id)],
+            textIdentifier: ['', Validators.required, textIdValidator(this.scannableService, this.compositeItem.id)]
+        });
+
         this.compositeDataForm
             .get('location')
             .valueChanges
@@ -79,6 +81,9 @@ export class EditCompositeModalComponent implements OnInit {
         } else {
             this.setFormData();
         }
+
+        this.compositeDataForm.get('barcode').markAsTouched();
+        this.compositeDataForm.get('textIdentifier').markAsTouched();
     }
 
     private setFormData() {

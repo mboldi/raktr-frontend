@@ -36,6 +36,9 @@
                         <mat-label>Azonosító</mat-label>
                         <input matInput type="text" autocomplete="off"
                                formControlName="textIdentifier">
+                        <mat-error *ngIf="compositeDataForm.get('textIdentifier').hasError('textIdTaken')">
+                            Ez az azonosító már foglalt!
+                        </mat-error>
                     </mat-form-field>
                 </div>
 
@@ -44,6 +47,9 @@
                         <mat-label>Vonalkód tartalma</mat-label>
                         <input matInput type="text" autocomplete="off"
                                formControlName="barcode">
+                        <mat-error *ngIf="compositeDataForm.get('barcode').hasError('barcodeTaken')">
+                            Ez a vonalkód már foglalt!
+                        </mat-error>
                     </mat-form-field>
                 </div>
             </div>
