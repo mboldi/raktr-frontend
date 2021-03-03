@@ -7,7 +7,7 @@ export class CompositeItem extends Scannable {
     devices: Device[];
     location: Location;
 
-    static fromJSON(compositeItem: CompositeItem): CompositeItem {
+    static fromJson(compositeItem: CompositeItem): CompositeItem {
         const compositeItem1 = new CompositeItem(compositeItem.id,
             compositeItem.name,
             compositeItem.barcode,
@@ -15,29 +15,38 @@ export class CompositeItem extends Scannable {
             [],
             compositeItem.location);
 
-        compositeItem.devices.forEach(deviceJson => compositeItem1.devices.push(new Device(
-            deviceJson.id,
-            deviceJson.name,
-            deviceJson.barcode,
-            deviceJson.textIdentifier,
-            deviceJson.maker,
-            deviceJson.type,
-            deviceJson.serial,
-            deviceJson.value,
-            deviceJson.weight,
-            deviceJson.location,
-            deviceJson.status,
-            deviceJson.category,
-            deviceJson.quantity
-        )));
+        if (compositeItem.devices) {
+            compositeItem.devices.forEach(deviceJson => compositeItem1.devices.push(new Device(
+                deviceJson.id,
+                deviceJson.name,
+                deviceJson.barcode,
+                deviceJson.textIdentifier,
+                deviceJson.maker,
+                deviceJson.type,
+                deviceJson.serial,
+                deviceJson.value,
+                deviceJson.weight,
+                deviceJson.location,
+                deviceJson.status,
+                deviceJson.category,
+                deviceJson.quantity
+            )));
+        } else {
+            compositeItem1.devices = [];
+        }
 
         return compositeItem1
     }
 
     static toJsonString(compositeItem: CompositeItem): string {
+        return `{\"CompositeItem\": ${this.toJsonWithoutRoot(compositeItem)}`;
+    }
+
+    static toJsonWithoutRoot(compositeItem: CompositeItem): string {
         const compositeJson = JSON.parse(JSON.stringify(compositeItem));
         compositeJson['@type'] = 'compositeItem';
-        return `{\"CompositeItem\": ${JSON.stringify(compositeJson)}}`;
+        compositeJson['devices'].forEach(device => device['@type'] = 'device');
+        return JSON.stringify(compositeJson);
     }
 
     constructor(id: number = -1, name: string = '', barcode: string = '', textIdentifier: string = '',

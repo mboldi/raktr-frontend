@@ -41,8 +41,8 @@ export class DevicesComponent implements OnInit {
         this.devices = [];
 
         this.deviceService.getDevices().subscribe(devices => {
-            devices.forEach(device => this.devices.push(Device.fromJson(device)));
-            this.sortedDevices = this.devices;
+            this.devices = devices;
+            this.sortedDevices = devices;
 
             this.searchControl.valueChanges.subscribe(value => {
                 this.sortedDevices = this.devices.filter(device =>
@@ -68,8 +68,8 @@ export class DevicesComponent implements OnInit {
         this.compositeItems = [];
 
         this.compositeService.getCompositeItems().subscribe(compositeItems => {
-            compositeItems.forEach(compositeItem => this.compositeItems.push(CompositeItem.fromJSON(compositeItem)));
-            this.sortedComposites = this.compositeItems;
+            this.compositeItems = compositeItems;
+            this.sortedComposites = compositeItems;
         });
     }
 
@@ -157,7 +157,6 @@ export class DevicesComponent implements OnInit {
         editModal.result.catch(reason => {
             if (reason === 'delete') {
                 this.deviceService.getDevices().subscribe(devices => {
-                    console.log(devices);
                     this.devices = devices;
                     this.sortedDevices = devices;
                 });

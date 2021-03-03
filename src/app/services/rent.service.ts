@@ -5,6 +5,7 @@ import {RentItem} from '../model/RentItem';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {environment} from '../../environments/environment';
 import {saveAs} from 'file-saver';
+import {map} from 'rxjs/operators';
 
 @Injectable({
     providedIn: 'root'
@@ -15,31 +16,54 @@ export class RentService {
     }
 
     getRents(): Observable<Rent[]> {
-        return this.http.get<Rent[]>(`${environment.apiUrl}/api/rent`);
+        return this.http.get<Rent[]>(`${environment.apiUrl}/api/rent`)
+            .pipe(
+                map(rents => {
+                    const rents_typed: Rent[] = [];
+
+                    rents.forEach(rent => rents_typed.push(Rent.fromJson(rent)))
+
+                    return rents_typed;
+                })
+            );
     }
 
     addRent(rent: Rent): Observable<Rent> {
         const headers = new HttpHeaders().set('Content-Type', 'application/json');
 
-        return this.http.post<Rent>(`${environment.apiUrl}/api/rent`, Rent.toJsonString(rent), {headers: headers});
+        return this.http.post<Rent>(`${environment.apiUrl}/api/rent`, Rent.toJsonString(rent), {headers: headers})
+            .pipe(
+                map(rent_ => Rent.fromJson(rent_))
+            );
     }
 
     updateRent(rent: Rent): Observable<Rent> {
         const headers = new HttpHeaders().set('Content-Type', 'application/json');
 
-        return this.http.put<Rent>(`${environment.apiUrl}/api/rent`, Rent.toJsonString(rent), {headers: headers});
+        return this.http.put<Rent>(`${environment.apiUrl}/api/rent`, Rent.toJsonString(rent), {headers: headers})
+            .pipe(
+                map(rent_ => Rent.fromJson(rent_))
+            );
     }
 
     getRent(id: number | string): Observable<Rent> {
-        return this.http.get<Rent>(`${environment.apiUrl}/api/rent/${id}`);
+        return this.http.get<Rent>(`${environment.apiUrl}/api/rent/${id}`)
+            .pipe(
+                map(rent_ => Rent.fromJson(rent_))
+            );
     }
 
     updateInRent(rentId: number, rentItem: RentItem) {
         const headers = new HttpHeaders().set('Content-Type', 'application/json');
 
+        console.log(RentItem.toJson(rentItem));
+
         return this.http.put<Rent>(`${environment.apiUrl}/api/rent/${rentId}`,
             RentItem.toJson(rentItem),
             {headers: headers})
+            .pipe(
+                map(rent_ => Rent.fromJson(rent_))
+            );
     }
 
     addItemToRent(rentId: number, newRentItem: RentItem): Observable<Rent> {
@@ -48,13 +72,19 @@ export class RentService {
         return this.http.put<Rent>(`${environment.apiUrl}/api/rent/${rentId}`,
             RentItem.toJson(newRentItem),
             {headers: headers})
+            .pipe(
+                map(rent_ => Rent.fromJson(rent_))
+            );
     }
 
     deleteRent(rent: Rent): Observable<Rent> {
         const headers = new HttpHeaders().set('Content-Type', 'application/json');
 
         return this.http.request<Rent>('delete', `${environment.apiUrl}/api/rent`,
-            {headers: headers, body: Rent.toJsonString(rent)});
+            {headers: headers, body: Rent.toJsonString(rent)})
+            .pipe(
+                map(rent_ => Rent.fromJson(rent_))
+            );
     }
 
     getPdf(rent: Rent, pdfRequest: string) {

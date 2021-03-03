@@ -69,7 +69,7 @@ export class EditRentComponent implements OnInit {
             this.rent = new Rent();
         } else {
             this.rentService.getRent(id).subscribe(rent => {
-                    this.rent = Rent.fromJson(rent);
+                    this.rent = rent;
 
                     this.rentDataForm.setValue({
                         destination: this.rent.destination,
@@ -104,8 +104,8 @@ export class EditRentComponent implements OnInit {
             this.scannableService.getScannableByBarcode(barcode).subscribe(scannable => {
                     if (scannable === undefined) {
                         this.showNotification('Nem találtam eszközt ilyen vonalkóddal!', 'warning');
-                    } else if (scannable['@type'] === 'device') {
-                        const device = Device.fromJson(scannable as Device);
+                    } else if (scannable['type_'] === 'device') {
+                        const device = scannable as Device;
 
                         if (device.quantity > 1) {
                             const editModal = this.modalService.open(DeviceToRentModalComponent, {size: 'md', windowClass: 'modal-holder'});
@@ -119,11 +119,11 @@ export class EditRentComponent implements OnInit {
                         } else {
                             this.addScannableToRent(device, 1);
                         }
-                    } else if (scannable['@type'] === 'compositeItem') {
-                        const composite = CompositeItem.fromJSON(scannable as CompositeItem);
+                    } else if (scannable['type_'] === 'compositeItem') {
+                        const composite = scannable as CompositeItem;
                         this.addScannableToRent(composite, 1);
                     } else {
-                        this.showNotification('Nem találok ilyet!', 'error');
+                        this.showNotification('Nem találok ilyet!', 'warning');
                     }
                 },
                 error => {
@@ -163,7 +163,7 @@ export class EditRentComponent implements OnInit {
                     if (rent === undefined) {
                         this.showNotification('Nem sikerült hozzáadni', 'warning');
                     } else {
-                        this.rent = Rent.fromJson(rent);
+                        this.rent = rent;
 
                         if (amount > 1) {
                             this.showNotification(amount + ' darab ' + scannable.name + ' hozzáadva sikeresen!', 'success');
@@ -175,7 +175,6 @@ export class EditRentComponent implements OnInit {
                     }
                 })
             }, error => {
-                console.log(error);
                 if (error.status === 409) {
                     this.showNotification('Nem lehetséges ennyit bérelni ebből az eszközből', 'warning');
                 } else {
@@ -190,7 +189,7 @@ export class EditRentComponent implements OnInit {
         rentItem.outQuantity = 0;
         this.rentService.updateInRent(this.rent.id, rentItem).subscribe(rent_ => {
                 this.rentService.getRent(this.rent.id).subscribe(rent => {
-                    this.rent = Rent.fromJson(rent);
+                    this.rent = rent;
                     this.searchControl.setValue('');
                     this.showNotification(`${rentItem.scannable.name} törölve!`, 'success');
                 })
@@ -210,7 +209,7 @@ export class EditRentComponent implements OnInit {
         if (this.rent.id === -1) {
             // new
             this.rentService.addRent(this.rent).subscribe(rent_ => {
-                    this.rent = Rent.fromJson(rent_);
+                    this.rent = rent_;
                     this.showNotification('Sikeresen mentve', 'success');
                 },
                 error => {
@@ -219,7 +218,7 @@ export class EditRentComponent implements OnInit {
         } else {
             // update
             this.rentService.updateRent(this.rent).subscribe(rent_ => {
-                    this.rent = Rent.fromJson(rent_);
+                    this.rent = rent_;
                     this.showNotification('Sikeresen mentve', 'success');
                 },
                 error => {
@@ -259,7 +258,7 @@ export class EditRentComponent implements OnInit {
 
             this.rentService.updateInRent(this.rent.id, rentItem).subscribe(
                 rent => {
-                    this.rent = Rent.fromJson(rent);
+                    this.rent = rent;
                     this.showNotification('Sikeresen mentve!', 'success');
                 },
                 error => {
@@ -284,7 +283,7 @@ export class EditRentComponent implements OnInit {
 
             this.rentService.updateInRent(this.rent.id, rentItem).subscribe(
                 rent => {
-                    this.rent = Rent.fromJson(rent);
+                    this.rent = rent;
                     this.showNotification('Sikeresen mentve!', 'success');
                 },
                 error => {
@@ -307,7 +306,7 @@ export class EditRentComponent implements OnInit {
                 this.showNotification(rentItem.scannable.name + ' mennyisége frissítve: ' + rentItem.outQuantity + 'db', 'success');
             },
             error => {
-                this.showNotification('Nem sikerült menteni', 'warning');
+                this.showNotification('Nem lehet ilyen mennyiségben kivinni!', 'warning');
                 event.target.value = oldQuantity;
             }
         )

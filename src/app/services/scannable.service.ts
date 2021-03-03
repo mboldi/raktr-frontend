@@ -28,9 +28,9 @@ export class ScannableService {
                         return undefined;
                     } else {
                         if (res.body['@type'] === 'device') {
-                            return res.body as Device;
+                            return Device.fromJson(res.body as Device);
                         } else if (res.body['@type'] === 'compositeItem') {
-                            return res.body as CompositeItem;
+                            return CompositeItem.fromJson(res.body as CompositeItem);
                         }
                     }
                 })
@@ -46,9 +46,9 @@ export class ScannableService {
                         return undefined;
                     } else {
                         if (res.body['@type'] === 'device') {
-                            return res.body as Device;
+                            return Device.fromJson(res.body as Device);
                         } else if (res.body['@type'] === 'compositeItem') {
-                            return res.body as CompositeItem;
+                            return CompositeItem.fromJson(res.body as CompositeItem);
                         }
                     }
                 })

@@ -112,7 +112,7 @@ export class EditCompositeModalComponent implements OnInit {
             // new
             this.compositeItemService.addCompositeItem(this.compositeItem).subscribe(
                 compositeItem => {
-                    this.compositeItem = CompositeItem.fromJSON(compositeItem);
+                    this.compositeItem = compositeItem;
                     this.showNotification('Mentve', 'success');
                 },
                 (error) => {
@@ -122,7 +122,7 @@ export class EditCompositeModalComponent implements OnInit {
         } else {
             this.compositeItemService.updateCompositeItem(this.compositeItem).subscribe(
                 compositeItem => {
-                    this.compositeItem = CompositeItem.fromJSON(compositeItem);
+                    this.compositeItem = compositeItem;
                     this.compositeDataForm.setValue({
                         name: compositeItem.name,
                         location: compositeItem.location.name,
@@ -139,11 +139,11 @@ export class EditCompositeModalComponent implements OnInit {
     }
 
     removeFromComposite(device: Device) {
-
         if (this.inComposite(device)) {
             this.compositeItemService.removeDeviceFromComposite(device, this.compositeItem.id).subscribe(composite => {
-                this.compositeItem = CompositeItem.fromJSON(composite);
+                this.compositeItem = composite;
                 this.compositeItem.devices.push();
+                this.showNotification(`${device.name} eltávolítva`, 'success');
             })
         } else {
             this.showNotification('Ez az eszköz nem eleme az összetett eszköznek', 'warning');
@@ -156,16 +156,16 @@ export class EditCompositeModalComponent implements OnInit {
         this.scannableService.getScannableByBarcode(barcode).subscribe(scannable => {
                 if (scannable === undefined) {
                     this.showNotification('Nem találtam ilyen eszközt', 'warning');
-                } else if (scannable['@type'] === 'compositeItem') {
+                } else if (scannable['type_'] === 'compositeItem') {
                     this.showNotification('Összetett eszközt nem lehet hozzáadni!', 'warning');
-                } else if (this.inComposite(Device.fromJson(scannable as Device))) {
+                } else if (this.inComposite(scannable as Device)) {
                     this.showNotification('Ezt az eszközt (' + scannable.name + ') már tartalmazza az összetett eszköz!', 'warning');
                 } else {
-                    this.compositeItem.devices.push(Device.fromJson(scannable as Device));
-                    this.compositeItemService.addDeviceToComposite(Device.fromJson(scannable as Device), this.compositeItem.id)
+                    this.compositeItem.devices.push(scannable as Device);
+                    this.compositeItemService.addDeviceToComposite(scannable as Device, this.compositeItem.id)
                         .subscribe(composite => {
-                            this.compositeItem = CompositeItem.fromJSON(composite);
-                            this.showNotification('Hozzáadtam az eszközt!', 'success');
+                            this.compositeItem = composite;
+                            this.showNotification(`${scannable.name} hozzáadva!`, 'success');
                         });
 
                     this.addDeviceFormControl.setValue('');

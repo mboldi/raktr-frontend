@@ -26,7 +26,7 @@ export class AuthService {
     setSession(authResult, username) {
         localStorage.setItem('id_token', authResult.body.token);
         localStorage.setItem('expires_at', authResult.body.expiresAt);
-        console.log(authResult.body.expiresAt);
+        //console.log(authResult.body.expiresAt);
         localStorage.setItem('username', username);
     }
 

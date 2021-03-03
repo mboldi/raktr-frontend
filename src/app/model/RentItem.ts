@@ -13,7 +13,7 @@ export class RentItem {
         return new RentItem(rentItemString.id,
             rentItemString.scannable['@type'] === 'device' ?
                 Device.fromJson(rentItemString.scannable as Device) :
-                CompositeItem.fromJSON(rentItemString.scannable as CompositeItem),
+                CompositeItem.fromJson(rentItemString.scannable as CompositeItem),
             this.rentStatusFormatter(rentItemString.backStatus),
             rentItemString.outQuantity)
     }
@@ -31,9 +31,10 @@ export class RentItem {
     static toJson(rentItem: RentItem): string {
         const rentItemJson = JSON.parse(JSON.stringify(rentItem));
 
-        rentItemJson['scannable'] = rentItem.scannable;
-        rentItemJson['scannable']['@type'] = rentItem.scannable.type_;
-        return `{\"RentItem\": ${JSON.stringify(rentItem)}}`;
+        rentItemJson['scannable'] = rentItem.scannable.type_ === 'device' ?
+            JSON.parse(Device.toJsonWithoutRoot(rentItem.scannable as Device)) :
+            JSON.parse(CompositeItem.toJsonWithoutRoot(rentItem.scannable as CompositeItem));
+        return `{\"RentItem\": ${JSON.stringify(rentItemJson)}}`;
     }
 
     constructor(id: number = -1, scannable: Scannable = null, backStatus: BackStatus = BackStatus.OUT, outQuantity: number = 1) {

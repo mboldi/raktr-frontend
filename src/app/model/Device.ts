@@ -15,9 +15,13 @@ export class Device extends Scannable {
     quantity: number;
 
     static toJsonString(device: Device): string {
+        return `{\"Device\": ${this.toJsonWithoutRoot(device)}}`;
+    }
+
+    static toJsonWithoutRoot(device: Device): string {
         const deviceJson = JSON.parse(JSON.stringify(device));
         deviceJson['@type'] = 'device';
-        return `{\"Device\": ${JSON.stringify(deviceJson)}}`;
+        return JSON.stringify(deviceJson);
     }
 
     static fromJson(deviceJson: Device): Device {

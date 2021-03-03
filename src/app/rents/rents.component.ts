@@ -31,7 +31,7 @@ export class RentsComponent implements OnInit {
         this.rentSearchControl.setValue('');
 
         this.rentService.getRents().subscribe(rents => {
-            rents.forEach(rent => this.rents.push(Rent.fromJson(rent)));
+            this.rents = rents;
 
             this.rents = this.rents.sort(((a, b) => {
                 const aDate = new Date(a.actBackDate === '' ? a.actBackDate : a.expBackDate);

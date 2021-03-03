@@ -65,11 +65,11 @@ export class OverviewComponent implements OnInit {
                     } else if (scannable['@type'] === 'device') {
                         const editModal = this.modalService.open(EditDeviceModalComponent, {size: 'lg', windowClass: 'modal-holder'});
                         editModal.componentInstance.title = 'Eszköz szerkesztése';
-                        editModal.componentInstance.device = Device.fromJson(scannable as Device);
+                        editModal.componentInstance.device = scannable as Device;
                     } else if (scannable['@type'] === 'compositeItem') {
                         const editModal = this.modalService.open(EditCompositeModalComponent, {size: 'lg', windowClass: 'modal-holder'});
                         editModal.componentInstance.title = 'Összetett eszköz szerkesztése';
-                        editModal.componentInstance.compositeItem = CompositeItem.fromJSON(scannable as CompositeItem);
+                        editModal.componentInstance.compositeItem = scannable as CompositeItem;
                     }
                 },
                 (error => {
