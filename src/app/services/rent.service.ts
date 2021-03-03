@@ -56,8 +56,6 @@ export class RentService {
     updateInRent(rentId: number, rentItem: RentItem) {
         const headers = new HttpHeaders().set('Content-Type', 'application/json');
 
-        console.log(RentItem.toJson(rentItem));
-
         return this.http.put<Rent>(`${environment.apiUrl}/api/rent/${rentId}`,
             RentItem.toJson(rentItem),
             {headers: headers})

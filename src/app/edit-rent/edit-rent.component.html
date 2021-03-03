@@ -166,6 +166,7 @@
                                                    min="1"
                                                    max="{{rentItem.scannable.type_ === 'compositeItem' ? 1 : rentItem.scannable['quantity']}}"
                                                    autocomplete="off"
+                                                   [disabled]="rentItem.scannable.type_ === 'compositeItem'"
                                                    style="text-align: right"
                                                    (change)="quantityChanged($event, rentItem)">
                                         </td>
