@@ -67,7 +67,9 @@
                             <mat-icon>delete</mat-icon>
                         </button>
                     </mat-slide-toggle>
-                    <button mat-raised-button type="submit" class="btn btn-info pb-2" (click)="save()">
+                    <button mat-raised-button type="submit" class="btn btn-info pb-2"
+                            [disabled]="compositeDataForm.invalid"
+                            (click)="save()">
                         Mentés
                     </button>
                 </div>
