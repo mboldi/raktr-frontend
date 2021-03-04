@@ -39,7 +39,7 @@ export class CompositeItem extends Scannable {
     }
 
     static toJsonString(compositeItem: CompositeItem): string {
-        return `{\"CompositeItem\": ${this.toJsonWithoutRoot(compositeItem)}`;
+        return `{\"CompositeItem\": ${this.toJsonWithoutRoot(compositeItem)}}`;
     }
 
     static toJsonWithoutRoot(compositeItem: CompositeItem): string {
