@@ -3,6 +3,8 @@ import {AuthService} from '../services/auth.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import {Title} from '@angular/platform-browser';
+import {catchError, delay, timeout} from 'rxjs/operators';
+import {of} from 'rxjs';
 
 @Component({
     selector: 'app-login',
@@ -11,6 +13,8 @@ import {Title} from '@angular/platform-browser';
 })
 export class LoginComponent implements OnInit {
     hide = true;
+    loginHappening = false;
+    invalidCreds = false;
     form: FormGroup;
 
     constructor(private authService: AuthService,
@@ -32,14 +36,20 @@ export class LoginComponent implements OnInit {
     }
 
     login() {
+        this.loginHappening = true;
+        this.invalidCreds = false;
         const val = this.form.value;
 
         if (val.username && val.password) {
-            this.authService.login(val.username, val.password).subscribe(resp => {
-                if (resp.ok) {
-                    this.router.navigateByUrl('/overview');
-                }
-            })
+            this.authService.login(val.username, val.password).pipe(delay(50)).subscribe(resp => {
+                    if (resp.ok) {
+                        this.router.navigateByUrl('/overview');
+                    }
+                },
+                error => {
+                    this.loginHappening = false;
+                    this.invalidCreds = true;
+                });
         }
     }
 }
