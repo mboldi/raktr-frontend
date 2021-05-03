@@ -53,6 +53,7 @@ export class EditCompositeModalComponent implements OnInit {
     ngOnInit(): void {
         this.compositeDataForm = this.fb.group({
             name: ['', Validators.required],
+            isPublicRentable: [''],
             location: ['', Validators.required],
             barcode: ['', Validators.required, barcodeValidator(this.scannableService, this.compositeItem.id)],
             textIdentifier: ['', Validators.required, textIdValidator(this.scannableService, this.compositeItem.id)]
@@ -89,6 +90,7 @@ export class EditCompositeModalComponent implements OnInit {
     private setFormData() {
         this.compositeDataForm.setValue({
             name: this.compositeItem.name,
+            isPublicRentable: this.compositeItem.isPublicRentable,
             location: this.compositeItem.location === null ? '' : this.compositeItem.location.name,
             barcode: this.compositeItem.barcode,
             textIdentifier: this.compositeItem.textIdentifier,
@@ -104,6 +106,7 @@ export class EditCompositeModalComponent implements OnInit {
     save() {
         const value = this.compositeDataForm.value;
         this.compositeItem.name = value.name.toString();
+        this.compositeItem.isPublicRentable = value.isPublicRentable;
         this.compositeItem.barcode = value.barcode.toString();
         this.compositeItem.textIdentifier = value.textIdentifier.toString();
         this.compositeItem.location = new Location(-1, value.location.toString());
@@ -125,6 +128,7 @@ export class EditCompositeModalComponent implements OnInit {
                     this.compositeItem = compositeItem;
                     this.compositeDataForm.setValue({
                         name: compositeItem.name,
+                        isPublicRentable: compositeItem.isPublicRentable,
                         location: compositeItem.location.name,
                         barcode: compositeItem.barcode,
                         textIdentifier: compositeItem.textIdentifier

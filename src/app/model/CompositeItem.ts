@@ -12,6 +12,7 @@ export class CompositeItem extends Scannable {
             compositeItem.name,
             compositeItem.barcode,
             compositeItem.textIdentifier,
+            compositeItem.isPublicRentable,
             [],
             compositeItem.location);
 
@@ -21,6 +22,7 @@ export class CompositeItem extends Scannable {
                 deviceJson.name,
                 deviceJson.barcode,
                 deviceJson.textIdentifier,
+                deviceJson.isPublicRentable,
                 deviceJson.maker,
                 deviceJson.type,
                 deviceJson.serial,
@@ -49,9 +51,9 @@ export class CompositeItem extends Scannable {
         return JSON.stringify(compositeJson);
     }
 
-    constructor(id: number = -1, name: string = '', barcode: string = '', textIdentifier: string = '',
+    constructor(id: number = -1, name: string = '', barcode: string = '', textIdentifier: string = '', isPublicRentable: boolean = false,
                 devices: Device[] = [], location: Location = null) {
-        super('compositeItem', id, name, barcode, textIdentifier);
+        super('compositeItem', id, name, barcode, textIdentifier, isPublicRentable);
         this.devices = devices;
         this.location = location;
     }

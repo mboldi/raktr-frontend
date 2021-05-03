@@ -17,3 +17,8 @@
 .state-radio-buttons {
     vertical-align: bottom;
 }
+
+.publicRentableCheckbox {
+    display: flex;
+    align-items: center;
+}

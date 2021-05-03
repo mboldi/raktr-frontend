@@ -54,6 +54,7 @@ export class EditDeviceModalComponent implements OnInit {
     ngOnInit(): void {
         this.deviceForm = this.fb.group({
             name: ['', Validators.required],
+            isPublicRentable: [''],
             maker: [''],
             type: [''],
             category: ['', Validators.required],
@@ -111,6 +112,7 @@ export class EditDeviceModalComponent implements OnInit {
     private setFormFields() {
         this.deviceForm.setValue({
             name: this.device.name,
+            isPublicRentable: this.device.isPublicRentable,
             maker: this.device.maker,
             type: this.device.type,
             category: this.device.category === null ? '' : this.device.category.name,
@@ -138,6 +140,7 @@ export class EditDeviceModalComponent implements OnInit {
     save() {
         const values = this.deviceForm.value;
         this.device.name = values.name.toString();
+        this.device.isPublicRentable = values.isPublicRentable;
         this.device.maker = values.maker.toString();
         this.device.type = values.type.toString();
         this.device.category = new Category(-1, values.category.toString());
