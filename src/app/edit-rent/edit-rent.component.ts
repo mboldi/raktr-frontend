@@ -30,11 +30,12 @@ import {BarcodePurifier} from '../services/barcode-purifier.service';
 export class EditRentComponent implements OnInit {
     rent: Rent;
     filteredRentItems: Observable<RentItem[]>;
+    currentOutDate: Date = new Date();
 
     searchControl = new FormControl();
     addDeviceFormControl = new FormControl();
     rentDataForm: FormGroup;
-    admin = false;
+    fullAccessMember = false;
     deleteConfirmed = false;
 
     constructor(private rentService: RentService,
@@ -58,7 +59,7 @@ export class EditRentComponent implements OnInit {
         })
 
         this.userService.getCurrentUser().subscribe(user => {
-            this.admin = User.isStudioMember(user);
+            this.fullAccessMember = User.isStudioMember(user);
         });
     }
 
@@ -78,7 +79,9 @@ export class EditRentComponent implements OnInit {
                         outDate: this.createDateFromString(this.rent.outDate),
                         expBackDate: this.createDateFromString(this.rent.expBackDate),
                         actBackDate: this.rent.actBackDate === '' ? '' : this.createDateFromString(this.rent.actBackDate)
-                    })
+                    });
+
+                    this.currentOutDate = new Date(this.createDateFromString(this.rent.outDate));
                 }
             )
         }
@@ -315,6 +318,10 @@ export class EditRentComponent implements OnInit {
     getPdf() {
         const pdfModal = this.modalService.open(PdfGenerationModalComponent, {size: 'md', windowClass: 'modal-holder'});
         pdfModal.componentInstance.rent = this.rent;
+    }
+
+    setCurrOutDate(event) {
+        this.currentOutDate = new Date(event.value);
     }
 
     showNotification(message_: string, type: string) {

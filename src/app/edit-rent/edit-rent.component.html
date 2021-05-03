@@ -55,7 +55,7 @@
                                         <mat-label>Kivitel ideje</mat-label>
                                         <input matInput [matDatepicker]="picker_out"
                                                formControlName="outDate"
-                                               autocomplete="off">
+                                               autocomplete="off" (dateInput)="setCurrOutDate($event)">
                                         <mat-datepicker-toggle matSuffix [for]="picker_out"></mat-datepicker-toggle>
                                         <mat-datepicker #picker_out></mat-datepicker>
                                     </mat-form-field>
@@ -65,9 +65,10 @@
                                         <mat-label>Várható visszaérkezés</mat-label>
                                         <input matInput [matDatepicker]="picker_exp"
                                                formControlName="expBackDate"
+                                               [min]="currentOutDate"
                                                autocomplete="off">
                                         <mat-datepicker-toggle matSuffix [for]="picker_exp"></mat-datepicker-toggle>
-                                        <mat-datepicker #picker_exp></mat-datepicker>
+                                        <mat-datepicker #picker_exp ></mat-datepicker>
                                     </mat-form-field>
                                 </div>
                                 <div class="col-xl-3 col-lg-4 col-md-5  col-sm-12">
@@ -75,6 +76,7 @@
                                         <mat-label>Tényleges visszaérkezés</mat-label>
                                         <input matInput [matDatepicker]="picker_back"
                                                formControlName="actBackDate"
+                                               [min]="currentOutDate"
                                                autocomplete="off">
                                         <mat-datepicker-toggle matSuffix
                                                                [for]="picker_back"></mat-datepicker-toggle>
@@ -86,7 +88,7 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="pull-right">
-                                        <mat-slide-toggle *ngIf="admin && rent.id !== -1 && rent.actBackDate === ''"
+                                        <mat-slide-toggle *ngIf="fullAccessMember && rent.id !== -1 && rent.actBackDate === ''"
                                                           class="pt-3"
                                                           (change)="deleteConfirmed = $event.checked"
                                                           color="warn">
