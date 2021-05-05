@@ -23,8 +23,8 @@ export class RentItem {
             return BackStatus.OUT;
         } else if (status === 1 || status === 'BACK') {
             return BackStatus.BACK;
-        } else if (status === 2 || status === 'PACKED_IN') {
-            return BackStatus.PACKED_IN;
+        } else if (status === 2 || status === 'PLANNED') {
+            return BackStatus.PLANNED;
         }
     }
 

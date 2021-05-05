@@ -21,6 +21,7 @@ import {CompositeItem} from '../model/CompositeItem';
 import {MatCheckboxChange} from '@angular/material/checkbox';
 import {PdfGenerationModalComponent} from '../pdf-generation-modal/pdf-generation-modal.component';
 import {BarcodePurifier} from '../services/barcode-purifier.service';
+import {RentType} from '../model/RentType';
 
 @Component({
     selector: 'app-edit-rent',
@@ -36,6 +37,7 @@ export class EditRentComponent implements OnInit {
     addDeviceFormControl = new FormControl();
     rentDataForm: FormGroup;
     fullAccessMember = false;
+    admin = false;
     deleteConfirmed = false;
 
     constructor(private rentService: RentService,
@@ -50,6 +52,7 @@ export class EditRentComponent implements OnInit {
         this.title.setTitle('Raktr - Bérlés szerkesztése');
 
         this.rentDataForm = fb.group({
+            rentType: [''],
             destination: ['', Validators.required],
             issuer: ['', Validators.required],
             renter: ['', Validators.required],
@@ -60,6 +63,7 @@ export class EditRentComponent implements OnInit {
 
         this.userService.getCurrentUser().subscribe(user => {
             this.fullAccessMember = User.isStudioMember(user);
+            this.admin = User.isAdmin(user);
         });
     }
 
@@ -73,6 +77,7 @@ export class EditRentComponent implements OnInit {
                     this.rent = rent;
 
                     this.rentDataForm.setValue({
+                        rentType: this.rent.type,
                         destination: this.rent.destination,
                         issuer: this.rent.issuer,
                         renter: this.rent.renter,
@@ -254,9 +259,9 @@ export class EditRentComponent implements OnInit {
     packedChanged(checkboxChange: MatCheckboxChange, rentItem: RentItem) {
         if (rentItem.backStatus !== BackStatus.BACK) {
             if (checkboxChange.checked) {
-                rentItem.backStatus = BackStatus.PACKED_IN;
-            } else {
                 rentItem.backStatus = BackStatus.OUT;
+            } else {
+                rentItem.backStatus = BackStatus.PLANNED;
             }
 
             this.rentService.updateInRent(this.rent.id, rentItem).subscribe(
@@ -276,12 +281,12 @@ export class EditRentComponent implements OnInit {
     }
 
     backChanged(checkboxChange: MatCheckboxChange, rentItem: RentItem) {
-        if (rentItem.backStatus === BackStatus.PACKED_IN ||
+        if (rentItem.backStatus === BackStatus.OUT ||
             rentItem.backStatus === BackStatus.BACK) {
             if (checkboxChange.checked) {
                 rentItem.backStatus = BackStatus.BACK;
             } else {
-                rentItem.backStatus = BackStatus.PACKED_IN;
+                rentItem.backStatus = BackStatus.OUT;
             }
 
             this.rentService.updateInRent(this.rent.id, rentItem).subscribe(
@@ -315,6 +320,24 @@ export class EditRentComponent implements OnInit {
         )
     }
 
+    allBack() {
+        for (let i = 0; i < this.rent.rentItems.length; i++) {
+            if (this.rent.rentItems[i].backStatus !== BackStatus.BACK) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    finalize() {
+        this.rent.isFinalized = true;
+    }
+
+    unfinalize() {
+        this.rent.isFinalized = false;
+    }
+
     getPdf() {
         const pdfModal = this.modalService.open(PdfGenerationModalComponent, {size: 'md', windowClass: 'modal-holder'});
         pdfModal.componentInstance.rent = this.rent;
@@ -322,6 +345,20 @@ export class EditRentComponent implements OnInit {
 
     setCurrOutDate(event) {
         this.currentOutDate = new Date(event.value);
+    }
+
+    typeChanged(event: any) {
+        switch (event) {
+            case 'SIMPLE':
+                this.rent.type = RentType.SIMPLE;
+                break;
+            case 'COMPLEX':
+                this.rent.type = RentType.COMPLEX;
+                break;
+            default:
+                this.rent.type = RentType.SIMPLE;
+                break;
+        }
     }
 
     showNotification(message_: string, type: string) {

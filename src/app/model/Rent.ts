@@ -1,13 +1,16 @@
 import {RentItem} from './RentItem';
+import {RentType} from './RentType';
 
 export class Rent {
     id: number;
+    type: RentType;
     destination: string;
     renter: string;
     issuer: string;
     outDate: string;
     expBackDate: string;
     actBackDate: string;
+    isFinalized: boolean;
     rentItems: RentItem[];
 
     static toJsonString(rent: Rent): string {
@@ -36,6 +39,8 @@ export class Rent {
         newRent.outDate = rent.outDate;
         newRent.expBackDate = rent.expBackDate;
         newRent.actBackDate = rent.actBackDate;
+        newRent.isFinalized = rent.isFinalized;
+        newRent.type = rent.type;
         newRent.rentItems = [];
 
         rent.rentItems.forEach(rentItem => newRent.rentItems.push(RentItem.fromJson(rentItem)));
@@ -43,15 +48,18 @@ export class Rent {
         return newRent;
     }
 
-    constructor(id: number = -1, destination: string = '', renter: string = '', issuer: string = '',
-                outDate: string = '', expBackDate: string = '', actBackDate: string = '', rentItems: RentItem[] = []) {
+    constructor(id: number = -1, rentType: RentType = RentType.SIMPLE, destination: string = '', renter: string = '', issuer: string = '',
+                outDate: string = '', expBackDate: string = '', actBackDate: string = '', isFinalized: boolean = false,
+                rentItems: RentItem[] = []) {
         this.id = id;
+        this.type = rentType;
         this.destination = destination;
         this.renter = renter;
         this.issuer = issuer;
         this.outDate = outDate;
         this.expBackDate = expBackDate;
         this.actBackDate = actBackDate;
+        this.isFinalized = isFinalized;
         this.rentItems = rentItems;
     }
 
