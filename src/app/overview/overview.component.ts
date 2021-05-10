@@ -48,7 +48,7 @@ export class OverviewComponent implements OnInit {
     }
 
     activeRents(): Rent[] {
-        return this.rents.filter(rent => rent.actBackDate === '');
+        return this.rents.filter(rent => !rent.isFinalized);
     }
 
     searchScannable() {
