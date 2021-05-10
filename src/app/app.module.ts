@@ -34,6 +34,7 @@ import {PdfGenerationModalComponent} from './pdf-generation-modal/pdf-generation
 import {MatRadioModule} from '@angular/material/radio';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatSelectModule} from '@angular/material/select';
+import {MatTooltipModule} from '@angular/material/tooltip';
 
 @NgModule({
     imports: [
@@ -59,7 +60,8 @@ import {MatSelectModule} from '@angular/material/select';
         MatRadioModule,
         MatSlideToggleModule,
         MatProgressSpinnerModule,
-        MatSelectModule
+        MatSelectModule,
+        MatTooltipModule
     ],
     declarations: [
         AppComponent,

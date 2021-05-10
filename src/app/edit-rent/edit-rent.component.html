@@ -87,7 +87,7 @@
                                         <mat-label>Tényleges visszaérkezés</mat-label>
                                         <input matInput [matDatepicker]="picker_back"
                                                formControlName="actBackDate"
-                                               [min]="currentOutDate"
+                                               [min]="currentOutDate" (dateInput)="setActBackDate($event)"
                                                autocomplete="off">
                                         <mat-datepicker-toggle matSuffix
                                                                [for]="picker_back"></mat-datepicker-toggle>
@@ -112,7 +112,9 @@
                                         </mat-slide-toggle>
 
                                         <button mat-raised-button type="button" class="btn btn-danger mr-2"
-                                                [disabled]="allBack()"
+                                                [disabled]="!isFinalizable()"
+                                                matTooltip="{{whyNotFinalizable}}"
+                                                matTooltipClass="tooltip-red"
                                                 *ngIf="fullAccessMember && !rent.isFinalized"
                                                 (click)="finalize()">
                                             Lezárás
@@ -172,13 +174,13 @@
                                     <th>
                                         Kivitt mennyiség
                                     </th>
-                                    <th>
+                                    <th *ngIf="rent.type === 1">
                                         Elpakolva
                                     </th>
                                     <th>
                                         Visszaérkezett
                                     </th>
-                                    <th *ngIf="rent.actBackDate === ''">
+                                    <th *ngIf="!rent.isFinalized">
                                         Törlés
                                     </th>
                                     </thead>
@@ -197,7 +199,7 @@
                                                    style="text-align: right"
                                                    (change)="quantityChanged($event, rentItem)">
                                         </td>
-                                        <td>
+                                        <td *ngIf="rent.type === 1">
                                             <mat-checkbox color="primary"
                                                           [disabled]="rent.isFinalized"
                                                           [checked]="rentItem.backStatus === 0 || rentItem.backStatus === 1"
@@ -209,7 +211,7 @@
                                                           [checked]="rentItem.backStatus === 1"
                                                           (change)="backChanged($event, rentItem)"></mat-checkbox>
                                         </td>
-                                        <td class="pb-0 pt-0 " *ngIf="rent.actBackDate === ''">
+                                        <td class="pb-0 pt-0 " *ngIf="!rent.isFinalized">
                                             <button mat-raised-button type="button"
                                                     class="btn btn-info pull-center btn-just-icon"
                                                     data-toggle="modal" data-target=".edit-rental-dialog"

@@ -2,7 +2,7 @@ import * as $ from 'jquery';
 import {Rent} from '../model/Rent';
 import {RentService} from '../services/rent.service';
 import {Title} from '@angular/platform-browser';
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewEncapsulation} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Observable} from 'rxjs';
 import {map, startWith} from 'rxjs/operators';
@@ -16,17 +16,19 @@ import {Scannable} from '../model/Scannable';
 import {BackStatus} from '../model/BackStatus';
 import {ScannableService} from '../services/scannable.service';
 import {UserService} from '../services/user.service';
-import {User} from '../model/User';
 import {CompositeItem} from '../model/CompositeItem';
 import {MatCheckboxChange} from '@angular/material/checkbox';
 import {PdfGenerationModalComponent} from '../pdf-generation-modal/pdf-generation-modal.component';
 import {BarcodePurifier} from '../services/barcode-purifier.service';
 import {RentType} from '../model/RentType';
+import {MatDatepickerInputEvent} from '@angular/material/datepicker';
+import {User} from '../model/User';
 
 @Component({
     selector: 'app-edit-rent',
     templateUrl: './edit-rent.component.html',
-    styleUrls: ['./edit-rent.component.css']
+    styleUrls: ['./edit-rent.component.css'],
+    encapsulation: ViewEncapsulation.None,
 })
 export class EditRentComponent implements OnInit {
     rent: Rent;
@@ -39,6 +41,7 @@ export class EditRentComponent implements OnInit {
     fullAccessMember = false;
     admin = false;
     deleteConfirmed = false;
+    whyNotFinalizable = 'Hiányzó adatok a lezáráshoz!';
 
     constructor(private rentService: RentService,
                 private deviceService: DeviceService,
@@ -163,7 +166,7 @@ export class EditRentComponent implements OnInit {
         if (newRentItem === null) {
             newRentItem = new RentItem(undefined,
                 scannable,
-                BackStatus.OUT,
+                this.rent.type === RentType.SIMPLE ? BackStatus.OUT : BackStatus.PLANNED,
                 amount);
 
             this.rentService.addItemToRent(this.rent.id, newRentItem).subscribe(rent_ => {
@@ -320,12 +323,20 @@ export class EditRentComponent implements OnInit {
         )
     }
 
-    allBack() {
+    isFinalizable() {
+        if (this.rent.actBackDate === '') {
+            this.whyNotFinalizable = 'Nincs megadva visszaérkezési dátum!';
+            return false;
+        }
+
         for (let i = 0; i < this.rent.rentItems.length; i++) {
             if (this.rent.rentItems[i].backStatus !== BackStatus.BACK) {
+                this.whyNotFinalizable = 'Nem érkezett minden vissza!';
                 return false;
             }
         }
+
+        this.whyNotFinalizable = 'Véglegesíthető';
 
         return true;
     }
@@ -345,6 +356,10 @@ export class EditRentComponent implements OnInit {
 
     setCurrOutDate(event) {
         this.currentOutDate = new Date(event.value);
+    }
+
+    setActBackDate($event: MatDatepickerInputEvent<Date>) {
+        this.rent.actBackDate = this.formatDate(this.rentDataForm.value.actBackDate.toString());
     }
 
     typeChanged(event: any) {
