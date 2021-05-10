@@ -40,8 +40,16 @@ export class Rent {
         newRent.expBackDate = rent.expBackDate;
         newRent.actBackDate = rent.actBackDate;
         newRent.isFinalized = rent.isFinalized;
-        newRent.type = rent.type;
         newRent.rentItems = [];
+
+        switch (rent.type.toString()) {
+            case 'SIMPLE':
+                newRent.type = RentType.SIMPLE;
+                break;
+            case 'COMPLEX':
+                newRent.type = RentType.COMPLEX;
+                break;
+        }
 
         rent.rentItems.forEach(rentItem => newRent.rentItems.push(RentItem.fromJson(rentItem)));
 

@@ -28,7 +28,6 @@ import {User} from '../model/User';
     selector: 'app-edit-rent',
     templateUrl: './edit-rent.component.html',
     styleUrls: ['./edit-rent.component.css'],
-    encapsulation: ViewEncapsulation.None,
 })
 export class EditRentComponent implements OnInit {
     rent: Rent;
@@ -80,7 +79,7 @@ export class EditRentComponent implements OnInit {
                     this.rent = rent;
 
                     this.rentDataForm.setValue({
-                        rentType: this.rent.type,
+                        rentType: this.rent.type === RentType.SIMPLE ? 'SIMPLE' : 'COMPLEX',
                         destination: this.rent.destination,
                         issuer: this.rent.issuer,
                         renter: this.rent.renter,

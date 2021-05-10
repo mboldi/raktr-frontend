@@ -113,8 +113,6 @@
 
                                         <button mat-raised-button type="button" class="btn btn-danger mr-2"
                                                 [disabled]="!isFinalizable()"
-                                                matTooltip="{{whyNotFinalizable}}"
-                                                matTooltipClass="tooltip-red"
                                                 *ngIf="fullAccessMember && !rent.isFinalized"
                                                 (click)="finalize()">
                                             Lezárás
@@ -215,7 +213,9 @@
                                             <button mat-raised-button type="button"
                                                     class="btn btn-info pull-center btn-just-icon"
                                                     data-toggle="modal" data-target=".edit-rental-dialog"
-                                                    [disabled]="rentItem.backStatus !== 0 || rent.isFinalized"
+                                                    [disabled]="(rent.type === 0 && rentItem.backStatus === 1)
+                                                     || (rent.type === 1 && rentItem.backStatus !== 2)
+                                                     || rent.isFinalized"
                                                     (click)="removeFromRent(rentItem)">
                                                 <i class="material-icons">delete</i>
                                             </button>
@@ -230,7 +230,7 @@
             </div>
             <div class="col-md-12" *ngIf="!rent">
                 <h1 style="text-align: center">Hoppá!</h1>
-                <h3 style="text-align: center">Nincs ilyen ID-vel rendelkező eszköz, vagy csak vak vagyok és nem
+                <h3 style="text-align: center">Nincs ilyen ID-vel rendelkező bérlés, vagy csak vak vagyok és nem
                     találom :(
                 </h3>
             </div>

@@ -17,8 +17,3 @@
 .device-row:hover {
     background: #f2f2f2 !important;
 }
-
-.tooltip-red {
-    background: #b71c1c;
-    color: white;
-}
