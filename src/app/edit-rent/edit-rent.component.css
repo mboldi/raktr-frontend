@@ -1,5 +1,26 @@
 .main-content {
-    margin-top: 0px !important;
+    margin-top: 0 !important;
+}
+
+.comment-field {
+    background: #11111111;
+    border-radius: 5px;
+}
+
+.blockquote {
+    font-size: 1rem;
+}
+
+.date-delete-row {
+    font-size: 0.7rem;
+}
+
+.comment-deleter {
+    cursor: pointer;
+}
+
+.comment-deleter:hover {
+    text-decoration: underline;
 }
 
 .backbutton {

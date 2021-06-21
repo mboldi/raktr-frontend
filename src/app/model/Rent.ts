@@ -1,5 +1,6 @@
 import {RentItem} from './RentItem';
 import {RentType} from './RentType';
+import {Comment} from './Comment';
 
 export class Rent {
     id: number;
@@ -12,6 +13,7 @@ export class Rent {
     actBackDate: string;
     isFinalized: boolean;
     rentItems: RentItem[];
+    comments: Comment[];
 
     static toJsonString(rent: Rent): string {
         const rentJson = JSON.parse(JSON.stringify(rent));
@@ -52,6 +54,16 @@ export class Rent {
         }
 
         rent.rentItems.forEach(rentItem => newRent.rentItems.push(RentItem.fromJson(rentItem)));
+
+        if (rent.comments) {
+            if (!newRent.comments) {
+                newRent.comments = [];
+            }
+
+            rent.comments.forEach(comment => newRent.comments.push(Comment.fromJson(comment)));
+        } else {
+            newRent.comments = [];
+        }
 
         return newRent;
     }

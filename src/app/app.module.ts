@@ -1,5 +1,5 @@
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {NgModule} from '@angular/core';
+import {LOCALE_ID, NgModule} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpModule} from '@angular/http';
 import {RouterModule} from '@angular/router';
@@ -35,6 +35,7 @@ import {MatRadioModule} from '@angular/material/radio';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatSelectModule} from '@angular/material/select';
 import {MatTooltipModule} from '@angular/material/tooltip';
+import {MatDividerModule} from '@angular/material/divider';
 
 @NgModule({
     imports: [
@@ -61,7 +62,8 @@ import {MatTooltipModule} from '@angular/material/tooltip';
         MatSlideToggleModule,
         MatProgressSpinnerModule,
         MatSelectModule,
-        MatTooltipModule
+        MatTooltipModule,
+        MatDividerModule
     ],
     declarations: [
         AppComponent,
@@ -77,6 +79,7 @@ import {MatTooltipModule} from '@angular/material/tooltip';
     ],
     providers: [
         {provide: MAT_DATE_LOCALE, useValue: 'hu-HU'},
+        //{provide: LOCALE_ID, useValue: 'hu-HU'},
         {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}
     ],
     bootstrap: [AppComponent]

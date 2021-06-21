@@ -6,6 +6,8 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {environment} from '../../environments/environment';
 import {saveAs} from 'file-saver';
 import {map} from 'rxjs/operators';
+import {Comment} from '../model/comment'
+import {RequestOptions} from '@angular/http';
 
 @Injectable({
     providedIn: 'root'
@@ -96,5 +98,26 @@ export class RentService {
             },
             error => {
             })
+    }
+
+    addComment(rent: Rent, comment: Comment): Observable<Rent> {
+        const headers = new HttpHeaders().set('Content-Type', 'application/json');
+
+        return this.http.post<Rent>(`${environment.apiUrl}/api/rent/${rent.id}/comment`, comment.toJson(), {headers: headers})
+            .pipe(
+                map(rent_ => Rent.fromJson(rent_))
+            );
+    }
+
+    deleteComment(rent: Rent, comment: Comment): Observable<Rent> {
+        const headers = new HttpHeaders().set('Content-Type', 'application/json');
+
+        return this.http.request<Rent>('delete', `${environment.apiUrl}/api/rent/${rent.id}/comment`, {
+                headers: headers,
+                body: comment.toJson()
+            })
+            .pipe(
+                map(rent_ => Rent.fromJson(rent_))
+            );
     }
 }

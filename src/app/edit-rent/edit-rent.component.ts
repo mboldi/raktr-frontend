@@ -2,7 +2,7 @@ import * as $ from 'jquery';
 import {Rent} from '../model/Rent';
 import {RentService} from '../services/rent.service';
 import {Title} from '@angular/platform-browser';
-import {Component, OnInit, ViewEncapsulation} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Observable} from 'rxjs';
 import {map, startWith} from 'rxjs/operators';
@@ -23,6 +23,7 @@ import {BarcodePurifier} from '../services/barcode-purifier.service';
 import {RentType} from '../model/RentType';
 import {MatDatepickerInputEvent} from '@angular/material/datepicker';
 import {User} from '../model/User';
+import {Comment} from '../model/Comment';
 
 @Component({
     selector: 'app-edit-rent',
@@ -36,11 +37,17 @@ export class EditRentComponent implements OnInit {
 
     searchControl = new FormControl();
     addDeviceFormControl = new FormControl();
+    addCommentFormControl = new FormControl();
     rentDataForm: FormGroup;
+    newCommentForm: FormGroup;
     fullAccessMember = false;
     admin = false;
+    user: User;
+
     deleteConfirmed = false;
     whyNotFinalizable = 'Hiányzó adatok a lezáráshoz!';
+
+    newComment = '';
 
     constructor(private rentService: RentService,
                 private deviceService: DeviceService,
@@ -63,7 +70,14 @@ export class EditRentComponent implements OnInit {
             actBackDate: ['']
         })
 
+        this.newCommentForm = fb.group(
+            {
+                commentBody: ['', Validators.required]
+            })
+
         this.userService.getCurrentUser().subscribe(user => {
+            this.user = user;
+
             this.fullAccessMember = User.isStudioMember(user);
             this.admin = User.isAdmin(user);
         });
@@ -74,19 +88,14 @@ export class EditRentComponent implements OnInit {
 
         if (id === 'new') {
             this.rent = new Rent();
+
+            this.setFormFieldsWithRentData();
         } else {
             this.rentService.getRent(id).subscribe(rent => {
                     this.rent = rent;
 
-                    this.rentDataForm.setValue({
-                        rentType: this.rent.type === RentType.SIMPLE ? 'SIMPLE' : 'COMPLEX',
-                        destination: this.rent.destination,
-                        issuer: this.rent.issuer,
-                        renter: this.rent.renter,
-                        outDate: this.createDateFromString(this.rent.outDate),
-                        expBackDate: this.createDateFromString(this.rent.expBackDate),
-                        actBackDate: this.rent.actBackDate === '' ? '' : this.createDateFromString(this.rent.actBackDate)
-                    });
+                    this.setFormFieldsWithRentData();
+                    this.sortComments();
 
                     this.currentOutDate = new Date(this.createDateFromString(this.rent.outDate));
                 }
@@ -98,6 +107,18 @@ export class EditRentComponent implements OnInit {
                 startWith(''),
                 map(value => this._filterRentItems(this.rent.rentItems, value))
             );
+    }
+
+    private setFormFieldsWithRentData() {
+        this.rentDataForm.setValue({
+            rentType: this.rent.type === RentType.SIMPLE ? 'SIMPLE' : 'COMPLEX',
+            destination: this.rent.destination,
+            issuer: this.rent.issuer,
+            renter: this.rent.renter,
+            outDate: this.createDateFromString(this.rent.outDate),
+            expBackDate: this.createDateFromString(this.rent.expBackDate),
+            actBackDate: this.rent.actBackDate === '' ? '' : this.createDateFromString(this.rent.actBackDate)
+        });
     }
 
     private _filterRentItems(rentItems_: RentItem[], value: string): RentItem[] {
@@ -221,6 +242,8 @@ export class EditRentComponent implements OnInit {
             this.rentService.addRent(this.rent).subscribe(rent_ => {
                     this.rent = rent_;
                     this.showNotification('Sikeresen mentve', 'success');
+
+                    this.router.navigateByUrl('/rent/' + this.rent.id);
                 },
                 error => {
                     this.showNotification('Nem sikerült menteni', 'error');
@@ -341,6 +364,7 @@ export class EditRentComponent implements OnInit {
     }
 
     finalize() {
+        //mentés is, szóval igazából update
         this.rent.isFinalized = true;
     }
 
@@ -373,6 +397,36 @@ export class EditRentComponent implements OnInit {
                 this.rent.type = RentType.SIMPLE;
                 break;
         }
+    }
+
+    sendComment() {
+        const commentBody = this.newCommentForm.value.commentBody;
+
+        if (commentBody !== '') {
+            const newComment = new Comment(
+                -1,
+                commentBody,
+                new Date(),
+                this.user
+            )
+
+            this.rentService.addComment(this.rent, newComment).subscribe(rent => {
+                this.newCommentForm.setValue({commentBody: ''});
+
+                this.rent = rent;
+                this.sortComments();
+            })
+        }
+    }
+
+    deleteComment(comment: Comment) {
+        this.rentService.deleteComment(this.rent, comment).subscribe(rent => {
+            this.rent = rent;
+        })
+    }
+
+    private sortComments() {
+        this.rent.comments.sort((a, b) => a.dateOfWriting > b.dateOfWriting ? -1 : 1)
     }
 
     showNotification(message_: string, type: string) {
