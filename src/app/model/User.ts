@@ -10,7 +10,7 @@ export class User {
     roles: UserRole[];
     token?: string;
 
-    static isStudioMember(user: User): boolean {
+    static isFullAccessMember(user: User): boolean {
         return this.checkRole(user, 'ROLE_Stúdiós');
     }
 

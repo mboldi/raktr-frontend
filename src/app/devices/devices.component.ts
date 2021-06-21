@@ -123,6 +123,8 @@ export class DevicesComponent implements OnInit {
             switch (sort.active) {
                 case 'name':
                     return compare(a.name.toLowerCase(), b.name.toLowerCase(), isAsc);
+                case 'category':
+                    return compare(a.category.name.toLowerCase(), b.category.name.toLowerCase(), isAsc);
                 case 'location':
                     return compare(a.location.name.toLowerCase(), b.location.name.toLowerCase(), isAsc);
                 case 'weight':

@@ -1,10 +1,12 @@
 import {Scannable} from './Scannable';
 import {Device} from './Device';
 import {Location} from './Location';
+import {Category} from './Category';
 
 export class CompositeItem extends Scannable {
     type_ = 'compositeItem';
     devices: Device[];
+    category: Category;
     location: Location;
 
     static fromJson(compositeItem: CompositeItem): CompositeItem {
@@ -14,6 +16,7 @@ export class CompositeItem extends Scannable {
             compositeItem.textIdentifier,
             compositeItem.isPublicRentable,
             [],
+            compositeItem.category,
             compositeItem.location);
 
         if (compositeItem.devices) {
@@ -52,9 +55,10 @@ export class CompositeItem extends Scannable {
     }
 
     constructor(id: number = -1, name: string = '', barcode: string = '', textIdentifier: string = '', isPublicRentable: boolean = false,
-                devices: Device[] = [], location: Location = null) {
+                devices: Device[] = [], category: Category = null, location: Location = null) {
         super('compositeItem', id, name, barcode, textIdentifier, isPublicRentable);
         this.devices = devices;
+        this.category = category;
         this.location = location;
     }
 

@@ -136,6 +136,9 @@
                                         <th>
                                             Tartalmazott eszközök száma
                                         </th>
+                                        <th mat-sort-header="category">
+                                            Kategória
+                                        </th>
                                         <th mat-sort-header="location">
                                             Tárolási hely
                                         </th>
@@ -157,6 +160,9 @@
                                             </td>
                                             <td (click)="editCompositeItem(compositeItem)">
                                                 {{compositeItem.devices.length}}
+                                            </td>
+                                            <td (click)="editCompositeItem(compositeItem)">
+                                                {{compositeItem.category.name}}
                                             </td>
                                             <td (click)="editCompositeItem(compositeItem)">
                                                 {{compositeItem.location.name}}

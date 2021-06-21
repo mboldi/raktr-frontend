@@ -78,7 +78,7 @@ export class EditRentComponent implements OnInit {
         this.userService.getCurrentUser().subscribe(user => {
             this.user = user;
 
-            this.fullAccessMember = User.isStudioMember(user);
+            this.fullAccessMember = User.isFullAccessMember(user);
             this.admin = User.isAdmin(user);
         });
     }

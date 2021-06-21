@@ -15,6 +15,8 @@ import {BarcodePurifier} from '../services/barcode-purifier.service';
 import {switchMap, tap} from 'rxjs/operators';
 import {barcodeValidator} from '../helpers/barcode.validator';
 import {textIdValidator} from '../helpers/textId.validator';
+import {Category} from '../model/Category';
+import {CategoryService} from '../services/category.service';
 
 @Component({
     selector: 'app-edit-composite-modal',
@@ -27,17 +29,22 @@ export class EditCompositeModalComponent implements OnInit {
 
     compositeDataForm: FormGroup;
 
+    categoryOptions: Category[];
+    filteredCategoryOptions: Category[];
     locationOptions: Location[];
     filteredLocationOptions: Location[];
     addDeviceFormControl = new FormControl();
-    admin = false;
+    fullAccessMember = false;
     deleteConfirmed = false;
+
     private currentLocationInput = '';
+    private currentCategoryInput = '';
 
     constructor(public activeModal: NgbActiveModal,
                 private fb: FormBuilder,
                 private compositeItemService: CompositeService,
                 private locationService: LocationService,
+                private categoryService: CategoryService,
                 private deviceService: DeviceService,
                 private scannableService: ScannableService,
                 private userService: UserService) {
@@ -46,7 +53,7 @@ export class EditCompositeModalComponent implements OnInit {
         }
 
         this.userService.getCurrentUser().subscribe(user => {
-            this.admin = User.isStudioMember(user);
+            this.fullAccessMember = User.isFullAccessMember(user);
         });
     }
 
@@ -55,9 +62,22 @@ export class EditCompositeModalComponent implements OnInit {
             name: ['', Validators.required],
             isPublicRentable: [''],
             location: ['', Validators.required],
+            category: ['', Validators.required],
             barcode: ['', Validators.required, barcodeValidator(this.scannableService, this.compositeItem.id)],
             textIdentifier: ['', Validators.required, textIdValidator(this.scannableService, this.compositeItem.id)]
         });
+
+        this.compositeDataForm
+            .get('category')
+            .valueChanges
+            .pipe(
+                tap(value => this.currentCategoryInput = value),
+                switchMap(value => this.categoryService.getCategories())
+            )
+            .subscribe(categories => {
+                this.categoryOptions = categories;
+                this.filteredCategoryOptions = this._filterCategories(categories, this.currentCategoryInput);
+            });
 
         this.compositeDataForm
             .get('location')
@@ -91,10 +111,17 @@ export class EditCompositeModalComponent implements OnInit {
         this.compositeDataForm.setValue({
             name: this.compositeItem.name,
             isPublicRentable: this.compositeItem.isPublicRentable,
+            category: this.compositeItem.category === null ? '' : this.compositeItem.category.name,
             location: this.compositeItem.location === null ? '' : this.compositeItem.location.name,
             barcode: this.compositeItem.barcode,
             textIdentifier: this.compositeItem.textIdentifier,
         });
+    }
+
+    private _filterCategories(categories: Category[], value: string): Category[] {
+        const filterValue = value.toLowerCase();
+
+        return categories.filter(category => category.name.toLowerCase().includes(filterValue));
     }
 
     private _filterLocations(locations: Location[], value: string): Location[] {
@@ -110,6 +137,7 @@ export class EditCompositeModalComponent implements OnInit {
         this.compositeItem.barcode = value.barcode.toString();
         this.compositeItem.textIdentifier = value.textIdentifier.toString();
         this.compositeItem.location = new Location(-1, value.location.toString());
+        this.compositeItem.category = new Category(-1, value.category.toString());
 
         if (this.compositeItem.id === -1) {
             // new
