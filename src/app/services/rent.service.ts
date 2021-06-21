@@ -48,6 +48,15 @@ export class RentService {
             );
     }
 
+    finalizeRent(rent: Rent): Observable<Rent> {
+        const headers = new HttpHeaders().set('Content-Type', 'application/json');
+
+        return this.http.put<Rent>(`${environment.apiUrl}/api/rent/finalize`, Rent.toJsonString(rent), {headers: headers})
+            .pipe(
+                map(rent_ => Rent.fromJson(rent_))
+            );
+    }
+
     getRent(id: number | string): Observable<Rent> {
         return this.http.get<Rent>(`${environment.apiUrl}/api/rent/${id}`)
             .pipe(

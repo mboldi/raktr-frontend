@@ -228,14 +228,19 @@ export class EditRentComponent implements OnInit {
             error => this.showNotification('Nem sikerült törölni', 'warning'))
     }
 
-    save() {
+    private setRentFields() {
         const value = this.rentDataForm.value;
+
         this.rent.destination = value.destination.toString();
         this.rent.issuer = value.issuer.toString();
         this.rent.renter = value.renter.toString();
         this.rent.outDate = this.formatDate(value.outDate.toString());
         this.rent.expBackDate = this.formatDate(value.expBackDate.toString());
         this.rent.actBackDate = this.formatDate(value.actBackDate.toString());
+    }
+
+    save() {
+        this.setRentFields();
 
         if (this.rent.id === -1) {
             // new
@@ -364,12 +369,21 @@ export class EditRentComponent implements OnInit {
     }
 
     finalize() {
-        //mentés is, szóval igazából update
+        this.setRentFields();
         this.rent.isFinalized = true;
+
+        this.rentService.finalizeRent(this.rent).subscribe(rent => {
+            this.rent = rent;
+        });
     }
 
     unfinalize() {
+        this.setRentFields();
         this.rent.isFinalized = false;
+
+        this.rentService.finalizeRent(this.rent).subscribe(rent => {
+            this.rent = rent;
+        });
     }
 
     getPdf() {
