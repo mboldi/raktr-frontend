@@ -24,7 +24,7 @@ export class RentsComponent implements OnInit {
     constructor(private title: Title,
                 private rentService: RentService,
                 private router: Router) {
-        this.title.setTitle('Raktr - Bérlések');
+        this.title.setTitle('Raktr - Kivitelek');
     }
 
     ngOnInit(): void {
