@@ -6,8 +6,6 @@ import {Category} from './Category';
 export class CompositeItem extends Scannable {
     type_ = 'compositeItem';
     devices: Device[];
-    category: Category;
-    location: Location;
 
     static fromJson(compositeItem: CompositeItem): CompositeItem {
         const compositeItem1 = new CompositeItem(compositeItem.id,
@@ -56,10 +54,8 @@ export class CompositeItem extends Scannable {
 
     constructor(id: number = -1, name: string = '', barcode: string = '', textIdentifier: string = '', isPublicRentable: boolean = false,
                 devices: Device[] = [], category: Category = null, location: Location = null) {
-        super('compositeItem', id, name, barcode, textIdentifier, isPublicRentable);
+        super('compositeItem', id, name, barcode, textIdentifier, category, location, isPublicRentable);
         this.devices = devices;
-        this.category = category;
-        this.location = location;
     }
 
     getWeight() {

@@ -9,9 +9,7 @@ export class Device extends Scannable {
     serial: string;
     value: number;
     weight: number;
-    location: Location;
     status: DeviceStatus;
-    category: Category;
     quantity: number;
 
     static toJsonString(device: Device): string {
@@ -46,15 +44,13 @@ export class Device extends Scannable {
     constructor(id: number = -1, name: string = '', barcode: string = '', textIdentifier: string = '', isPublicRentable: boolean = false, maker: string = '',
                 type: string = '', serial: string = '', value: number = 0, weight: number = 0, location: Location = null,
                 status: DeviceStatus = DeviceStatus.GOOD, category: Category = null, quantity: number = 1) {
-        super('device', id, name, barcode, textIdentifier, isPublicRentable);
+        super('device', id, name, barcode, textIdentifier, category, location, isPublicRentable);
         this.maker = maker;
         this.type = type;
         this.serial = serial;
         this.value = value;
         this.weight = weight;
-        this.location = location;
         this.status = status;
-        this.category = category;
         this.quantity = quantity;
     }
 
