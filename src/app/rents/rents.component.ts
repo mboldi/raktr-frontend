@@ -34,8 +34,8 @@ export class RentsComponent implements OnInit {
             this.rents = rents;
 
             this.rents = this.rents.sort(((a, b) => {
-                const aDate = new Date(a.actBackDate === '' ? a.actBackDate : a.expBackDate);
-                const bDate = new Date(b.actBackDate === '' ? b.actBackDate : b.expBackDate);
+                const aDate = new Date(a.actBackDate === null ? a.actBackDate : a.expBackDate);
+                const bDate = new Date(b.actBackDate === null ? b.actBackDate : b.expBackDate);
 
                 return aDate.getTime() - bDate.getTime();
             }));

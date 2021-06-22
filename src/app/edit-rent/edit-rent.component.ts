@@ -97,7 +97,7 @@ export class EditRentComponent implements OnInit {
                     this.setFormFieldsWithRentData();
                     this.sortComments();
 
-                    this.currentOutDate = new Date(this.createDateFromString(this.rent.outDate));
+                    this.currentOutDate = this.rent.outDate;
                 }
             )
         }
@@ -115,9 +115,9 @@ export class EditRentComponent implements OnInit {
             destination: this.rent.destination,
             issuer: this.rent.issuer,
             renter: this.rent.renter,
-            outDate: this.createDateFromString(this.rent.outDate),
-            expBackDate: this.createDateFromString(this.rent.expBackDate),
-            actBackDate: this.rent.actBackDate === '' ? '' : this.createDateFromString(this.rent.actBackDate)
+            outDate: this.rent.outDate,
+            expBackDate: this.rent.expBackDate,
+            actBackDate: this.rent.actBackDate
         });
     }
 
@@ -234,9 +234,9 @@ export class EditRentComponent implements OnInit {
         this.rent.destination = value.destination.toString();
         this.rent.issuer = value.issuer.toString();
         this.rent.renter = value.renter.toString();
-        this.rent.outDate = this.formatDate(value.outDate.toString());
-        this.rent.expBackDate = this.formatDate(value.expBackDate.toString());
-        this.rent.actBackDate = this.formatDate(value.actBackDate.toString());
+        this.rent.outDate = value.outDate;
+        this.rent.expBackDate = value.expBackDate;
+        this.rent.actBackDate = value.actBackDate;
     }
 
     save() {
@@ -351,7 +351,7 @@ export class EditRentComponent implements OnInit {
     }
 
     isFinalizable() {
-        if (this.rent.actBackDate === '') {
+        if (this.rent.actBackDate === null) {
             this.whyNotFinalizable = 'Nincs megadva visszaérkezési dátum!';
             return false;
         }
@@ -396,7 +396,7 @@ export class EditRentComponent implements OnInit {
     }
 
     setActBackDate($event: MatDatepickerInputEvent<Date>) {
-        this.rent.actBackDate = this.formatDate(this.rentDataForm.value.actBackDate.toString());
+        this.rent.actBackDate = this.rentDataForm.value.actBackDate;
     }
 
     typeChanged(event: any) {

@@ -65,14 +65,14 @@
                                         {{rent.destination}}
                                     </td>
                                     <td>
-                                        {{rent.outDate}}
+                                        {{rent.outDate | date:'yyyy. MM. dd.'}}
                                     </td>
                                     <td>
-                                        {{rent.expBackDate}}
+                                        {{rent.expBackDate | date:'yyyy. MM. dd.'}}
                                     </td>
                                     <td>
-                                        <div *ngIf="rent.actBackDate == ''">Nem jött még vissza</div>
-                                        {{rent.actBackDate}}
+                                        <div *ngIf="rent.actBackDate === null">Nem jött még vissza</div>
+                                        {{rent.actBackDate | date:'yyyy. MM. dd.'}}
                                     </td>
                                     <td>
                                         {{rent.rentItems.length}}

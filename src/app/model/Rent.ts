@@ -8,9 +8,9 @@ export class Rent {
     destination: string;
     renter: string;
     issuer: string;
-    outDate: string;
-    expBackDate: string;
-    actBackDate: string;
+    outDate: Date;
+    expBackDate: Date;
+    actBackDate: Date;
     isFinalized: boolean;
     rentItems: RentItem[];
     comments: Comment[];
@@ -69,7 +69,7 @@ export class Rent {
     }
 
     constructor(id: number = -1, rentType: RentType = RentType.SIMPLE, destination: string = '', renter: string = '', issuer: string = '',
-                outDate: string = '', expBackDate: string = '', actBackDate: string = '', isFinalized: boolean = false,
+                outDate: Date = null, expBackDate: Date = null, actBackDate: Date = null, isFinalized: boolean = false,
                 rentItems: RentItem[] = []) {
         this.id = id;
         this.type = rentType;

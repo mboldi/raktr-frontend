@@ -103,10 +103,10 @@
                                         {{rent.destination}}
                                     </td>
                                     <td>
-                                        {{rent.outDate}}
+                                        {{rent.outDate | date:'yyyy. MM. dd.'}}
                                     </td>
                                     <td>
-                                        {{rent.expBackDate}}
+                                        {{rent.expBackDate | date:'yyyy. MM. dd.'}}
                                     </td>
                                     <td>
                                         {{rent.rentItems.length}}
