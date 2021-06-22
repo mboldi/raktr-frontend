@@ -2,7 +2,7 @@
     <h3>Eszköz hozzáadása</h3>
 </div>
 
-<div class="modal-body">
+<div class="modal-body" (keydown)="keydown($event)">
     <div class="container-fluid">
         <div class="row">
             <h3 class="col-sm-12">{{device.name}}</h3>
