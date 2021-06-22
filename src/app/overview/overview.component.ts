@@ -37,10 +37,14 @@ export class OverviewComponent implements OnInit {
 
     ngOnInit(): void {
         this.rentService.getRents().subscribe(rents => {
-                this.rents = [];
-                rents.forEach(rent => {
-                    this.rents.push(Rent.fromJson(rent));
-                })
+                this.rents = rents;
+
+                this.rents = this.rents.sort(((a, b) => {
+                    const aDate = new Date(a.actBackDate === null ? a.actBackDate : a.expBackDate);
+                    const bDate = new Date(b.actBackDate === null ? b.actBackDate : b.expBackDate);
+
+                    return aDate.getTime() - bDate.getTime();
+                }));
             }
         );
 
