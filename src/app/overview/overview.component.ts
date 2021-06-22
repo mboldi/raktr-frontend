@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, HostListener, OnInit} from '@angular/core';
 import {Title} from '@angular/platform-browser';
 import {RentService} from '../services/rent.service';
 import {DeviceService} from '../services/device.service';
@@ -97,5 +97,12 @@ export class OverviewComponent implements OnInit {
             },
             z_index: 2000
         })
+    }
+
+    @HostListener('document:keyDown.control.k', ['$event'])
+    selectPack(event: KeyboardEvent) {
+        event.preventDefault();
+
+        this.router.navigateByUrl('rent/new');
     }
 }
