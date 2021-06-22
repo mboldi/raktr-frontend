@@ -36,6 +36,7 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatSelectModule} from '@angular/material/select';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatDividerModule} from '@angular/material/divider';
+import {MatExpansionModule} from '@angular/material/expansion';
 
 @NgModule({
     imports: [
@@ -63,7 +64,8 @@ import {MatDividerModule} from '@angular/material/divider';
         MatProgressSpinnerModule,
         MatSelectModule,
         MatTooltipModule,
-        MatDividerModule
+        MatDividerModule,
+        MatExpansionModule
     ],
     declarations: [
         AppComponent,
@@ -79,7 +81,6 @@ import {MatDividerModule} from '@angular/material/divider';
     ],
     providers: [
         {provide: MAT_DATE_LOCALE, useValue: 'hu-HU'},
-        //{provide: LOCALE_ID, useValue: 'hu-HU'},
         {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}
     ],
     bootstrap: [AppComponent]

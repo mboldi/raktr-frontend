@@ -4,8 +4,6 @@ import {RentService} from '../services/rent.service';
 import {Title} from '@angular/platform-browser';
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {Observable} from 'rxjs';
-import {map, startWith} from 'rxjs/operators';
 import {RentItem} from '../model/RentItem';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
@@ -28,11 +26,11 @@ import {Comment} from '../model/Comment';
 @Component({
     selector: 'app-edit-rent',
     templateUrl: './edit-rent.component.html',
-    styleUrls: ['./edit-rent.component.css'],
+    styleUrls: ['./edit-rent.component.css']
 })
 export class EditRentComponent implements OnInit {
     rent: Rent;
-    filteredRentItems: Observable<RentItem[]>;
+    filteredRentItems: RentItem[];
     currentOutDate: Date = new Date();
 
     searchControl = new FormControl();
@@ -46,6 +44,8 @@ export class EditRentComponent implements OnInit {
 
     deleteConfirmed = false;
     whyNotFinalizable = 'Hiányzó adatok a lezáráshoz!';
+    barcodePlaceholder = 'Hozzáadandó vonalkódja';
+    barcodeMode = 'add';
 
     newComment = '';
 
@@ -58,7 +58,7 @@ export class EditRentComponent implements OnInit {
                 private modalService: NgbModal,
                 private fb: FormBuilder,
                 private router: Router) {
-        this.title.setTitle('Raktr - Bérlés szerkesztése');
+        this.title.setTitle('Raktr - Kivitel szerkesztése');
 
         this.rentDataForm = fb.group({
             rentType: [''],
@@ -97,16 +97,13 @@ export class EditRentComponent implements OnInit {
                     this.setFormFieldsWithRentData();
                     this.sortComments();
 
+                    this.filteredRentItems = this.rent.rentItems;
+
                     this.currentOutDate = this.rent.outDate;
                 }
             )
         }
 
-        this.filteredRentItems = this.searchControl.valueChanges
-            .pipe(
-                startWith(''),
-                map(value => this._filterRentItems(this.rent.rentItems, value))
-            );
     }
 
     private setFormFieldsWithRentData() {
@@ -124,47 +121,81 @@ export class EditRentComponent implements OnInit {
     private _filterRentItems(rentItems_: RentItem[], value: string): RentItem[] {
         const filterValue = value.toLowerCase();
 
-        return rentItems_.filter(rentItem => rentItem.scannable.name.toLowerCase().includes(filterValue) ||
-            rentItem.scannable.barcode.toLowerCase().includes(filterValue));
+        return rentItems_.filter(rentItem =>
+            rentItem.scannable.name.toLowerCase().includes(filterValue) ||
+            rentItem.scannable.barcode.toLowerCase().includes(filterValue) ||
+            rentItem.scannable.textIdentifier.toLowerCase().includes(filterValue) ||
+            rentItem.scannable.category.name.toLowerCase().includes(filterValue) ||
+            rentItem.scannable.location.name.toLowerCase().includes(filterValue));
     }
 
-    addItemToRent() {
+    barcodeRead() {
         if (this.addDeviceFormControl.value !== null && this.addDeviceFormControl.value !== '') {
             const barcode = BarcodePurifier.purify(this.addDeviceFormControl.value)
 
-            this.scannableService.getScannableByBarcode(barcode).subscribe(scannable => {
-                    if (scannable === undefined) {
-                        this.showNotification('Nem találtam eszközt ilyen vonalkóddal!', 'warning');
-                    } else if (scannable['type_'] === 'device') {
-                        const device = scannable as Device;
+            if (this.barcodeMode === 'add') {
+                this.scannableService.getScannableByBarcode(barcode).subscribe(scannable => {
+                        if (scannable === undefined) {
+                            this.showNotification('Nem találtam eszközt ilyen vonalkóddal!', 'warning');
+                        } else if (scannable['type_'] === 'device') {
+                            const device = scannable as Device;
 
-                        if (device.quantity > 1) {
-                            const editModal = this.modalService.open(DeviceToRentModalComponent, {size: 'md', windowClass: 'modal-holder'});
-                            editModal.componentInstance.device = device;
+                            if (device.quantity > 1) {
+                                const editModal = this.modalService.open(DeviceToRentModalComponent, {size: 'md', windowClass: 'modal-holder'});
+                                editModal.componentInstance.device = device;
 
-                            editModal.result.catch(result => {
-                                if (result !== null && result as number !== 0) {
-                                    this.addScannableToRent(device, result);
-                                }
-                            })
+                                editModal.result.catch(result => {
+                                    if (result !== null && result as number !== 0) {
+                                        this.addScannableToRent(device, result);
+                                    }
+                                })
+                            } else {
+                                this.addScannableToRent(device, 1);
+                            }
+                        } else if (scannable['type_'] === 'compositeItem') {
+                            const composite = scannable as CompositeItem;
+                            this.addScannableToRent(composite, 1);
                         } else {
-                            this.addScannableToRent(device, 1);
+                            this.showNotification('Nem találok ilyet!', 'warning');
                         }
-                    } else if (scannable['type_'] === 'compositeItem') {
-                        const composite = scannable as CompositeItem;
-                        this.addScannableToRent(composite, 1);
-                    } else {
-                        this.showNotification('Nem találok ilyet!', 'warning');
-                    }
-                },
-                error => {
-                    this.showNotification('Nem találtam eszközt ilyen vonalkóddal!', 'warning');
-                });
+                    },
+                    error => {
+                        this.showNotification('Nem találtam eszközt ilyen vonalkóddal!', 'warning');
+                    });
+            } else if (this.barcodeMode === 'pack') {
+                const rentItemToChange = this.rent.rentItems.find(item => item.scannable.barcode === barcode);
 
+                if (rentItemToChange === undefined) {
+                    this.showNotification('Nem találtam eszközt a listában ilyen vonalkóddal!', 'warning');
+                } else {
+                    if (rentItemToChange.backStatus === BackStatus.OUT) {
+                        this.showNotification(`${rentItemToChange.scannable.name} ár kinn!`, 'warning');
+                    } else {
+                        this.togglePackedStatus(rentItemToChange);
+                    }
+                }
+            } else if (this.barcodeMode === 'back') {
+                const rentItemToChange = this.rent.rentItems.find(item => item.scannable.barcode === barcode);
+
+                if (rentItemToChange === undefined) {
+                    this.showNotification('Nem találtam eszközt a listában ilyen vonalkóddal!', 'warning');
+                } else {
+                    if (rentItemToChange.backStatus === BackStatus.BACK) {
+                        this.showNotification(`${rentItemToChange.scannable.name} már visszavéve!`, 'warning');
+                    } else {
+                        this.toggleBackStatus(rentItemToChange);
+                    }
+                }
+            }
 
             this.addDeviceFormControl.setValue('');
         } else {
-            this.showNotification('Add meg a vonalkódot!', 'warning');
+            this
+                .showNotification(
+                    'Add meg a vonalkódot!'
+                    ,
+                    'warning'
+                );
         }
     }
 
@@ -234,6 +265,7 @@ export class EditRentComponent implements OnInit {
         this.rent.destination = value.destination.toString();
         this.rent.issuer = value.issuer.toString();
         this.rent.renter = value.renter.toString();
+        this.rent.type = value.rentType === 'COMPLEX' ? RentType.COMPLEX : RentType.SIMPLE;
         this.rent.outDate = value.outDate;
         this.rent.expBackDate = value.expBackDate;
         this.rent.actBackDate = value.actBackDate;
@@ -265,19 +297,6 @@ export class EditRentComponent implements OnInit {
         }
     }
 
-    formatDate(dateString: string): string {
-        if (dateString.length === 0) {
-            return '';
-        }
-        const date = new Date(Date.parse(dateString));
-        return `${date.getFullYear()}.${date.getMonth() + 1}.${date.getDate()}.`;
-    }
-
-    createDateFromString(date: string) {
-        const splitDate = date.split('.');
-        return new Date(+splitDate[0], +splitDate[1] - 1, +splitDate[2], 0, 0, 0, 0);
-    }
-
     delete(rent: Rent) {
         this.rentService.deleteRent(rent).subscribe(rent_ => {
                 this.showNotification('Bérlés törölve', 'success');
@@ -286,9 +305,9 @@ export class EditRentComponent implements OnInit {
         )
     }
 
-    packedChanged(checkboxChange: MatCheckboxChange, rentItem: RentItem) {
+    private togglePackedStatus(rentItem: RentItem) {
         if (rentItem.backStatus !== BackStatus.BACK) {
-            if (checkboxChange.checked) {
+            if (rentItem.backStatus === BackStatus.PLANNED) {
                 rentItem.backStatus = BackStatus.OUT;
             } else {
                 rentItem.backStatus = BackStatus.PLANNED;
@@ -297,23 +316,31 @@ export class EditRentComponent implements OnInit {
             this.rentService.updateInRent(this.rent.id, rentItem).subscribe(
                 rent => {
                     this.rent = rent;
+                    this.filteredRentItems.find(item => item.id === rentItem.id).backStatus = rentItem.backStatus;
                     this.showNotification('Sikeresen mentve!', 'success');
                 },
                 error => {
-                    this.showNotification('Nem sikerült menteni :(', 'warning')
-                    checkboxChange.source.checked = false;
+                    this.showNotification('Nem sikerült menteni :(', 'warning');
                 }
             )
         } else {
+            rentItem.backStatus = BackStatus.BACK;
+            this.filteredRentItems.find(item => item.id === rentItem.id).backStatus = rentItem.backStatus;
             this.showNotification('Már visszajött, nem tudod nem elpakolni :D', 'warning')
-            checkboxChange.source.checked = true;
         }
     }
 
-    backChanged(checkboxChange: MatCheckboxChange, rentItem: RentItem) {
-        if (rentItem.backStatus === BackStatus.OUT ||
+    packedChanged(checkboxChange: MatCheckboxChange, rentItem: RentItem) {
+        this.togglePackedStatus(rentItem);
+
+        checkboxChange.source.checked = rentItem.backStatus === BackStatus.BACK ||
+            rentItem.backStatus === BackStatus.OUT;
+    }
+
+    private toggleBackStatus(rentItem: RentItem) {
+        if ((rentItem.backStatus === BackStatus.OUT || this.rent.type === RentType.SIMPLE) ||
             rentItem.backStatus === BackStatus.BACK) {
-            if (checkboxChange.checked) {
+            if (rentItem.backStatus === BackStatus.OUT) {
                 rentItem.backStatus = BackStatus.BACK;
             } else {
                 rentItem.backStatus = BackStatus.OUT;
@@ -322,18 +349,24 @@ export class EditRentComponent implements OnInit {
             this.rentService.updateInRent(this.rent.id, rentItem).subscribe(
                 rent => {
                     this.rent = rent;
+                    this.filteredRentItems.find(item => item.id === rentItem.id).backStatus = rentItem.backStatus;
                     this.showNotification('Sikeresen mentve!', 'success');
                 },
                 error => {
                     this.showNotification('Nem sikerült menteni :(', 'warning')
-                    checkboxChange.source.checked = false;
                 }
             )
         } else {
+            rentItem.backStatus = BackStatus.PLANNED;
+            this.filteredRentItems.find(item => item.id === rentItem.id).backStatus = rentItem.backStatus;
             this.showNotification('Még elpakolva sincs, hogy hoztad volna vissza!?', 'warning')
-            checkboxChange.source.checked = false;
         }
+    }
 
+    backChanged(checkboxChange: MatCheckboxChange, rentItem: RentItem) {
+        this.toggleBackStatus(rentItem);
+
+        checkboxChange.source.checked = rentItem.backStatus === BackStatus.BACK;
     }
 
     quantityChanged(event, rentItem: RentItem) {
@@ -399,20 +432,6 @@ export class EditRentComponent implements OnInit {
         this.rent.actBackDate = this.rentDataForm.value.actBackDate;
     }
 
-    typeChanged(event: any) {
-        switch (event) {
-            case 'SIMPLE':
-                this.rent.type = RentType.SIMPLE;
-                break;
-            case 'COMPLEX':
-                this.rent.type = RentType.COMPLEX;
-                break;
-            default:
-                this.rent.type = RentType.SIMPLE;
-                break;
-        }
-    }
-
     sendComment() {
         const commentBody = this.newCommentForm.value.commentBody;
 
@@ -443,13 +462,37 @@ export class EditRentComponent implements OnInit {
         this.rent.comments.sort((a, b) => a.dateOfWriting > b.dateOfWriting ? -1 : 1)
     }
 
+    pack($event: MouseEvent) {
+        if (this.barcodeMode === 'pack') {
+            this.barcodeMode = 'add';
+            this.barcodePlaceholder = 'Hozzáadandó vonalkódja';
+        } else {
+            this.barcodeMode = 'pack';
+            this.barcodePlaceholder = 'Elcsomagolt eszköz vonalkódja';
+        }
+    }
+
+    back($event: MouseEvent) {
+        if (this.barcodeMode === 'back') {
+            this.barcodeMode = 'add';
+            this.barcodePlaceholder = 'Hozzáadandó vonalkódja'
+        } else {
+            this.barcodeMode = 'back';
+            this.barcodePlaceholder = 'Visszaérkezett eszköz vonalkódja';
+        }
+    }
+
+    filterRentItems($event: any) {
+        this.filteredRentItems = this._filterRentItems(this.rent.rentItems, $event);
+    }
+
     showNotification(message_: string, type: string) {
         $['notify']({
             icon: 'add_alert',
             message: message_
         }, {
             type: type,
-            timer: 1000,
+            timer: 500,
             placement: {
                 from: 'top',
                 align: 'right'
