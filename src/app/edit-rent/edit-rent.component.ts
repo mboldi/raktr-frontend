@@ -2,7 +2,7 @@ import * as $ from 'jquery';
 import {Rent} from '../model/Rent';
 import {RentService} from '../services/rent.service';
 import {Title} from '@angular/platform-browser';
-import {Component, OnInit} from '@angular/core';
+import {Component, ElementRef, HostListener, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {RentItem} from '../model/RentItem';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
@@ -29,13 +29,14 @@ import {Comment} from '../model/Comment';
     styleUrls: ['./edit-rent.component.css']
 })
 export class EditRentComponent implements OnInit {
+    @ViewChild('barcodeInput') input: ElementRef;
+
     rent: Rent;
     filteredRentItems: RentItem[];
     currentOutDate: Date = new Date();
 
     searchControl = new FormControl();
     addDeviceFormControl = new FormControl();
-    addCommentFormControl = new FormControl();
     rentDataForm: FormGroup;
     newCommentForm: FormGroup;
     fullAccessMember = false;
@@ -464,21 +465,17 @@ export class EditRentComponent implements OnInit {
 
     pack($event: MouseEvent) {
         if (this.barcodeMode === 'pack') {
-            this.barcodeMode = 'add';
-            this.barcodePlaceholder = 'Hozzáadandó vonalkódja';
+            this.selectBarcodeMode('add')
         } else {
-            this.barcodeMode = 'pack';
-            this.barcodePlaceholder = 'Elcsomagolt eszköz vonalkódja';
+            this.selectBarcodeMode('pack');
         }
     }
 
     back($event: MouseEvent) {
         if (this.barcodeMode === 'back') {
-            this.barcodeMode = 'add';
-            this.barcodePlaceholder = 'Hozzáadandó vonalkódja'
+            this.selectBarcodeMode('add')
         } else {
-            this.barcodeMode = 'back';
-            this.barcodePlaceholder = 'Visszaérkezett eszköz vonalkódja';
+            this.selectBarcodeMode('back');
         }
     }
 
@@ -499,5 +496,44 @@ export class EditRentComponent implements OnInit {
             },
             z_index: 2000
         })
+    }
+
+    @HostListener('document:keyDown.control.a', ['$event'])
+    selectAdd(event: KeyboardEvent) {
+        event.preventDefault();
+
+        this.selectBarcodeMode('add');
+    }
+
+    @HostListener('document:keyDown.control.b', ['$event'])
+    selectBack(event: KeyboardEvent) {
+        event.preventDefault();
+
+        this.selectBarcodeMode('back');
+    }
+
+    @HostListener('document:keyDown.control.p', ['$event'])
+    selectPack(event: KeyboardEvent) {
+        event.preventDefault();
+
+        this.selectBarcodeMode('pack');
+    }
+
+    private selectBarcodeMode(mode: string) {
+        this.barcodeMode = mode;
+
+        switch (mode) {
+            case 'add':
+                this.barcodePlaceholder = 'Hozzáadandó vonalkódja';
+                break;
+            case 'pack':
+                this.barcodePlaceholder = 'Elpakolt eszköz vonalkódja';
+                break;
+            case 'back':
+                this.barcodePlaceholder = 'Visszavett eszköz vonalkódja';
+                break;
+        }
+
+        this.input.nativeElement.focus();
     }
 }
