@@ -10,6 +10,10 @@ import {EditDeviceModalComponent} from '../edit-device-modal/edit-device-modal.c
 import {EditCompositeModalComponent} from '../edit-composite-modal/edit-composite-modal.component';
 import * as $ from 'jquery';
 import {Sort} from '@angular/material/sort';
+import {PageEvent} from '@angular/material/paginator';
+import {Category} from '../model/Category';
+import {DeviceStatus} from '../model/DeviceStatus';
+import {Location} from '../model/Location';
 
 @Component({
     selector: 'app-table-list',
@@ -22,8 +26,14 @@ export class DevicesComponent implements OnInit {
 
     searchControl = new FormControl();
 
+    pageEvent: PageEvent;
+
     devices: Device[];
     sortedDevices: Device[];
+    pagedDevices: Device[];
+
+    currDevicePageIndex = 0;
+    currDevicePageSize = 25;
 
     compositeItems: CompositeItem[];
     sortedComposites: CompositeItem[];
@@ -43,14 +53,19 @@ export class DevicesComponent implements OnInit {
         this.deviceService.getDevices().subscribe(devices => {
             this.devices = devices;
             this.sortedDevices = devices;
+            this.setDevicePage();
 
             this.searchControl.valueChanges.subscribe(value => {
                 this.sortedDevices = this.devices.filter(device =>
                     device.name.toLowerCase().includes(value.toLowerCase()) ||
                     device.maker.toLowerCase().includes(value.toLowerCase()) ||
                     device.type.toLowerCase().includes(value.toLowerCase()) ||
+                    device.location.name.toLowerCase().includes(value.toLowerCase()) ||
+                    device.category.name.toLowerCase().includes(value.toLowerCase()) ||
                     device.textIdentifier.toLowerCase().includes(value.toLowerCase()) ||
                     device.barcode.toLowerCase().includes(value.toLowerCase()));
+
+                this.setDevicePage();
             });
         });
 
@@ -62,6 +77,21 @@ export class DevicesComponent implements OnInit {
                 compositeItem.textIdentifier.toLowerCase().includes(value) ||
                 compositeItem.barcode.toLowerCase().includes(value))
         });
+    }
+
+    private setDevicePage() {
+        for (; this.sortedDevices.length < this.currDevicePageIndex * this.currDevicePageSize; this.currDevicePageIndex--) {
+        }
+
+        this.pagedDevices = this.sortedDevices.slice(this.currDevicePageIndex * this.currDevicePageSize,
+            (this.currDevicePageIndex + 1) * this.currDevicePageSize);
+    }
+
+    pageChanged(event: PageEvent) {
+        this.currDevicePageIndex = event.pageIndex;
+        this.currDevicePageSize = event.pageSize;
+
+        this.setDevicePage();
     }
 
     getComposites() {
@@ -106,6 +136,8 @@ export class DevicesComponent implements OnInit {
                     return 0;
             }
         });
+
+        this.setDevicePage();
     }
 
     sortComposites(sort: Sort) {
@@ -147,6 +179,8 @@ export class DevicesComponent implements OnInit {
             this.deviceService.getDevices().subscribe(devices => {
                 this.devices = devices;
                 this.sortedDevices = devices;
+
+                this.setDevicePage();
             });
         })
     }
@@ -161,6 +195,8 @@ export class DevicesComponent implements OnInit {
                 this.deviceService.getDevices().subscribe(devices => {
                     this.devices = devices;
                     this.sortedDevices = devices;
+
+                    this.setDevicePage();
                 });
             }
         })
@@ -192,6 +228,8 @@ export class DevicesComponent implements OnInit {
                         } else {
                             this.devices[index] = (result as Device);
                         }
+
+                        this.setDevicePage();
                     }
                 });
                 break;

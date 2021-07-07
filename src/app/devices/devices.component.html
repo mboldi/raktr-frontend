@@ -49,6 +49,11 @@
                         <div class="tab-content">
                             <div class="tab-pane active" id="devices">
                                 <div class="table-responsive">
+                                    <mat-paginator [length]="sortedDevices.length" [pageSize]="25"
+                                                   [pageSizeOptions]="[25, 50, 100]"
+                                                   [pageIndex]="currDevicePageIndex"
+                                                   (page)="pageChanged($event)">
+                                    </mat-paginator>
                                     <table class="table" matSort (matSortChange)="sortDevices($event)">
                                         <thead class="text-orange">
                                         <th mat-sort-header="name">
@@ -83,7 +88,7 @@
                                         </th>-->
                                         </thead>
                                         <tbody>
-                                        <tr class="device-row" *ngFor="let device of sortedDevices">
+                                        <tr class="device-row" *ngFor="let device of pagedDevices">
                                             <td (click)="editDevice(device)">
                                                 {{device.name}}
                                             </td>
