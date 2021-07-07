@@ -52,7 +52,7 @@
                                     <mat-paginator [length]="sortedDevices.length" [pageSize]="25"
                                                    [pageSizeOptions]="[25, 50, 100]"
                                                    [pageIndex]="currDevicePageIndex"
-                                                   (page)="pageChanged($event)">
+                                                   (page)="devicePageChanged($event)">
                                     </mat-paginator>
                                     <table class="table" matSort (matSortChange)="sortDevices($event)">
                                         <thead class="text-orange">
@@ -82,10 +82,7 @@
                                         </th>
                                         <th>
                                             Másolás
-                                        </th><!--
-                                        <th>
-                                            Szerkesztés
-                                        </th>-->
+                                        </th>
                                         </thead>
                                         <tbody>
                                         <tr class="device-row" *ngFor="let device of pagedDevices">
@@ -119,13 +116,7 @@
                                                         class="material-icons pb-0 pt-0"
                                                         (click)="copyDevice(device)">content_copy</i>
                                                 </button>
-                                            </td><!--
-                                            <td class="pb-0 pt-0">
-                                                <button mat-raised-button type="button"
-                                                        class="btn btn-info pull-center btn-just-icon pb-0 pt-0">
-                                                    <i class="material-icons" (click)="editDevice(device)">create</i>
-                                                </button>
-                                            </td>-->
+                                            </td>
                                         </tr>
                                         </tbody>
                                     </table>
@@ -133,6 +124,11 @@
                             </div>
                             <div class="tab-pane" id="composites">
                                 <div class="table-responsive">
+                                    <mat-paginator [length]="sortedComposites.length" [pageSize]="25"
+                                                   [pageSizeOptions]="[25, 50, 100]"
+                                                   [pageIndex]="currCompositePageIndex"
+                                                   (page)="compositePageChanged($event)">
+                                    </mat-paginator>
                                     <table class="table" matSort (matSortChange)="sortComposites($event)">
                                         <thead class="text-orange">
                                         <th mat-sort-header="name">
@@ -152,14 +148,11 @@
                                         </th>
                                         <th mat-sort-header="textId">
                                             Azonosító
-                                        </th><!--
-                                        <th>
-                                            Szerkesztés
-                                        </th>-->
+                                        </th>
                                         </thead>
                                         <tbody>
                                         <tr class="device-row"
-                                            *ngFor="let compositeItem of sortedComposites">
+                                            *ngFor="let compositeItem of pagedComposites">
                                             <td (click)="editCompositeItem(compositeItem)">
                                                 {{compositeItem.name}}
                                             </td>
@@ -177,14 +170,7 @@
                                             </td>
                                             <td (click)="editCompositeItem(compositeItem)">
                                                 {{compositeItem.textIdentifier}}
-                                            </td><!--
-                                            <td class="pb-0 pt-0">
-                                                <button mat-raised-button type="button"
-                                                        class="btn btn-info pull-center btn-just-icon"
-                                                        (click)="editCompositeItem(compositeItem)">
-                                                    <mat-icon>create</mat-icon>
-                                                </button>
-                                            </td>-->
+                                            </td>
                                         </tr>
                                         </tbody>
                                     </table>

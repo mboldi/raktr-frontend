@@ -10,23 +10,23 @@ import {EditDeviceModalComponent} from '../edit-device-modal/edit-device-modal.c
 import {EditCompositeModalComponent} from '../edit-composite-modal/edit-composite-modal.component';
 import * as $ from 'jquery';
 import {Sort} from '@angular/material/sort';
-import {PageEvent} from '@angular/material/paginator';
+import {MatPaginatorIntl, PageEvent} from '@angular/material/paginator';
 import {Category} from '../model/Category';
 import {DeviceStatus} from '../model/DeviceStatus';
 import {Location} from '../model/Location';
+import {HunPaginator} from '../helpers/hun-paginator';
 
 @Component({
     selector: 'app-table-list',
     templateUrl: './devices.component.html',
     styleUrls: ['./devices.component.css'],
-    providers: [Title]
+    providers: [Title,
+        {provide: MatPaginatorIntl, useClass: HunPaginator}]
 })
 export class DevicesComponent implements OnInit {
     currentTab = 'devices';
 
     searchControl = new FormControl();
-
-    pageEvent: PageEvent;
 
     devices: Device[];
     sortedDevices: Device[];
@@ -37,6 +37,10 @@ export class DevicesComponent implements OnInit {
 
     compositeItems: CompositeItem[];
     sortedComposites: CompositeItem[];
+    pagedComposites: CompositeItem[];
+
+    currCompositePageIndex = 0;
+    currCompositePageSize = 25;
 
     constructor(private title: Title,
                 private deviceService: DeviceService,
@@ -87,11 +91,26 @@ export class DevicesComponent implements OnInit {
             (this.currDevicePageIndex + 1) * this.currDevicePageSize);
     }
 
-    pageChanged(event: PageEvent) {
+    devicePageChanged(event: PageEvent) {
         this.currDevicePageIndex = event.pageIndex;
         this.currDevicePageSize = event.pageSize;
 
         this.setDevicePage();
+    }
+
+    private setCompositePage() {
+        for (; this.sortedComposites.length < this.currCompositePageIndex * this.currCompositePageSize; this.currCompositePageIndex--) {
+        }
+
+        this.pagedComposites = this.sortedComposites.slice(this.currCompositePageIndex * this.currCompositePageSize,
+            (this.currCompositePageIndex + 1) * this.currCompositePageSize);
+    }
+
+    compositePageChanged(event: PageEvent) {
+        this.currCompositePageIndex = event.pageIndex;
+        this.currCompositePageSize = event.pageSize;
+
+        this.setCompositePage();
     }
 
     getComposites() {
@@ -100,6 +119,8 @@ export class DevicesComponent implements OnInit {
         this.compositeService.getCompositeItems().subscribe(compositeItems => {
             this.compositeItems = compositeItems;
             this.sortedComposites = compositeItems;
+
+            this.setCompositePage();
         });
     }
 
@@ -167,6 +188,8 @@ export class DevicesComponent implements OnInit {
                     return 0;
             }
         });
+
+        this.setCompositePage();
     }
 
     copyDevice(device: Device) {
@@ -261,6 +284,28 @@ export class DevicesComponent implements OnInit {
             },
             z_index: 2000
         })
+    }
+
+    addLotOfDevices(start: number, num: number) {
+        for (let i = start; i < start + num; i++) {
+            this.deviceService.addDevice(new Device(
+                -1,
+                `name:_${i}`,
+                (i).toString().padStart(7, '0'),
+                `azonos_${i}`,
+                false,
+                `gyartooo_${i}`,
+                `tippuuuuus_${i}`,
+                `kredenc_${i}`,
+                1000 * (i % 5) + 2 * i,
+                100 * (i % 5) + 2 * i,
+                new Location(-1, 'almaaa'),
+                DeviceStatus.GOOD,
+                new Category(-1, 'asd'),
+            )).subscribe(device => {
+                console.log(`${device.name} added`);
+            })
+        }
     }
 }
 

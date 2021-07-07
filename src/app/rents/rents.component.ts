@@ -5,18 +5,24 @@ import {Rent} from '../model/Rent';
 import {RentService} from '../services/rent.service';
 import {FormControl} from '@angular/forms';
 import {map, startWith} from 'rxjs/operators';
-import {Observable} from 'rxjs';
 import {Router} from '@angular/router';
+import {MatPaginatorIntl, PageEvent} from '@angular/material/paginator';
+import {HunPaginator} from '../helpers/hun-paginator';
 
 @Component({
     selector: 'app-rents',
     templateUrl: './rents.component.html',
     styleUrls: ['./rents.component.css'],
-    providers: [Title]
+    providers: [Title,
+        {provide: MatPaginatorIntl, useClass: HunPaginator}]
 })
 export class RentsComponent implements OnInit {
     rents: Rent[] = [];
-    filteredRents: Observable<Rent[]>;
+    filteredRents: Rent[];
+    pagedRents: Rent[];
+
+    currPageIndex = 0;
+    currPageSize = 25;
 
     currRent: Rent;
     rentSearchControl = new FormControl();
@@ -40,13 +46,15 @@ export class RentsComponent implements OnInit {
                 return aDate.getTime() - bDate.getTime();
             }));
             this.rentSearchControl.setValue('');
+
+            this.setPage();
         });
 
-        this.filteredRents = this.rentSearchControl.valueChanges
-            .pipe(
-                startWith(''),
-                map(value => this._filterDevices(this.rents, value))
-            );
+        this.rentSearchControl.valueChanges.subscribe(value => {
+            this.filteredRents = this._filterDevices(this.rents, value);
+
+            this.setPage();
+        });
     }
 
     private _filterDevices(rents_: Rent[], value: string): Rent[] {
@@ -55,6 +63,21 @@ export class RentsComponent implements OnInit {
         return rents_.filter(rent => rent.destination.toLowerCase().includes(filterValue) ||
             rent.issuer.toLowerCase().includes(filterValue) ||
             rent.renter.toLowerCase().includes(filterValue));
+    }
+
+    private setPage() {
+        for (; this.filteredRents.length < this.currPageIndex * this.currPageSize; this.currPageIndex--) {
+        }
+
+        this.pagedRents = this.filteredRents.slice(this.currPageIndex * this.currPageSize,
+            (this.currPageIndex + 1) * this.currPageSize);
+    }
+
+    pageChanged(event: PageEvent) {
+        this.currPageIndex = event.pageIndex;
+        this.currPageSize = event.pageSize;
+
+        this.setPage();
     }
 
     onSelect(rent: Rent) {

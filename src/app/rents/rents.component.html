@@ -26,6 +26,11 @@
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
+                            <mat-paginator [length]="filteredRents.length" [pageSize]="10"
+                                           [pageSizeOptions]="[10, 25, 50, 100]"
+                                           [pageIndex]="currPageIndex"
+                                           (page)="pageChanged($event)">
+                            </mat-paginator>
                             <table class="table">
                                 <thead class="text-orange">
                                 <th>
@@ -54,7 +59,7 @@
                                 </th>
                                 </thead>
                                 <tbody>
-                                <tr class="rent-row" *ngFor="let rent of filteredRents | async" (click)="openRent(rent.id)">
+                                <tr class="rent-row" *ngFor="let rent of pagedRents" (click)="openRent(rent.id)">
                                     <td>
                                         {{rent.issuer}}
                                     </td>
