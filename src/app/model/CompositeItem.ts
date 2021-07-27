@@ -32,7 +32,12 @@ export class CompositeItem extends Scannable {
                 deviceJson.location,
                 deviceJson.status,
                 deviceJson.category,
-                deviceJson.quantity
+                deviceJson.quantity,
+                deviceJson.aquiredFrom,
+                deviceJson.dateOfAcquisition,
+                deviceJson.owner,
+                deviceJson.endOfWarranty,
+                deviceJson.comment
             )));
         } else {
             compositeItem1.devices = [];

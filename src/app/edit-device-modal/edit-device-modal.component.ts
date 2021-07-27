@@ -16,6 +16,8 @@ import {ScannableService} from '../services/scannable.service';
 import {barcodeValidator} from '../helpers/barcode.validator';
 import {textIdValidator} from '../helpers/textId.validator';
 import {DeviceStatus} from '../model/DeviceStatus';
+import {Owner} from '../model/Owner';
+import {OwnerService} from '../services/owner.service';
 
 @Component({
     selector: 'app-edit-device-modal',
@@ -30,17 +32,21 @@ export class EditDeviceModalComponent implements OnInit {
     filteredCategoryOptions: Category[];
     locationOptions: Location[];
     filteredLocationOptions: Location[];
+    ownerOptions: Owner[];
+    filteredOwnerOptions: Owner[];
     deviceForm: FormGroup;
     admin = false;
     deleteConfirmed = false;
 
     currentCategoryInput = '';
     currentLocationInput = '';
+    currentOwnerInput = '';
 
     constructor(public activeModal: NgbActiveModal,
                 private fb: FormBuilder,
                 private locationService: LocationService,
                 private categoryService: CategoryService,
+                private ownerService: OwnerService,
                 private deviceService: DeviceService,
                 private scannableService: ScannableService,
                 private userService: UserService,
@@ -63,7 +69,11 @@ export class EditDeviceModalComponent implements OnInit {
             textIdentifier: ['', Validators.required, textIdValidator(this.scannableService, this.device.id)],
             weight: ['0'],
             value: ['0'],
-            quantity: ['1']
+            quantity: ['1'],
+            acquiredFrom: [''],
+            dateOfAcquisition: [new Date()],
+            owner: [''],
+            comment: ['']
         });
 
         if (this.device.id === null || this.device.id === -1) {
@@ -105,6 +115,18 @@ export class EditDeviceModalComponent implements OnInit {
                 this.filteredLocationOptions = this._filterLocations(locations, this.currentLocationInput);
             });
 
+        this.deviceForm
+            .get('owner')
+            .valueChanges
+            .pipe(
+                tap(value => this.currentOwnerInput = value),
+                switchMap(value => this.ownerService.getOwners())
+            )
+            .subscribe(owners => {
+                this.ownerOptions = owners;
+                this.filteredOwnerOptions = this._filterOwners(owners, this.currentOwnerInput);
+            });
+
         this.deviceForm.get('barcode').markAsTouched();
         this.deviceForm.get('textIdentifier').markAsTouched();
     }
@@ -121,7 +143,11 @@ export class EditDeviceModalComponent implements OnInit {
             textIdentifier: this.device.textIdentifier,
             weight: this.device.weight,
             value: this.device.value,
-            quantity: this.device.quantity
+            quantity: this.device.quantity,
+            acquiredFrom: this.device.aquiredFrom,
+            dateOfAcquisition: this.device.dateOfAcquisition,
+            owner: this.device.owner === null ? '' : this.device.owner.name,
+            comment: this.device.comment
         });
     }
 
@@ -137,6 +163,12 @@ export class EditDeviceModalComponent implements OnInit {
         return locations.filter(location => location.name.toLowerCase().includes(filterValue));
     }
 
+    private _filterOwners(owners: Owner[], value: string) {
+        const filterValue = value.toLowerCase();
+
+        return owners.filter(owner => owner.name.toLowerCase().includes(filterValue));
+    }
+
     save() {
         const values = this.deviceForm.value;
         this.device.name = values.name.toString();
@@ -150,6 +182,12 @@ export class EditDeviceModalComponent implements OnInit {
         this.device.weight = values.weight;
         this.device.value = values.value;
         this.device.quantity = values.quantity;
+        this.device.aquiredFrom = values.acquiredFrom;
+        this.device.dateOfAcquisition = values.dateOfAcquisition;
+        this.device.owner = new Owner(-1, values.owner.toString());
+        this.device.comment = values.comment.toString();
+
+        console.log(this.device.toJson());
 
         if (this.device.id === -1) {
             // new
