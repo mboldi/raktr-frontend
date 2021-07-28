@@ -11,6 +11,10 @@ export class Owner {
         )
     }
 
+    static toJsonString(owner: Owner): string {
+        return `{\"Owner\": ${JSON.stringify(owner)}`;
+    }
+
     constructor(id: number, name: string, inSchInventory: boolean = false) {
         this.id = id;
         this.name = name;
