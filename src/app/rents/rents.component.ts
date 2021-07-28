@@ -40,8 +40,8 @@ export class RentsComponent implements OnInit {
             this.rents = rents;
 
             this.rents = this.rents.sort(((a, b) => {
-                const aDate = new Date(a.actBackDate === null ? a.actBackDate : a.expBackDate);
-                const bDate = new Date(b.actBackDate === null ? b.actBackDate : b.expBackDate);
+                const aDate = new Date(a.backDate === null ? a.backDate : a.outDate);
+                const bDate = new Date(b.backDate === null ? b.backDate : b.outDate);
 
                 return aDate.getTime() - bDate.getTime();
             }));
@@ -61,7 +61,7 @@ export class RentsComponent implements OnInit {
         const filterValue = value.toLowerCase();
 
         return rents_.filter(rent => rent.destination.toLowerCase().includes(filterValue) ||
-            rent.issuer.toLowerCase().includes(filterValue) ||
+            rent.issuer.nickName.toLowerCase().includes(filterValue) ||
             rent.renter.toLowerCase().includes(filterValue));
     }
 

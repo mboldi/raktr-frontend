@@ -76,8 +76,8 @@
                                         {{rent.expBackDate | date:'yyyy. MM. dd.'}}
                                     </td>
                                     <td>
-                                        <div *ngIf="rent.actBackDate === null">Nem jött még vissza</div>
-                                        {{rent.actBackDate | date:'yyyy. MM. dd.'}}
+                                        <div *ngIf="rent.backDate === null">Nem jött még vissza</div>
+                                        {{rent.backDate | date:'yyyy. MM. dd.'}}
                                     </td>
                                     <td>
                                         {{rent.rentItems.length}}

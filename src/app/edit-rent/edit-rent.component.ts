@@ -114,8 +114,7 @@ export class EditRentComponent implements OnInit {
             issuer: this.rent.issuer,
             renter: this.rent.renter,
             outDate: this.rent.outDate,
-            expBackDate: this.rent.expBackDate,
-            actBackDate: this.rent.actBackDate
+            actBackDate: this.rent.backDate
         });
     }
 
@@ -268,8 +267,7 @@ export class EditRentComponent implements OnInit {
         this.rent.renter = value.renter.toString();
         this.rent.type = value.rentType === 'COMPLEX' ? RentType.COMPLEX : RentType.SIMPLE;
         this.rent.outDate = value.outDate;
-        this.rent.expBackDate = value.expBackDate;
-        this.rent.actBackDate = value.actBackDate;
+        this.rent.backDate = value.actBackDate;
     }
 
     save() {
@@ -385,7 +383,7 @@ export class EditRentComponent implements OnInit {
     }
 
     isFinalizable() {
-        if (this.rent.actBackDate === null) {
+        if (this.rent.backDate === null) {
             this.whyNotFinalizable = 'Nincs megadva visszaérkezési dátum!';
             return false;
         }
@@ -402,18 +400,18 @@ export class EditRentComponent implements OnInit {
         return true;
     }
 
-    finalize() {
+    close() {
         this.setRentFields();
-        this.rent.isFinalized = true;
+        this.rent.isClosed = true;
 
         this.rentService.finalizeRent(this.rent).subscribe(rent => {
             this.rent = rent;
         });
     }
 
-    unfinalize() {
+    open() {
         this.setRentFields();
-        this.rent.isFinalized = false;
+        this.rent.isClosed = false;
 
         this.rentService.finalizeRent(this.rent).subscribe(rent => {
             this.rent = rent;
@@ -430,7 +428,7 @@ export class EditRentComponent implements OnInit {
     }
 
     setActBackDate($event: MatDatepickerInputEvent<Date>) {
-        this.rent.actBackDate = this.rentDataForm.value.actBackDate;
+        this.rent.backDate = this.rentDataForm.value.actBackDate;
     }
 
     sendComment() {

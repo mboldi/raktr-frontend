@@ -1,21 +1,21 @@
 import {RentItem} from './RentItem';
 import {RentType} from './RentType';
 import {Comment} from './Comment';
+import {User} from './User';
 
 export class Rent {
     id: number;
     type: RentType;
     destination: string;
     renter: string;
-    issuer: string;
+    issuer: User;
     outDate: Date;
-    expBackDate: Date;
-    actBackDate: Date;
-    isFinalized: boolean;
+    backDate: Date;
+    isClosed: boolean;
     rentItems: RentItem[];
     comments: Comment[];
 
-    static toJsonString(rent: Rent): string {
+    static toJsonWithoutRoot(rent: Rent): string {
         const rentJson = JSON.parse(JSON.stringify(rent));
 
         if (rentJson.rentItems !== undefined) {
@@ -29,7 +29,11 @@ export class Rent {
             })
         }
 
-        return `{\"Rent\": ${JSON.stringify(rentJson)}}`;
+        return rentJson;
+    }
+
+    static toJsonString(rent: Rent): string {
+        return `{\"Rent\": ${JSON.stringify(this.toJsonWithoutRoot(rent))}}`;
     }
 
     static fromJson(rent: Rent): Rent {
@@ -39,9 +43,8 @@ export class Rent {
         newRent.issuer = rent.issuer;
         newRent.renter = rent.renter;
         newRent.outDate = rent.outDate;
-        newRent.expBackDate = rent.expBackDate;
-        newRent.actBackDate = rent.actBackDate;
-        newRent.isFinalized = rent.isFinalized;
+        newRent.backDate = rent.backDate;
+        newRent.isClosed = rent.isClosed;
         newRent.rentItems = [];
 
         switch (rent.type.toString()) {
@@ -68,8 +71,8 @@ export class Rent {
         return newRent;
     }
 
-    constructor(id: number = -1, rentType: RentType = RentType.SIMPLE, destination: string = '', renter: string = '', issuer: string = '',
-                outDate: Date = null, expBackDate: Date = null, actBackDate: Date = null, isFinalized: boolean = false,
+    constructor(id: number = -1, rentType: RentType = RentType.SIMPLE, destination: string = '', renter: string = '', issuer: User = null,
+                outDate: Date = null, expBackDate: Date = null, actBackDate: Date = null, isClosed: boolean = false,
                 rentItems: RentItem[] = []) {
         this.id = id;
         this.type = rentType;
@@ -77,9 +80,8 @@ export class Rent {
         this.renter = renter;
         this.issuer = issuer;
         this.outDate = outDate;
-        this.expBackDate = expBackDate;
-        this.actBackDate = actBackDate;
-        this.isFinalized = isFinalized;
+        this.backDate = actBackDate;
+        this.isClosed = isClosed;
         this.rentItems = rentItems;
     }
 

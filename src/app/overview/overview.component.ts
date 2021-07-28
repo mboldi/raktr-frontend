@@ -40,8 +40,8 @@ export class OverviewComponent implements OnInit {
                 this.rents = rents;
 
                 this.rents = this.rents.sort(((a, b) => {
-                    const aDate = new Date(a.actBackDate === null ? a.actBackDate : a.expBackDate);
-                    const bDate = new Date(b.actBackDate === null ? b.actBackDate : b.expBackDate);
+                    const aDate = new Date(a.backDate === null ? a.backDate : a.outDate);
+                    const bDate = new Date(b.backDate === null ? b.backDate : b.outDate);
 
                     return aDate.getTime() - bDate.getTime();
                 }));
@@ -52,7 +52,7 @@ export class OverviewComponent implements OnInit {
     }
 
     activeRents(): Rent[] {
-        return this.rents.filter(rent => !rent.isFinalized);
+        return this.rents.filter(rent => !rent.isClosed);
     }
 
     searchScannable() {
