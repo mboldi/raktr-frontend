@@ -4,7 +4,7 @@ import {Rent} from './Rent';
 export class Project {
     id: number;
     name: string;
-    producer: User;
+    prodManager: User;
     startDate: Date;
     expEndDate: Date;
     rents: Rent[];
@@ -23,7 +23,7 @@ export class Project {
     static fromJson(project: Project): Project {
         const newProject = new Project();
         newProject.id = project.id;
-        newProject.producer = project.producer;
+        newProject.prodManager = project.prodManager;
         newProject.name = project.name;
         newProject.startDate = project.startDate;
         newProject.expEndDate = project.expEndDate;

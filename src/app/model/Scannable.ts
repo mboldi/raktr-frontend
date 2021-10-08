@@ -1,5 +1,3 @@
-import {Device} from './Device';
-import {CompositeItem} from './CompositeItem';
 import {Category} from './Category';
 import {Location} from './Location';
 
