@@ -61,7 +61,7 @@
                                 <tbody>
                                 <tr class="rent-row" *ngFor="let rent of pagedRents" (click)="openRent(rent.id)">
                                     <td>
-                                        {{rent.issuer}}
+                                        {{rent.issuer.nickName}}
                                     </td>
                                     <td>
                                         {{rent.renter}}

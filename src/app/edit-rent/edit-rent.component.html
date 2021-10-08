@@ -11,7 +11,7 @@
         <div class="row pt-2">
             <div class="col-xl-10 col-lg-12">
                 <div class="card" *ngIf="rent">
-                    <div class="card-header {{!rent.isFinalized ? 'card-header-warning' : 'card-header-success'}}">
+                    <div class="card-header {{!rent.isClosed ? 'card-header-warning' : 'card-header-success'}}">
                         <h3 style="display: inline-block" class="mt-2 mb-1">Kivitel szerkesztése</h3>
                         <div class="form-inline pull-right" *ngIf="rent.id !== -1">
                             <button mat-fab type="button" (click)="getPdf()">
@@ -52,9 +52,17 @@
                                     <div class="col-xl-4 col-lg-5 col-md-6 col-sm-12">
                                         <mat-form-field class="full-width">
                                             <mat-label>Kiadó</mat-label>
-                                            <input matInput
+                                            <input type="text" matInput
                                                    formControlName="issuer"
-                                                   autocomplete="off">
+                                                   [matAutocomplete]="autoIssuer"
+                                                   required>
+                                            <mat-autocomplete #autoIssuer="matAutocomplete">
+                                                <mat-option *ngFor="let option of filteredRentIssuingMembers"
+                                                            [value]="option.familyName + ' ' + option.givenName"
+                                                            (onSelectionChange)="setSelectedIssuer(option.username)">
+                                                    {{option.familyName + ' ' + option.givenName}}
+                                                </mat-option>
+                                            </mat-autocomplete>
                                         </mat-form-field>
                                     </div>
                                     <div class="col-xl-4 col-lg-5 col-md-6 col-sm-12">
@@ -106,7 +114,7 @@
                                     <div class="col-md-12">
                                         <div class="pull-right">
                                             <mat-slide-toggle
-                                                    *ngIf="fullAccessMember && rent.id !== -1 && !rent.isFinalized"
+                                                    *ngIf="fullAccessMember && rent.id !== -1 && !rent.isClosed"
                                                     class="pt-3"
                                                     (change)="deleteConfirmed = $event.checked"
                                                     color="warn">
@@ -119,19 +127,19 @@
 
                                             <button mat-raised-button type="button" class="btn btn-danger mr-2"
                                                     [disabled]="!isFinalizable()"
-                                                    *ngIf="fullAccessMember && !rent.isFinalized"
+                                                    *ngIf="fullAccessMember && !rent.isClosed"
                                                     (click)="close()">
                                                 Lezárás
                                             </button>
 
                                             <button mat-raised-button type="button" class="btn btn-danger mr-2"
-                                                    *ngIf="admin && rent.isFinalized"
+                                                    *ngIf="admin && rent.isClosed"
                                                     (click)="open()">
                                                 Lezárás visszavonása
                                             </button>
 
                                             <button mat-raised-button type="submit" class="btn btn-info"
-                                                    *ngIf="!rent.isFinalized || admin"
+                                                    *ngIf="!rent.isClosed || admin"
                                                     (click)="save()">
                                                 Mentés
                                             </button>
@@ -148,7 +156,7 @@
                             <h4>Eszközök:</h4>
                             <div class="row">
                                 <div class="col-xl-4 col-lg-5 col-md-6 col-sm-12">
-                                    <mat-form-field class="full-width" *ngIf="!rent.isFinalized"
+                                    <mat-form-field class="full-width" *ngIf="!rent.isClosed"
                                                     hintLabel="Mód kiválasztásához kattints a táblázat megfelelő fejlécére!">
                                         <input matInput [placeholder]="barcodePlaceholder" #barcodeInput
                                                [formControl]="addDeviceFormControl"
@@ -194,7 +202,7 @@
                                         [ngClass]="{'selected' : barcodeMode === 'back'}">
                                         Visszaérkezett
                                     </th>
-                                    <th *ngIf="!rent.isFinalized">
+                                    <th *ngIf="!rent.isClosed">
                                         Törlés
                                     </th>
                                     </thead>
@@ -209,7 +217,7 @@
                                                    min="1"
                                                    max="{{rentItem.scannable.type_ === 'compositeItem' ? 1 : rentItem.scannable['quantity']}}"
                                                    autocomplete="off"
-                                                   [disabled]="rentItem.scannable.type_ === 'compositeItem' || rent.isFinalized"
+                                                   [disabled]="rentItem.scannable.type_ === 'compositeItem' || rent.isClosed"
                                                    style="text-align: right"
                                                    (change)="quantityChanged($event, rentItem)">
                                         </td>
@@ -218,23 +226,23 @@
                                         </td>
                                         <td *ngIf="rent.type === 1">
                                             <mat-checkbox color="primary"
-                                                          [disabled]="rent.isFinalized"
+                                                          [disabled]="rent.isClosed"
                                                           [ngModel]="rentItem.backStatus === 0 || rentItem.backStatus === 1"
                                                           (change)="packedChanged($event, rentItem)"></mat-checkbox>
                                         </td>
                                         <td>
                                             <mat-checkbox color="primary"
-                                                          [disabled]="rent.isFinalized"
+                                                          [disabled]="rent.isClosed"
                                                           [ngModel]="rentItem.backStatus === 1"
                                                           (change)="backChanged($event, rentItem)"></mat-checkbox>
                                         </td>
-                                        <td class="pb-0 pt-0 " *ngIf="!rent.isFinalized">
+                                        <td class="pb-0 pt-0 " *ngIf="!rent.isClosed">
                                             <button mat-raised-button type="button"
                                                     class="btn btn-info pull-center btn-just-icon"
                                                     data-toggle="modal" data-target=".edit-rental-dialog"
                                                     [disabled]="(rent.type === 0 && rentItem.backStatus === 1)
                                                      || (rent.type === 1 && rentItem.backStatus !== 2)
-                                                     || rent.isFinalized"
+                                                     || rent.isClosed"
                                                     (click)="removeFromRent(rentItem)">
                                                 <i class="material-icons">delete</i>
                                             </button>

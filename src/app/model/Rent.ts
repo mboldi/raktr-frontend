@@ -11,6 +11,7 @@ export class Rent {
     renter: string;
     issuer: User;
     outDate: Date;
+    expBackDate: Date;
     backDate: Date;
     isClosed: boolean;
     rentItems: RentItem[];
@@ -29,6 +30,12 @@ export class Rent {
                     })
                 }
             })
+
+            if (rentJson.comments !== undefined && rentJson.comments.length !== 0) {
+                rentJson.comments.forEach(comment => {
+                    comment['@type'] = comment['type_'];
+                })
+            }
         }
 
         return rentJson;
@@ -45,6 +52,7 @@ export class Rent {
         newRent.issuer = rent.issuer;
         newRent.renter = rent.renter;
         newRent.outDate = rent.outDate;
+        newRent.expBackDate = rent.expBackDate;
         newRent.backDate = rent.backDate;
         newRent.isClosed = rent.isClosed;
         newRent.rentItems = [];

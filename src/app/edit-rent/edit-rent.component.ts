@@ -31,6 +31,10 @@ import {Comment} from '../model/Comment';
 export class EditRentComponent implements OnInit {
     @ViewChild('barcodeInput') input: ElementRef;
 
+    rentIssuingMembers: User[];
+    filteredRentIssuingMembers: User[];
+    selectedIssuer = '';
+
     rent: Rent;
     filteredRentItems: RentItem[];
     currentOutDate: Date = new Date();
@@ -62,7 +66,7 @@ export class EditRentComponent implements OnInit {
         this.title.setTitle('Raktr - Kivitel szerkesztése');
 
         this.rentDataForm = fb.group({
-            rentType: [''],
+            rentType: ['SIMPLE'],
             destination: ['', Validators.required],
             issuer: ['', Validators.required],
             renter: ['', Validators.required],
@@ -81,7 +85,33 @@ export class EditRentComponent implements OnInit {
 
             this.fullAccessMember = User.isFullAccessMember(user);
             this.admin = User.isAdmin(user);
+
+            if (this.route.snapshot.paramMap.get('id') === 'new') {
+                this.rent.issuer = this.user;
+
+                this.rentDataForm.patchValue({
+                    'issuer': this.user.familyName + ' ' + this.user.givenName
+                })
+
+                this.selectedIssuer = this.user.username;
+            }
         });
+
+        userService.getRentIssuerableMembers().subscribe(users => {
+            this.rentIssuingMembers = users;
+        })
+
+        this.rentDataForm
+            .get('issuer')
+            .valueChanges
+            .subscribe(
+                value => {
+                    const filteredMembers =
+                        this.rentIssuingMembers.filter(user => (user.familyName + ' ' + user.givenName)
+                            .toLowerCase().includes(value.toLowerCase()));
+
+                    this.filteredRentIssuingMembers = filteredMembers.length > 10 ? [] : filteredMembers;
+                });
     }
 
     ngOnInit(): void {
@@ -89,6 +119,9 @@ export class EditRentComponent implements OnInit {
 
         if (id === 'new') {
             this.rent = new Rent();
+
+            this.rent.type = RentType.SIMPLE;
+            this.rent.isClosed = false;
 
             this.setFormFieldsWithRentData();
         } else {
@@ -99,8 +132,10 @@ export class EditRentComponent implements OnInit {
                     this.sortComments();
 
                     this.filteredRentItems = this.rent.rentItems;
-
                     this.currentOutDate = this.rent.outDate;
+
+                    this.rentDataForm.get('issuer').disable();
+                    this.rentDataForm.get('renter').disable();
                 }
             )
         }
@@ -111,9 +146,10 @@ export class EditRentComponent implements OnInit {
         this.rentDataForm.setValue({
             rentType: this.rent.type === RentType.SIMPLE ? 'SIMPLE' : 'COMPLEX',
             destination: this.rent.destination,
-            issuer: this.rent.issuer,
+            issuer: this.rent.issuer.familyName + ' ' + this.rent.issuer.givenName,
             renter: this.rent.renter,
             outDate: this.rent.outDate,
+            expBackDate: this.rent.expBackDate,
             actBackDate: this.rent.backDate
         });
     }
@@ -263,10 +299,12 @@ export class EditRentComponent implements OnInit {
         const value = this.rentDataForm.value;
 
         this.rent.destination = value.destination.toString();
-        this.rent.issuer = value.issuer.toString();
-        this.rent.renter = value.renter.toString();
+        if (value.renter !== undefined) {
+            this.rent.renter = value.renter.toString();
+        }
         this.rent.type = value.rentType === 'COMPLEX' ? RentType.COMPLEX : RentType.SIMPLE;
         this.rent.outDate = value.outDate;
+        this.rent.expBackDate = value.expBackDate;
         this.rent.backDate = value.actBackDate;
     }
 
@@ -278,6 +316,9 @@ export class EditRentComponent implements OnInit {
             this.rentService.addRent(this.rent).subscribe(rent_ => {
                     this.rent = rent_;
                     this.showNotification('Sikeresen mentve', 'success');
+
+                    this.rentDataForm.get('issuer').disable();
+                    this.rentDataForm.get('renter').disable();
 
                     this.router.navigateByUrl('/rent/' + this.rent.id);
                 },
@@ -383,6 +424,11 @@ export class EditRentComponent implements OnInit {
     }
 
     isFinalizable() {
+        if (this.rent.id === -1) {
+            this.whyNotFinalizable = 'Nincs mit véglegesíteni!';
+            return false;
+        }
+
         if (this.rent.backDate === null) {
             this.whyNotFinalizable = 'Nincs megadva visszaérkezési dátum!';
             return false;
@@ -533,5 +579,11 @@ export class EditRentComponent implements OnInit {
         }
 
         this.input.nativeElement.focus();
+    }
+
+    setSelectedIssuer(username: string) {
+        this.selectedIssuer = username;
+
+        this.userService.getUser(username).subscribe(user => this.rent.issuer = user);
     }
 }

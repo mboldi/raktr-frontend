@@ -10,6 +10,21 @@ export class User {
     roles: UserRole[];
     token?: string;
 
+    static fromJson(user: User) {
+        const userFromJson = new User(
+            user.id,
+            user.username,
+            user.nickName,
+            user.familyName,
+            user.givenName,
+            user.personalId
+        );
+
+        user.roles.forEach(role => userFromJson.roles.push(UserRole.fromJson(role)));
+
+        return userFromJson;
+    }
+
     static isFullAccessMember(user: User): boolean {
         return this.checkRole(user, 'ROLE_Stúdiós');
     }
@@ -29,7 +44,7 @@ export class User {
         return false;
     }
 
-    constructor(id: number, username: string, nickName: string, familyName: string, givenName: string, personalId: string, roles: UserRole[], token?: string) {
+    constructor(id: number, username: string, nickName: string, familyName: string, givenName: string, personalId: string, roles: UserRole[] = [], token?: string) {
         this.id = id;
         this.username = username;
         this.nickName = nickName;

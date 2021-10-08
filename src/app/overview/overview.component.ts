@@ -54,7 +54,7 @@ export class OverviewComponent implements OnInit {
     activeRents(): Rent[] {
         return this.rents.filter(rent => !rent.isClosed);
     }
-
+    
     searchScannable() {
         let barcode = this.deviceSearchFormControl.value;
 

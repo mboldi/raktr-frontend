@@ -3,6 +3,7 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {User} from '../model/User';
 import {environment} from '../../environments/environment';
+import {map} from 'rxjs/operators';
 
 @Injectable({
     providedIn: 'root'
@@ -15,6 +16,19 @@ export class UserService {
 
     public getUser(username: string): Observable<User> {
         return this.http.get<User>(`${environment.apiUrl}/api/user/${username}`);
+    }
+
+    public getRentIssuerableMembers(): Observable<User[]> {
+        return this.http.get<User[]>(`${environment.apiUrl}/api/user/canissuerent`)
+            .pipe(
+                map(users => {
+                    const users_typed: User[] = [];
+
+                    users.forEach(user => users_typed.push(User.fromJson(user)));
+
+                    return users_typed;
+                })
+            );
     }
 
     public updateUser(user: User): Observable<User> {
