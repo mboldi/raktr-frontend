@@ -1,5 +1,5 @@
 import {FormControl} from '@angular/forms';
-import {ScannableService} from '../services/scannable.service';
+import {ScannableService} from '../_services/scannable.service';
 import {map} from 'rxjs/operators';
 
 export const barcodeValidator =

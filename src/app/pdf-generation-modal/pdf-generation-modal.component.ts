@@ -1,9 +1,9 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {Rent} from '../model/Rent';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {UserService} from '../services/user.service';
+import {UserService} from '../_services/user.service';
 import {User} from '../model/User';
-import {RentService} from '../services/rent.service';
+import {RentService} from '../_services/rent.service';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({

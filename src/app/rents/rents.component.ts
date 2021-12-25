@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {Title} from '@angular/platform-browser';
 import 'bootstrap-notify'
 import {Rent} from '../model/Rent';
-import {RentService} from '../services/rent.service';
+import {RentService} from '../_services/rent.service';
 import {FormControl} from '@angular/forms';
 import {map, startWith} from 'rxjs/operators';
 import {Router} from '@angular/router';
@@ -24,7 +24,6 @@ export class RentsComponent implements OnInit {
     currPageIndex = 0;
     currPageSize = 25;
 
-    currRent: Rent;
     rentSearchControl = new FormControl();
 
     constructor(private title: Title,
@@ -78,10 +77,6 @@ export class RentsComponent implements OnInit {
         this.currPageSize = event.pageSize;
 
         this.setPage();
-    }
-
-    onSelect(rent: Rent) {
-        this.currRent = rent;
     }
 
     openRent(id: number) {

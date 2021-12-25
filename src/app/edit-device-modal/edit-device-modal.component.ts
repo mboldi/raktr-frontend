@@ -5,19 +5,19 @@ import {Location} from '../model/Location';
 import {switchMap, tap} from 'rxjs/operators';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {Device} from '../model/Device';
-import {LocationService} from '../services/location.service';
-import {CategoryService} from '../services/category.service';
-import {DeviceService} from '../services/device.service';
-import {UserService} from '../services/user.service';
+import {LocationService} from '../_services/location.service';
+import {CategoryService} from '../_services/category.service';
+import {DeviceService} from '../_services/device.service';
+import {UserService} from '../_services/user.service';
 import {MatDialog} from '@angular/material/dialog';
 import {User} from '../model/User';
 import * as $ from 'jquery';
-import {ScannableService} from '../services/scannable.service';
+import {ScannableService} from '../_services/scannable.service';
 import {barcodeValidator} from '../helpers/barcode.validator';
 import {textIdValidator} from '../helpers/textId.validator';
 import {DeviceStatus} from '../model/DeviceStatus';
 import {Owner} from '../model/Owner';
-import {OwnerService} from '../services/owner.service';
+import {OwnerService} from '../_services/owner.service';
 
 @Component({
     selector: 'app-edit-device-modal',

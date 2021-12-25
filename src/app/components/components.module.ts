@@ -11,6 +11,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
 import { ProjectsComponent } from '../projects/projects.component';
+import {MatPaginatorModule} from '@angular/material/paginator';
 
 @NgModule({
     imports: [
@@ -22,6 +23,7 @@ import { ProjectsComponent } from '../projects/projects.component';
         MatButtonModule,
         ReactiveFormsModule,
         MatIconModule,
+        MatPaginatorModule,
     ],
   declarations: [
     NavbarComponent,
