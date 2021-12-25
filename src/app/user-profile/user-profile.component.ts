@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {Title} from '@angular/platform-browser';
-import {UserService} from '../services/user.service';
+import {UserService} from '../_services/user.service';
 import {User} from '../model/User';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {GeneralDataService} from '../services/general-data.service';
+import {GeneralDataService} from '../_services/general-data.service';
 import {GeneralData} from '../model/GeneralData';
 import * as $ from 'jquery';
 
