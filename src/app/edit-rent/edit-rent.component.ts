@@ -40,7 +40,7 @@ export class EditRentComponent implements OnInit {
     currentOutDate: Date = new Date();
 
     searchControl = new FormControl();
-    addDeviceFormControl = new FormControl();
+    addRentFormControl = new FormControl();
     rentDataForm: FormGroup;
     newCommentForm: FormGroup;
     fullAccessMember = false;
@@ -166,8 +166,8 @@ export class EditRentComponent implements OnInit {
     }
 
     barcodeRead() {
-        if (this.addDeviceFormControl.value !== null && this.addDeviceFormControl.value !== '') {
-            const barcode = BarcodePurifier.purify(this.addDeviceFormControl.value)
+        if (this.addRentFormControl.value !== null && this.addRentFormControl.value !== '') {
+            const barcode = BarcodePurifier.purify(this.addRentFormControl.value)
 
             if (this.barcodeMode === 'add') {
                 this.scannableService.getScannableByBarcode(barcode).subscribe(scannable => {
@@ -224,7 +224,7 @@ export class EditRentComponent implements OnInit {
                 }
             }
 
-            this.addDeviceFormControl.setValue('');
+            this.addRentFormControl.setValue('');
         } else {
             this
                 .showNotification(

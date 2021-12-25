@@ -159,11 +159,11 @@
                                     <mat-form-field class="full-width" *ngIf="!rent.isClosed"
                                                     hintLabel="Mód kiválasztásához kattints a táblázat megfelelő fejlécére!">
                                         <input matInput [placeholder]="barcodePlaceholder" #barcodeInput
-                                               [formControl]="addDeviceFormControl"
+                                               [formControl]="addRentFormControl"
                                                (keyup.enter)="barcodeRead()"
                                                autocomplete="off">
                                         <button mat-button mat-icon-button matSuffix type="button"
-                                                *ngIf="addDeviceFormControl.value"
+                                                *ngIf="addRentFormControl.value"
                                                 (click)="barcodeRead()">
                                             <mat-icon>add</mat-icon>
                                         </button>

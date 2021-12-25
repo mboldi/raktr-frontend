@@ -39,7 +39,7 @@ import {MatDividerModule} from '@angular/material/divider';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import { TicketsComponent } from './tickets/tickets.component';
-import { ProjectComponent } from './project/project.component';
+import { EditProjectComponent } from './edit-project/edit-project.component';
 
 @NgModule({
     imports: [
@@ -83,7 +83,7 @@ import { ProjectComponent } from './project/project.component';
         ConfirmDialogComponent,
         PdfGenerationModalComponent,
         TicketsComponent,
-        ProjectComponent,
+        EditProjectComponent,
     ],
     providers: [
         {provide: MAT_DATE_LOCALE, useValue: 'hu-HU'},
