@@ -10,6 +10,7 @@ import {MatInputModule} from '@angular/material/input';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
+import { ProjectsComponent } from '../projects/projects.component';
 
 @NgModule({
     imports: [
@@ -25,7 +26,8 @@ import {MatIconModule} from '@angular/material/icon';
   declarations: [
     NavbarComponent,
     SidebarComponent,
-    OverviewComponent
+    OverviewComponent,
+    ProjectsComponent
   ],
   exports: [
     NavbarComponent,

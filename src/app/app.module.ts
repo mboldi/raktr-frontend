@@ -38,6 +38,8 @@ import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatDividerModule} from '@angular/material/divider';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatPaginatorModule} from '@angular/material/paginator';
+import { TicketsComponent } from './tickets/tickets.component';
+import { ProjectComponent } from './project/project.component';
 
 @NgModule({
     imports: [
@@ -80,6 +82,8 @@ import {MatPaginatorModule} from '@angular/material/paginator';
         EditCompositeModalComponent,
         ConfirmDialogComponent,
         PdfGenerationModalComponent,
+        TicketsComponent,
+        ProjectComponent,
     ],
     providers: [
         {provide: MAT_DATE_LOCALE, useValue: 'hu-HU'},
