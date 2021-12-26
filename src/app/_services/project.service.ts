@@ -30,6 +30,8 @@ export class ProjectService {
     addProject(project: Project): Observable<Project> {
         const headers = new HttpHeaders().set('Content-Type', 'application/json');
 
+        console.log(Project.toJsonString(project));
+
         return this.http.post<Project>(`${environment.apiUrl}/api/project`, Project.toJsonString(project), {headers: headers})
             .pipe(
                 map(project_ => Project.fromJson(project_))

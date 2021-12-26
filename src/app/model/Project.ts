@@ -34,4 +34,14 @@ export class Project {
 
         return newProject;
     }
+
+    constructor(id: number = -1, name: string = '', prodManager: User = null,
+                startDate: Date = null, expEndDate: Date = null, rents: Rent[] = []) {
+        this.id = id;
+        this.name = name;
+        this.prodManager = prodManager;
+        this.startDate = startDate;
+        this.expEndDate = expEndDate;
+        this.rents = rents;
+    }
 }
