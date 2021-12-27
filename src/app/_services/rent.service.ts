@@ -2,12 +2,11 @@ import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import {Rent} from '../model/Rent';
 import {RentItem} from '../model/RentItem';
+import {Comment} from '../model/Comment';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {environment} from '../../environments/environment';
 import {saveAs} from 'file-saver';
 import {map} from 'rxjs/operators';
-import {Comment} from '../model/comment'
-import {RequestOptions} from '@angular/http';
 
 @Injectable({
     providedIn: 'root'
